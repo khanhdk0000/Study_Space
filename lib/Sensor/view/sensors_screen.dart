@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Home/view/SideMenu.dart';
-import 'package:study_space/Sensor/view/Body.dart';
+import 'package:study_space/Home/view/side_menu.dart';
+import 'package:study_space/Sensor/view/body.dart';
 import 'package:study_space/constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SensorScreen extends StatelessWidget {
   @override

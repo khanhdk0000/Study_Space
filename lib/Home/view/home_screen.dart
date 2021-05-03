@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Home/view/SideMenu.dart';
+import 'package:study_space/Home/view/side_menu.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

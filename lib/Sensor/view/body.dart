@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Home/view/HomeScreen.dart';
-import 'package:study_space/Sensor/view/LightingSensor_screen.dart';
+import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/Sensor/view/lighting_sensor_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
