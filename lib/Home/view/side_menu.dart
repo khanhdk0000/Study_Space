@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_space/Sensor/view/Sensors_screen.dart';
+import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/constants.dart';
 
 class SideMenu extends StatelessWidget {
