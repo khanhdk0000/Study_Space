@@ -8,7 +8,15 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(),
       drawer: SideMenu(),
       body: SafeArea(
-        child: Container(),
+        child: Container(
+          child: ElevatedButton(
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+            ),
+            onPressed: () { },
+            child: Text('Button'),
+          ),
+        ),
       ),
     );
   }

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/theme.dart';
 
+import 'package:study_space/mqtt/MQTTView.dart';
+import 'package:study_space/mqtt/state/MQTTAppState.dart';
+import 'package:provider/provider.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -14,7 +18,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
-      home: HomeScreen(),
+      home: ChangeNotifierProvider<MQTTAppState>(
+        create: (_) => MQTTAppState(),
+        child: MQTTView(),
+      ),
     );
   }
 }
