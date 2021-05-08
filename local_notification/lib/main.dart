@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
-      2,
+      1,
       'Đi họccccccccccccccccccccc',
       'Êi bạn êi, vô học bạn êi!!',
       platformChannelSpecifics,
