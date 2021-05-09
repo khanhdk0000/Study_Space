@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
+import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 
 class SideMenu extends StatelessWidget {
@@ -20,7 +21,7 @@ class SideMenu extends StatelessWidget {
               style: TextStyle(color: kContentColorDarkTheme),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/img/man.png'),
+              backgroundImage: AssetImage('assets/img/portrait.png'),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -32,7 +33,12 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.cast_for_education),
