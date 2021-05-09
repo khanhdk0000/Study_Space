@@ -45,31 +45,24 @@ class _MyAppState extends State<MyApp> {
     );
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    // await flutterLocalNotificationsPlugin.show(
-    //   2,
-    //   'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
-    //   'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
-    //   platformChannelSpecifics,
-    //   payload: 'Ra chơi 15 phút',
-    // );
-    var scheduledTime = DateTime.now().add(Duration(seconds: 5));
-    // flutterLocalNotificationsPlugin.schedule(
-    //   1,
-    //   'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
-    //   'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
-    //   scheduledTime,
-    //   platformChannelSpecifics,
-    //   payload: 'Ra chơi 15 phút',
-    // );
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        1,
-        'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
-        'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
-        scheduledTime,
-        platformChannelSpecifics,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
+    var scheduledTime = DateTime.now().add(Duration(seconds: 10));
+    await flutterLocalNotificationsPlugin.schedule(
+      2,
+      'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+      'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+      scheduledTime,
+      platformChannelSpecifics,
+      payload: 'Ra chơi 15 phút',
+    );
+    // flutterLocalNotificationsPlugin.zonedSchedule(
+    //     1,
+    //     'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+    //     'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+    //     scheduledTime,
+    //     platformChannelSpecifics,
+    //     uiLocalNotificationDateInterpretation:
+    //         UILocalNotificationDateInterpretation.absoluteTime,
+    //     androidAllowWhileIdle: true);
   }
 
 // Method 3
