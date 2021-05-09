@@ -87,8 +87,7 @@ class HomeSchedule extends StatelessWidget {
             padding: EdgeInsets.all(26),
             color: Color.fromRGBO(0, 0, 0, 0.06),
             width: double.infinity,
-            child: Column(
-                children: [
+            child: Column(children: [
               for (var i = 0; i < subjects.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -100,8 +99,7 @@ class HomeSchedule extends StatelessWidget {
                             width: 4.0,
                             height: 4.0,
                             decoration: BoxDecoration(
-                                color: colors[i],
-                                shape: BoxShape.circle),
+                                color: colors[i], shape: BoxShape.circle),
                           ),
                           Text(
                             "  ${subjects[i]}",
@@ -121,27 +119,27 @@ class HomeSchedule extends StatelessWidget {
                       ]),
                 ),
               SizedBox(height: 26),
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    ),
-                    onPressed: () {
-                    },
-                    child:   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                      Text(
-                        "Show my schedule  ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.black,
-                        size: 22.0,
-                      ),
-                    ]),
-                  )
+              TextButton(
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: () {},
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Text(
+                    "Show my schedule  ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black),
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: Colors.black,
+                    size: 22.0,
+                  ),
+                ]),
+              )
             ])),
       ],
     );
