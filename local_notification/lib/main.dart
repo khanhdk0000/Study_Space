@@ -45,13 +45,31 @@ class _MyAppState extends State<MyApp> {
     );
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      2,
-      'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
-      'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
-      platformChannelSpecifics,
-      payload: 'Ra chơi 15 phút',
-    );
+    // await flutterLocalNotificationsPlugin.show(
+    //   2,
+    //   'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+    //   'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+    //   platformChannelSpecifics,
+    //   payload: 'Ra chơi 15 phút',
+    // );
+    var scheduledTime = DateTime.now().add(Duration(seconds: 5));
+    // flutterLocalNotificationsPlugin.schedule(
+    //   1,
+    //   'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+    //   'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+    //   scheduledTime,
+    //   platformChannelSpecifics,
+    //   payload: 'Ra chơi 15 phút',
+    // );
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        1,
+        'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+        'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+        scheduledTime,
+        platformChannelSpecifics,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
   }
 
 // Method 3
@@ -82,26 +100,18 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              /*
-              new RaisedButton(
-                onPressed: _showNotificationWithSound,
-                child: new Text('Show Notification With Sound'),
-              ),
-
-               */
               new SizedBox(
                 height: 30.0,
               ),
-              new RaisedButton(
-                onPressed: _showNotificationWithoutSound,
+              new ElevatedButton(
+                onPressed: () => [
+                  _showNotificationWithoutSound(),
+                  _showNotificationWithDefaultSound()
+                ],
                 child: new Text('Study time'),
               ),
               new SizedBox(
                 height: 30.0,
-              ),
-              new RaisedButton(
-                onPressed: _showNotificationWithDefaultSound,
-                child: new Text('Break time'),
               ),
             ],
           ),
