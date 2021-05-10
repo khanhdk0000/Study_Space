@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/constants.dart';
 import 'package:study_space/theme.dart';
 
 import 'package:study_space/mqtt/MQTTView.dart';
@@ -20,7 +22,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
-      home: HomeScreen(),
+      home: WelcomeScreen(),
+      routes: {
+        kHomeScreen: (BuildContext context) => HomeScreen(),
+        kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
+      },
     );
   }
 }

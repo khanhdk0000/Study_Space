@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-            child: TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              child:   Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                  size: 24.0
-              ),
-            )
-
-        );
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        ),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+        child: Icon(Icons.menu, color: Colors.black, size: 24.0),
+      ),
+    );
   }
 }
