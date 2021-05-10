@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 
+
 const divider = SizedBox(height: 32.0);
 
 class HomeScreen extends StatelessWidget {
-  @override
   final userName = "Gwen";
   final progress = 75;
 
+  @override
   Widget build(BuildContext context) {
-    var TopSummary = Column(children: [
+    var topSummary = Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -50,7 +51,7 @@ class HomeScreen extends StatelessWidget {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [TopSummary, divider, HomeSchedule()])),
+              children: [topSummary, divider, HomeSchedule()])),
     );
   }
 }

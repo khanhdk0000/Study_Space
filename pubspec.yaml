@@ -34,6 +34,8 @@ dependencies:
   usb_serial: ^0.2.4
   mqtt_client: ^9.2.0
   provider: ^5.0.0
+  firebase_core: ^1.1.0
+  firebase_auth: ^1.1.3
 
 dev_dependencies:
   flutter_test:
