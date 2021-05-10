@@ -8,3 +8,6 @@ const kWarninngColor = Color(0xFFF3BB1C);
 const kErrorColor = Color(0xFFF03738);
 const kShadowColor = Color(0xFF343a40);
 const kDefaultPadding = 20.0;
+
+const kHomeScreen = 'homeScreen';
+const kWelcomeScreen = 'welcomeScreen';
