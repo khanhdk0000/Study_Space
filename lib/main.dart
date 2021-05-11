@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
-      home: WelcomeScreen(),
+      home: Ada(),
       routes: {
         kHomeScreen: (BuildContext context) => HomeScreen(),
         kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
