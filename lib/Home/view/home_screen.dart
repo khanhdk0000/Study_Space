@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const divider = SizedBox(height: 32.0);
 
 class HomeScreen extends StatelessWidget {
-  @override
+  HomeScreen({this.user});
   final userName = "Gwen";
   final progress = 75;
+  final User user;
 
+  @override
   Widget build(BuildContext context) {
-    var TopSummary = Column(children: [
+    var topSummary = Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -30,7 +33,7 @@ class HomeScreen extends StatelessWidget {
       ),
       SizedBox(height: 22),
       Text(
-        userName,
+        user == null ? userName : user.displayName,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -45,29 +48,35 @@ class HomeScreen extends StatelessWidget {
     ]);
 
     return Scaffold(
-      drawer: SideMenu(),
-      body: SafeArea(
-          child: ListView(
-              scrollDirection: Axis.vertical,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [TopSummary, divider, HomeSchedule()])),
+      drawer: SideMenu(
+        user: user,
+      ),
+      body: user == null
+          ? Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                children: [topSummary, divider, HomeSchedule()],
+              ),
+            ),
     );
   }
 }
 
 class HomeSchedule extends StatelessWidget {
-  @override
-  var subjects = [
+  final subjects = [
     "Calculus",
     "Physics",
     "Computer Graphics",
     "Introduction to AI"
   ];
-  var startTimes = ["11:00", "12:00", "9:00", "14:00"];
-  var endTimes = ["11:45", "12:45", "9:00", "14:00"];
+  final startTimes = ["11:00", "12:00", "9:00", "14:00"];
+  final endTimes = ["11:45", "12:45", "9:00", "14:00"];
   final colors = [Colors.red, Colors.blue, Colors.green, Colors.orange];
-  var eta = 15;
+  final eta = 15;
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -87,8 +96,7 @@ class HomeSchedule extends StatelessWidget {
             padding: EdgeInsets.all(26),
             color: Color.fromRGBO(0, 0, 0, 0.06),
             width: double.infinity,
-            child: Column(
-                children: [
+            child: Column(children: [
               for (var i = 0; i < subjects.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -100,8 +108,7 @@ class HomeSchedule extends StatelessWidget {
                             width: 4.0,
                             height: 4.0,
                             decoration: BoxDecoration(
-                                color: colors[i],
-                                shape: BoxShape.circle),
+                                color: colors[i], shape: BoxShape.circle),
                           ),
                           Text(
                             "  ${subjects[i]}",
@@ -121,27 +128,27 @@ class HomeSchedule extends StatelessWidget {
                       ]),
                 ),
               SizedBox(height: 26),
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    ),
-                    onPressed: () {
-                    },
-                    child:   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                      Text(
-                        "Show my schedule  ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.black,
-                        size: 22.0,
-                      ),
-                    ]),
-                  )
+              TextButton(
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: () {},
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Text(
+                    "Show my schedule  ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black),
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: Colors.black,
+                    size: 22.0,
+                  ),
+                ]),
+              )
             ])),
       ],
     );

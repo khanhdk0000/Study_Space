@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class SideMenu extends StatelessWidget {
+  SideMenu({this.user});
+  final User user;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -13,11 +19,11 @@ class SideMenu extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              'example',
+              user == null ? 'example' : user.displayName,
               style: TextStyle(color: kContentColorDarkTheme),
             ),
             accountEmail: Text(
-              'abc@email',
+              user == null ? 'abc@email' : user.email,
               style: TextStyle(color: kContentColorDarkTheme),
             ),
             currentAccountPicture: CircleAvatar(
@@ -83,14 +89,28 @@ class SideMenu extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (context) => SensorScreen(),
-              ),
-            ),
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Sign Out'),
+            onTap: () async {
+              final User user = _auth.currentUser;
+              if (user == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No one has signed in.'),
+                  ),
+                );
+                return;
+              }
+              await _auth.signOut();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      Text(user.displayName + ' has successfully signed out.'),
+                ),
+              );
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  kWelcomeScreen, (Route<dynamic> route) => false);
+            },
           ),
         ],
       ),
