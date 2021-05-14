@@ -1,21 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:local_notification/time_picker.dart';
 
-void main() async {
-  await _configureLocalTimeZone();
-
+void main() {
   runApp(
     new MaterialApp(home: new MyApp()),
   );
-}
-
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Asia/Bangkok'));
 }
 
 class MyApp extends StatefulWidget {
@@ -55,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     // var scheduledTime = DateTime.now().add(Duration(seconds: 30));
-    var scheduledTime = DateTime.parse("2021-05-14 09:30:00");
+    var scheduledTime = DateTime.parse("2021-05-14 12:31:00");
     await flutterLocalNotificationsPlugin.schedule(
       2,
       'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
