@@ -1,16 +1,18 @@
 class User {
-  final int id;
-  final String fname;
-  final String lname;
-  final String email;
+  final int _id;
+  final String _username;
+  final String _fname;
+  final String _lname;
+  final String _dob;
 
-  User(this.id,this.email,this.fname,this.lname);
-  String getEmail()
+
+  User(this._id,this._username,this._fname,this._lname,this._dob);
+  String getUsername()
   {
-    return this.email;
+    return this._username;
   }
   String getName()
   {
-    return this.fname + ' ' + this.lname;
+    return this._fname + ' ' + this._lname;
   }
 }
