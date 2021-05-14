@@ -9,9 +9,11 @@ import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:study_space/Controller/userController.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(TestApp(text: 'hello'));
 }
 
 class MyApp extends StatelessWidget {
@@ -90,8 +92,41 @@ class TestApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       home: Scaffold(
-        body: Text(text),
+        body: Center(
+          child:
+            TestClass(),
+        ),
       ),
     );
   }
+}
+
+class TestClass extends StatelessWidget {
+  String s = 'T';
+  var c = new userController();
+
+  Future<void> func() async {
+    this.s = await c.testSql();
+    this.s = "BB";
+  }
+  @override
+  Widget build(BuildContext context)  {
+    return new FutureBuilder(
+        // future: getTextFromFile(),
+        future: c.testSql(),
+        initialData: "Loading text..",
+        builder: (BuildContext context, AsyncSnapshot<String> text) {
+          return new Text(text.data);
+        }
+    );
+  }
+}
+
+
+Future<String> getFileData(String path) async {
+  return await new Future(() => "test Text");
+}
+
+Future<String> getTextFromFile() async {
+  return getFileData("test.txt");
 }

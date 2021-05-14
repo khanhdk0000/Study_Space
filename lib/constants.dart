@@ -13,8 +13,8 @@ const kDefaultPadding = 20.0;
 const db_host = 'localhost';
 const db_port = 3306; //*
 const db_user = 'root'; //*
-const db_password = ''; //*
-const db_name = 'study_space';
+const db_password = '123'; //*
+const db_name = 'study_space'; //*
 
 
 const kHomeScreen = 'homeScreen';
