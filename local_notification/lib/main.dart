@@ -16,8 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  DateTime _selectedTime = new DateTime.now();
-
+  DateTime scheduledTime = DateTime.parse("2021-05-14 12:45:00");
   @override
   initState() {
     super.initState();
@@ -33,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   }
 
 // Method 2
-  Future _showNotificationWithDefaultSound() async {
+  Future _showNotificationWithDefaultSound(DateTime time) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
       '1',
       'name',
@@ -45,8 +44,7 @@ class _MyAppState extends State<MyApp> {
     );
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    // var scheduledTime = DateTime.now().add(Duration(seconds: 30));
-    var scheduledTime = DateTime.parse("2021-05-14 12:31:00");
+    var scheduledTime = time.add(Duration(seconds: 10));
     await flutterLocalNotificationsPlugin.schedule(
       2,
       'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
@@ -70,16 +68,18 @@ class _MyAppState extends State<MyApp> {
   }
 
 // Method 3
-  Future _showNotificationWithoutSound() async {
+  Future _showNotificationWithoutSound(DateTime scheduledTime) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         '2', 'your channel name', 'your channel description',
         playSound: false, importance: Importance.max, priority: Priority.high);
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
+    // var scheduledTime = DateTime.parse("2021-05-14 12:38:00");
+    await flutterLocalNotificationsPlugin.schedule(
       1,
       'Đi họccccccccccccccccccccc',
       'Êi bạn êi, vô học bạn êi!!',
+      scheduledTime,
       platformChannelSpecifics,
       payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
     );
@@ -101,16 +101,16 @@ class _MyAppState extends State<MyApp> {
                 height: 30.0,
               ),
               new DateTimeItem(
-                  dateTime: _selectedTime,
+                  dateTime: scheduledTime,
                   onChanged: (value) {
                     setState(() {
-                      _selectedTime = value;
+                      scheduledTime = value;
                     });
                   }),
               new ElevatedButton(
                 onPressed: () => [
-                  _showNotificationWithoutSound(),
-                  _showNotificationWithDefaultSound()
+                  _showNotificationWithoutSound(scheduledTime),
+                  _showNotificationWithDefaultSound(scheduledTime)
                 ],
                 child: new Text('Study time'),
               ),
