@@ -9,6 +9,14 @@ const kErrorColor = Color(0xFFF03738);
 const kShadowColor = Color(0xFF343a40);
 const kDefaultPadding = 20.0;
 
+//Database info
+const db_host = 'localhost';
+const db_port = 3306; //*
+const db_user = 'root'; //*
+const db_password = ''; //*
+const db_name = 'study_space';
+
+
 const kHomeScreen = 'homeScreen';
 const kWelcomeScreen = 'welcomeScreen';
 
