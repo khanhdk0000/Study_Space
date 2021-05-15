@@ -10,7 +10,7 @@ const kShadowColor = Color(0xFF343a40);
 const kDefaultPadding = 20.0;
 
 //Database info
-const db_host = 'localhost';
+const db_host = '10.0.2.2'; //* ipconfig
 const db_port = 3306; //*
 const db_user = 'root'; //*
 const db_password = '123'; //*

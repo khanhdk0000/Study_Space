@@ -105,10 +105,6 @@ class TestClass extends StatelessWidget {
   String s = 'T';
   var c = new userController();
 
-  Future<void> func() async {
-    this.s = await c.testSql();
-    this.s = "BB";
-  }
   @override
   Widget build(BuildContext context)  {
     return new FutureBuilder(
@@ -128,5 +124,7 @@ Future<String> getFileData(String path) async {
 }
 
 Future<String> getTextFromFile() async {
+  var c = new userController();
+  c.testSql();
   return getFileData("test.txt");
 }
