@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
-// import 'package:study_space/Sensor/view/body.dart';
-
-import '../constants.dart';
+import 'package:study_space/constants.dart';
+import 'package:study_space/Database/serverdb.dart';
+import 'package:study_space/summary/model/session.dart';
 
 class SummaryAllSessionsView extends StatefulWidget {
   const SummaryAllSessionsView({Key key}) : super(key: key);
@@ -15,12 +15,19 @@ class SummaryAllSessionsView extends StatefulWidget {
 }
 
 class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
-  int _numView = 4;
+  Future<List<Session>> futureSession;
+  int _numView = 5;
   int _sortedBy = 0;
   String _username = 'Gwen';
   int _progress = 75;
-  List<String> _numViewValue = ['1', '2', '4', '10', '99'];
+  List<String> _numViewValue = ['1', '2', '5', '10', '25', '99'];
   List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
+
+  @override
+  void initState() {
+    super.initState();
+    futureSession = ServerDB().getAllSessions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +130,26 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Widget _listView(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-      child: Column(
-        children: [
-          _scheduleTile(['10:00 - 10:45', 'Calculus', 'Friday, Apr 23', '100']),
-          _scheduleTile(['12:00 - 12:45', 'Physics', 'Friday, Apr 23', '95']),
-          _scheduleTile(['09:00 - 12:00', 'Computer Graphics', 'Tuesday, Apr 20', '50']),
-        ],
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          child: FutureBuilder(future: futureSession, builder: (context, snapshot){
+            if (snapshot.hasData){
+              var numDisplay = snapshot.data.length > _numView ? _numView : snapshot.data.length;
+              List<Widget> widLst = [];
+              for(int i = 0; i < numDisplay; i++){
+                widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
+              }
+              return Column(
+                children: widLst,
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Text('Nothing to show');
+          }),
+        ),
       ),
     );
   }
@@ -315,4 +334,5 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
       return Colors.redAccent;
     }
   }
+
 }
