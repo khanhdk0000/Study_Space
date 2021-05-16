@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:study_space/Controller/userController.dart';
+import 'package:study_space/Model/user.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,7 +110,7 @@ class TestClass extends StatelessWidget {
   Widget build(BuildContext context)  {
     return new FutureBuilder(
         // future: getTextFromFile(),
-        future: c.testSql(),
+        future: addUsers(),
         initialData: "Loading text..",
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return new Text(text.data);
@@ -118,13 +119,8 @@ class TestClass extends StatelessWidget {
   }
 }
 
-
-Future<String> getFileData(String path) async {
-  return await new Future(() => "test Text");
-}
-
-Future<String> getTextFromFile() async {
+Future<String> addUsers() async{
   var c = new userController();
-  c.testSql();
-  return getFileData("test.txt");
+  var  a = await c.addUser('new_user2', 'F', 'L', '1/1/1');
+  return 'Done';
 }
