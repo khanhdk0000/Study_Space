@@ -28,9 +28,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<String> scheduleList = [
-    "2021-05-17 23:32:00",
-    "2021-05-17 23:32:30",
-    "2021-05-17 23:33:00"
+    "2021-05-17 23:47:00",
+    "2021-05-18 23:32:30",
+    "2021-05-18 23:33:00"
   ];
 
   // BREAK NOTIFICATION
