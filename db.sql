@@ -66,6 +66,7 @@ CREATE TABLE `sensors` (
   KEY `sess_sens_idx` (`sess_id`,`sched_id`),
   CONSTRAINT `sess_sens` FOREIGN KEY (`sess_id`, `sched_id`) REFERENCES `sessions` (`id`, `sched_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,6 +126,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
