@@ -38,9 +38,15 @@ class _MyAppState extends State<MyApp> {
   );
 
   List<String> scheduledStudyList = [
-    "2021-05-18 10:53:00",
+    "2021-05-18 11:35:00",
     "2021-05-18 10:05:30",
     "2021-05-18 10:50:30"
+  ];
+
+  List<String> scheduledEndtimeList = [
+    "2021-05-18 11:35:30",
+    "2021-05-18 10:30:30",
+    "2021-05-18 10:45:30"
   ];
 
   // BREAK NOTIFICATION
@@ -58,12 +64,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // STUDY NOTIFICATION
+  // START STUDY SESSION NOTIFICATION
   Future _showStudyNotification(List<String> scheduledStudyList) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     var priority = 0;
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < scheduledStudyList.length; i++) {
       if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
         priority++;
         await flutterLocalNotificationsPlugin.schedule(
@@ -80,6 +86,25 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  // END STUDY SESSION NOTIFICATION
+  Future _showEndtimeNotification(List<String> scheduledEndtimeList) async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    for (var i = 0; i < scheduledEndtimeList.length; i++) {
+      if (DateTime.parse(scheduledEndtimeList[i]).isAfter(DateTime.now())) {
+        await flutterLocalNotificationsPlugin.schedule(
+          3,
+          'Hết giờ !!!!!!!!!!!!!!!!',
+          'Nghỉ đi tan rồi, cố quá là quá cố',
+          DateTime.parse(scheduledEndtimeList[i]),
+          platformChannelSpecifics,
+          payload: 'Một cái nội dung gì đó về việc tới giờ nghỉ học',
+        );
+      }
+    }
+  }
+
+  // CANCEL ALL NOTIFICATION
   Future _cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
@@ -98,7 +123,10 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               for (var i in scheduledStudyList) Text(i),
               ElevatedButton(
-                onPressed: () => _showStudyNotification(scheduledStudyList),
+                onPressed: () => [
+                  _showStudyNotification(scheduledStudyList),
+                  _showEndtimeNotification(scheduledEndtimeList)
+                ],
                 child: Text('Turn on notifications'),
               ),
               ElevatedButton(
