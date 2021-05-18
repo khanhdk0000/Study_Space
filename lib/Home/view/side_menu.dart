@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/summary/view/all_sessions.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -54,7 +56,12 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
             title: Text('Summary'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SummaryAllSessionsView()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today_sharp),
@@ -87,6 +94,16 @@ class SideMenu extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          ListTile(
+            leading: Icon(Icons.construction),
+            title: Text('Customize'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CustomViewAll()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
