@@ -8,6 +8,10 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
+import 'package:http/http.dart' as http;
+import 'dart:math';
+
+final _random = new Random();
 
 class CustomViewAll extends StatelessWidget {
   const CustomViewAll({
@@ -68,10 +72,9 @@ class _CustomViewState extends State<CustomView> {
       print(recentText);
       var message = jsonDecode(recentText);
       String data = message['data'].toString();
-      if (data == "0" && _lightStatus){
+      if (data == "0" && _lightStatus) {
         _lightStatus = false;
-      }
-      else if (data != "0" && !_lightStatus){
+      } else if (data != "0" && !_lightStatus) {
         _lightStatus = true;
       }
     }
@@ -136,15 +139,15 @@ class _CustomViewState extends State<CustomView> {
             ),
             Spacer(),
             _buildConnectedButtonFrom(currentAppState.getAppConnectionState),
-            _connectionStateDisplay(
-                _prepareStateMessageFrom(currentAppState.getAppConnectionState)),
+            _connectionStateDisplay(_prepareStateMessageFrom(
+                currentAppState.getAppConnectionState)),
           ],
         ),
       ),
     );
   }
 
-  Widget _titleWidget(String name){
+  Widget _titleWidget(String name) {
     return Text(
       name,
       style: TextStyle(
@@ -154,7 +157,7 @@ class _CustomViewState extends State<CustomView> {
     );
   }
 
-  Widget _sensorValueDisplay(String name, String val){
+  Widget _sensorValueDisplay(String name, String val) {
     return Column(
       children: [
         Row(
@@ -163,7 +166,7 @@ class _CustomViewState extends State<CustomView> {
             Text(
               name,
               style: TextStyle(
-              fontSize: 16.0,
+                fontSize: 16.0,
               ),
             ),
             Text(
@@ -181,12 +184,11 @@ class _CustomViewState extends State<CustomView> {
 
   Widget _connectionStateDisplay(String status) {
     Color color;
-    if (status == 'Connected'){
+    if (status == 'Connected') {
       color = Colors.greenAccent;
     } else if (status == 'Disconnected') {
       color = Colors.redAccent;
-    }
-    else {
+    } else {
       color = Colors.orangeAccent;
     }
     return Row(
@@ -219,7 +221,6 @@ class _CustomViewState extends State<CustomView> {
   Widget _buildConnectedButtonFrom(MQTTAppConnectionState state) {
     return Row(
       children: <Widget>[
-
         Expanded(
           // ignore: deprecated_member_use
           child: RaisedButton(
@@ -259,31 +260,51 @@ class _CustomViewState extends State<CustomView> {
 
   void _configureAndConnect() {
     // TODO: Use UUID
+    _getLatestData().then((value) {
+      setState(() {
+        if (value['data'] == '0') {
+          _lightStatus = false;
+        } else {
+          _lightStatus = true;
+        }
+      });
+    });
     String osPrefix = 'Flutter_iOS';
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       osPrefix = 'Flutter_Android';
     }
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'dfighter1312/feeds/studyspace',
-        identifier: osPrefix,
+        topic: 'khanhdk0000/feeds/bbc-led',
+        identifier: _random.nextInt(100).toString(),
         state: currentAppState);
     manager.initializeMQTTClient();
     manager.connect();
     print("You goes here");
   }
 
-  void _disconnect(){
+  void _disconnect() {
     manager.disconnect();
   }
+
   void _publishMessage(String text) {
-    Message light = Message(id: '1', name:'LED', data:text, unit:'');
+    Message light = Message(id: '1', name: 'LED', data: text, unit: '');
     String message = jsonEncode(light);
     manager.publish(message);
     // _messageTextController.clear();
   }
-}
 
+  _getLatestData() async {
+    var req = await http.get(
+        Uri.https('io.adafruit.com', 'api/v2/khanhdk0000/feeds/bbc-led/data'));
+    var infos = json.decode(req.body);
+    print(infos[0]['value']);
+    var temp = infos[0]['value'];
+    var temp2 = json.decode(temp);
+    print(temp2['data'] + '1');
+    return temp2;
+  }
+}
 
 class Message {
   String id;
@@ -293,11 +314,5 @@ class Message {
 
   Message({this.id, this.name, this.data, this.unit});
 
-  Map toJson() => {
-    'id': id,
-    'name': name,
-    'data': data,
-    'unit': unit
-  };
+  Map toJson() => {'id': id, 'name': name, 'data': data, 'unit': unit};
 }
-
