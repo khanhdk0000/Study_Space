@@ -9,9 +9,12 @@ import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:study_space/Controller/userController.dart';
+import 'package:study_space/Model/user.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(TestApp(text: 'hello'));
 }
 
 class MyApp extends StatelessWidget {
@@ -90,8 +93,34 @@ class TestApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       home: Scaffold(
-        body: Text(text),
+        body: Center(
+          child:
+            TestClass(),
+        ),
       ),
     );
   }
+}
+
+class TestClass extends StatelessWidget {
+  String s = 'T';
+  var c = new userController();
+
+  @override
+  Widget build(BuildContext context)  {
+    return new FutureBuilder(
+        // future: getTextFromFile(),
+        future: addUsers(),
+        initialData: "Loading text..",
+        builder: (BuildContext context, AsyncSnapshot<String> text) {
+          return new Text(text.data);
+        }
+    );
+  }
+}
+
+Future<String> addUsers() async{
+  var c = new userController();
+  var  a = await c.addUser('new_user2', 'F', 'L', '1/1/1');
+  return 'Done';
 }
