@@ -38,14 +38,14 @@ class _MyAppState extends State<MyApp> {
   );
 
   List<String> scheduledStudyList = [
-    "2021-05-18 11:45:00",
-    "2021-05-18 11:46:00",
+    "2021-05-18 23:59:00",
+    "2021-05-19 00:00:00",
     "2021-05-18 10:50:30"
   ];
 
   List<String> scheduledEndtimeList = [
-    "2021-05-18 11:45:30",
-    "2021-05-18 11:46:30",
+    "2021-05-18 23:59:30",
+    "2021-05-19 00:00:30",
     "2021-05-18 10:45:30"
   ];
 
@@ -109,12 +109,32 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  var onoff = 'Off';
+  bool switchControl = false;
+  void onchange(bool value) {
+    if (switchControl == false) {
+      setState(() {
+        switchControl = true;
+        onoff = 'On';
+        _showStudyNotification(scheduledStudyList);
+        _showEndtimeNotification(scheduledEndtimeList);
+      });
+    } else {
+      setState(() {
+        switchControl = false;
+        onoff = 'Off';
+        _cancelAllNotifications();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
           title: new Text('Plugin example app'),
+          backgroundColor: Colors.orange,
         ),
         body: new Center(
           child: new Column(
@@ -123,15 +143,21 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               for (var i in scheduledStudyList) Text(i),
               ElevatedButton(
-                onPressed: () => [
-                  _showStudyNotification(scheduledStudyList),
-                  _showEndtimeNotification(scheduledEndtimeList)
-                ],
-                child: Text('Turn on notifications'),
-              ),
+                  onPressed: () => [
+                        _showStudyNotification(scheduledStudyList),
+                        _showEndtimeNotification(scheduledEndtimeList)
+                      ],
+                  child: Text('Turn on notifications'),
+                  style: ElevatedButton.styleFrom(primary: Colors.orange)),
               ElevatedButton(
                   onPressed: _cancelAllNotifications,
-                  child: Text('Turn off notifications'))
+                  child: Text('Turn off notifications'),
+                  style: ElevatedButton.styleFrom(primary: Colors.orange)),
+              Switch(
+                value: switchControl,
+                onChanged: (bool value) => onchange(value),
+              ),
+              Center(child: new Text("Notification ${onoff}")),
             ],
           ),
         ),
