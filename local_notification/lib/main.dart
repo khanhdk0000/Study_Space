@@ -38,14 +38,14 @@ class _MyAppState extends State<MyApp> {
   );
 
   List<String> scheduledStudyList = [
-    "2021-05-18 11:35:00",
-    "2021-05-18 10:05:30",
+    "2021-05-18 11:45:00",
+    "2021-05-18 11:46:00",
     "2021-05-18 10:50:30"
   ];
 
   List<String> scheduledEndtimeList = [
-    "2021-05-18 11:35:30",
-    "2021-05-18 10:30:30",
+    "2021-05-18 11:45:30",
+    "2021-05-18 11:46:30",
     "2021-05-18 10:45:30"
   ];
 
@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
     for (var i = 0; i < scheduledEndtimeList.length; i++) {
       if (DateTime.parse(scheduledEndtimeList[i]).isAfter(DateTime.now())) {
         await flutterLocalNotificationsPlugin.schedule(
-          3,
+          i + scheduledEndtimeList.length * 2,
           'Hết giờ !!!!!!!!!!!!!!!!',
           'Nghỉ đi tan rồi, cố quá là quá cố',
           DateTime.parse(scheduledEndtimeList[i]),
