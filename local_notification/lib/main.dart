@@ -27,23 +27,24 @@ class _MyAppState extends State<MyApp> {
         onSelectNotification: onSelectNotification);
   }
 
-  List<String> scheduleList = [
-    "2021-05-17 23:47:00",
-    "2021-05-18 23:32:30",
-    "2021-05-18 23:33:00"
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+    'id',
+    'name',
+    'description',
+    sound: RawResourceAndroidNotificationSound('mysound'),
+    playSound: true,
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+
+  List<String> scheduledStudyList = [
+    "2021-05-18 10:53:00",
+    "2021-05-18 10:05:30",
+    "2021-05-18 10:50:30"
   ];
 
   // BREAK NOTIFICATION
   Future _showBreakNotification(String time, var i) async {
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      '1',
-      'name',
-      'description',
-      sound: RawResourceAndroidNotificationSound('mysound'),
-      playSound: true,
-      importance: Importance.max,
-      priority: Priority.high,
-    );
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     var scheduledTime = DateTime.parse(time).add(Duration(seconds: 10));
@@ -58,31 +59,24 @@ class _MyAppState extends State<MyApp> {
   }
 
   // STUDY NOTIFICATION
-  Future _showStudyNotification(List<String> scheduleList) async {
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      '2',
-      'name',
-      'description',
-      sound: RawResourceAndroidNotificationSound('mysound'),
-      playSound: true,
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+  Future _showStudyNotification(List<String> scheduledStudyList) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     var priority = 0;
     for (var i = 0; i < 3; i++) {
-      priority++;
-      await flutterLocalNotificationsPlugin.schedule(
-        priority,
-        'Đi họccccccccccccccccccccc',
-        'Êi bạn êi, vô học bạn êi!!',
-        DateTime.parse(scheduleList[i]),
-        platformChannelSpecifics,
-        payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
-      );
-      priority++;
-      _showBreakNotification(scheduleList[i], priority);
+      if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
+        priority++;
+        await flutterLocalNotificationsPlugin.schedule(
+          priority,
+          'Đi họccccccccccccccccccccc',
+          'Êi bạn êi, vô học bạn êi!!',
+          DateTime.parse(scheduledStudyList[i]),
+          platformChannelSpecifics,
+          payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
+        );
+        priority++;
+        _showBreakNotification(scheduledStudyList[i], priority);
+      }
     }
   }
 
@@ -102,9 +96,9 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              for (var i in scheduleList) Text(i),
+              for (var i in scheduledStudyList) Text(i),
               ElevatedButton(
-                onPressed: () => _showStudyNotification(scheduleList),
+                onPressed: () => _showStudyNotification(scheduledStudyList),
                 child: Text('Turn on notifications'),
               ),
               ElevatedButton(
