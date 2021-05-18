@@ -6,13 +6,6 @@ import 'package:study_space/constants.dart';
 import 'package:study_space/Model/user.dart';
 
 class userController {
-  // var settings = new ConnectionSettings(
-  //     host: db_host,
-  //     port: db_port,
-  //     user: db_user,
-  //     password: db_password,
-  //     db: db_name
-  // );
   userController() {print('constructed');}
 
   Future<String> testSql() async {
@@ -42,7 +35,29 @@ class userController {
 
     if (response.statusCode == 201) {
       print("Success");
-      return User(User.getCount(),username,fname,lname,dob);
+      var id = response.body.toString();
+      return User(int.parse(id),username,fname,lname,dob);
+    }
+    else {
+      print('failed');
+      return null;
+    }
+  }
+
+  Future<User> getUser(String username) async {
+    var response = await http.post(
+        Uri.https(webhost,'get_user.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode( <String, String> {
+          'username' : username,
+        })
+    );
+    if (response.statusCode == 201) {
+      print("Success");
+      var data = jsonDecode(response.body);
+      return User.fromJson(data);
     }
     else {
       print('failed');

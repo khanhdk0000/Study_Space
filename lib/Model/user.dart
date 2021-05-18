@@ -1,5 +1,4 @@
 class User {
-  static int _count  = 20;
   final int _id;
   final String _username;
   final String _fname;
@@ -18,9 +17,5 @@ class User {
   String getName()
   {
     return this._fname + ' ' + this._lname;
-  }
-  static int getCount() {
-    _count++;
-    return _count;
   }
 }
