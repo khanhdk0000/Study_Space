@@ -40,8 +40,8 @@ class MQTTManager {
             'willtopic') // If you set this you must set a will message
         .withWillMessage('My Will message')
         .startClean()
-        .authenticateAs('khanhdk0000',
-            'aio_XzOV50HBgGzb7jIH1kbTLXuXeLfa') // Non persistent session for testing
+        .authenticateAs('dfighter1312',
+            'aio_qtIn31mHSSdml2klyZBLA026T9c4') // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
     _client.connectionMessage = connMess;
