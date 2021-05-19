@@ -11,3 +11,5 @@ const kDefaultPadding = 20.0;
 
 const kHomeScreen = 'homeScreen';
 const kWelcomeScreen = 'welcomeScreen';
+
+enum MQTTAppConnectionState { connected, disconnected, connecting }

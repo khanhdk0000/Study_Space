@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:study_space/constants.dart';
 
 class MQTTManager {
   // Private instance of client
-  final MQTTAppState _currentState;
+  final _currentState;
   MqttServerClient _client;
   final String _identifier;
   final String _host;
@@ -16,7 +16,7 @@ class MQTTManager {
       {@required String host,
       @required String topic,
       @required String identifier,
-      @required MQTTAppState state})
+      @required state})
       : _identifier = identifier,
         _host = host,
         _topic = topic,
@@ -41,7 +41,7 @@ class MQTTManager {
         .withWillMessage('My Will message')
         .startClean()
         .authenticateAs('khanhdk0000',
-            'aio_jvWu10qIKZj5AwisU7dklKsFWXPU') // Non persistent session for testing
+            'aio_JnjJ85T83gZfi2fStAMgSxKIYL84') // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
     _client.connectionMessage = connMess;

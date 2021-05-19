@@ -7,6 +7,7 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
+import 'package:study_space/mqtt/state/MQTTSensorState.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
@@ -20,8 +21,12 @@ class CustomViewAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MQTTAppState>(
-      create: (_) => MQTTAppState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
+        ChangeNotifierProvider<MQTTSensorState>(
+            create: (_) => MQTTSensorState()),
+      ],
       child: CustomView(),
     );
   }
@@ -42,7 +47,12 @@ class _CustomViewState extends State<CustomView> {
 
   MQTTAppState currentAppState;
   MQTTManager manager;
+  MQTTSensorState sensorCurrentAppState;
+  MQTTManager sensorManager;
   bool _lightStatus = false;
+  bool _overThreshold = false;
+  bool _sensorTest = false;
+  double _currentSliderValue = 0;
 
   @override
   void initState() {
@@ -78,10 +88,29 @@ class _CustomViewState extends State<CustomView> {
         _lightStatus = true;
       }
     }
+    // Sensor part
+    final MQTTSensorState sensorState = Provider.of<MQTTSensorState>(context);
+    sensorCurrentAppState = sensorState;
+    String sensorText = sensorState.getReceivedText;
+    double valueFromServerSensor = sensorState.getValueFromServer;
+    if (valueFromServerSensor > 100.00) {
+      _overThreshold = true;
+    }
+
+    if (_overThreshold) {
+      _publishMessage(id: '1', name: 'LED', data: '1');
+      _overThreshold = false;
+      sensorState.valueFromServer(0.0);
+      _lightStatus = true;
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Value from server exceeds threshold')));
+    }
+
     return Scaffold(
       drawer: SideMenu(),
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             Row(
               children: [
@@ -99,12 +128,12 @@ class _CustomViewState extends State<CustomView> {
               padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               child: Column(
                 children: [
-                  _titleWidget('Control Light'),
+                  _titleWidget('Control Light', 25.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Light',
+                        'Led',
                         style: TextStyle(
                           fontSize: 16.0,
                         ),
@@ -122,37 +151,58 @@ class _CustomViewState extends State<CustomView> {
                           setState(() {
                             _lightStatus = value;
                             String data = value ? "2" : "0";
-                            _publishMessage(data);
+                            _publishMessage(id: '1', name: 'LED', data: data);
                           });
                         },
                       ),
                     ],
                   ),
-                  _titleWidget('Sensor Data'),
-                  _sensorValueDisplay('Light', '0'),
-                  _sensorValueDisplay('Sound', '0'),
-                  _sensorValueDisplay('Temperature', '1'),
-                  _titleWidget('History Request'),
+                  _titleWidget('History Request', 16.0),
                   _buildScrollableTextWith(currentAppState.getHistoryText),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _buildConnectedButtonFrom(
+                      currentAppState.getAppConnectionState,
+                      _configureAndConnect,
+                      _disconnect),
+                  _connectionStateDisplay(_prepareStateMessageFrom(
+                      currentAppState.getAppConnectionState)),
+                  // This shit is so messy
+                  // Sensor
+                  Divider(
+                    color: Colors.black87,
+                  ),
+                  _titleWidget('Sensor Data', 25.0),
+                  _sensorValueDisplay('Light', 'Threshold: 100'),
+                  _buildSlider(sensorCurrentAppState.getAppConnectionState),
+                  _titleWidget('History Request', 16.0),
+                  _buildScrollableTextWith(
+                      sensorCurrentAppState.getHistoryText),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _buildConnectedButtonFrom(
+                      sensorCurrentAppState.getAppConnectionState,
+                      _configureAndConnect2,
+                      _disconnect2),
+                  _connectionStateDisplay(_prepareStateMessageFrom(
+                      sensorCurrentAppState.getAppConnectionState)),
                 ],
               ),
             ),
-            Spacer(),
-            _buildConnectedButtonFrom(currentAppState.getAppConnectionState),
-            _connectionStateDisplay(_prepareStateMessageFrom(
-                currentAppState.getAppConnectionState)),
           ],
         ),
       ),
     );
   }
 
-  Widget _titleWidget(String name) {
+  Widget _titleWidget(String name, double size) {
     return Text(
       name,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 16.0,
+        fontSize: size,
       ),
     );
   }
@@ -218,7 +268,8 @@ class _CustomViewState extends State<CustomView> {
     );
   }
 
-  Widget _buildConnectedButtonFrom(MQTTAppConnectionState state) {
+  Widget _buildConnectedButtonFrom(
+      MQTTAppConnectionState state, Function connect, Function disconnect) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -227,7 +278,7 @@ class _CustomViewState extends State<CustomView> {
             color: Colors.lightBlueAccent,
             child: const Text('Connect'),
             onPressed: state == MQTTAppConnectionState.disconnected
-                ? _configureAndConnect
+                ? connect
                 : null, //
           ),
         ),
@@ -235,12 +286,13 @@ class _CustomViewState extends State<CustomView> {
         Expanded(
           // ignore: deprecated_member_use
           child: RaisedButton(
-            color: Colors.redAccent,
-            child: const Text('Disconnect'),
-            onPressed: state == MQTTAppConnectionState.connected
-                ? _disconnect
-                : null, //
-          ),
+              color: Colors.redAccent,
+              child: const Text('Disconnect'),
+              disabledColor: Colors.grey,
+              onPressed: state != MQTTAppConnectionState.disconnected
+                  ? () => disconnect()
+                  : null //
+              ),
         ),
       ],
     );
@@ -260,6 +312,18 @@ class _CustomViewState extends State<CustomView> {
 
   void _configureAndConnect() {
     // TODO: Use UUID
+
+    String osPrefix = 'Flutter_iOS';
+    if (Platform.isAndroid) {
+      osPrefix = 'Flutter_Android';
+    }
+    manager = MQTTManager(
+        host: 'io.adafruit.com',
+        topic: 'khanhdk0000/feeds/bbc-led',
+        identifier: _random.nextInt(10).toString(),
+        state: currentAppState);
+    manager.initializeMQTTClient();
+    manager.connect();
     _getLatestData().then((value) {
       setState(() {
         if (value['data'] == '0') {
@@ -269,26 +333,19 @@ class _CustomViewState extends State<CustomView> {
         }
       });
     });
-    String osPrefix = 'Flutter_iOS';
-    if (Platform.isAndroid) {
-      osPrefix = 'Flutter_Android';
-    }
-    manager = MQTTManager(
-        host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/bbc-led',
-        identifier: _random.nextInt(100).toString(),
-        state: currentAppState);
-    manager.initializeMQTTClient();
-    manager.connect();
     print("You goes here");
   }
 
   void _disconnect() {
+    print('bitch');
+    setState(() {
+      _lightStatus = false;
+    });
     manager.disconnect();
   }
 
-  void _publishMessage(String text) {
-    Message light = Message(id: '1', name: 'LED', data: text, unit: '');
+  void _publishMessage({String id, String name, String data}) {
+    Message light = Message(id: id, name: name, data: data, unit: '');
     String message = jsonEncode(light);
     manager.publish(message);
     // _messageTextController.clear();
@@ -303,6 +360,69 @@ class _CustomViewState extends State<CustomView> {
     var temp2 = json.decode(temp);
     print(temp2['data'] + '1');
     return temp2;
+  }
+
+///////////////////////////
+  void _publishMessage2({String id, String name, String data}) {
+    Message light = Message(id: id, name: name, data: data, unit: '');
+    String message = jsonEncode(light);
+    sensorManager.publish(message);
+    // _messageTextController.clear();
+  }
+
+  void _configureAndConnect2() {
+    sensorManager = MQTTManager(
+        host: 'io.adafruit.com',
+        topic: 'khanhdk0000/feeds/sensor',
+        identifier: _random.nextInt(10).toString(),
+        state: sensorCurrentAppState);
+    sensorManager.initializeMQTTClient();
+    sensorManager.connect();
+  }
+
+  void _disconnect2() {
+    sensorManager.disconnect();
+  }
+
+  Widget _buildSlider(MQTTAppConnectionState state) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '0',
+              style:
+                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 19),
+            ),
+            Text(
+              _currentSliderValue.toStringAsFixed(3),
+              style:
+                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 19),
+            ),
+          ],
+        ),
+        Slider(
+          value: _currentSliderValue,
+          min: 0,
+          max: 100,
+          label: _currentSliderValue.round().toString(),
+          onChanged: (newValue) {
+            setState(() {
+              _currentSliderValue = newValue;
+            });
+          },
+          onChangeEnd: (value) {
+            if (state == MQTTAppConnectionState.connected) {
+              _publishMessage2(
+                  id: '2',
+                  name: 'Light',
+                  data: value.toStringAsFixed(3).toString());
+            }
+          },
+        ),
+      ],
+    );
   }
 }
 
