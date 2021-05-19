@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/Timer/view/timer_screen.dart';
 import 'package:study_space/constants.dart';
 
 class SideMenu extends StatelessWidget {
@@ -58,7 +59,10 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.timer_outlined),
             title: Text('Timer'),
-            onTap: () => null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TimerScreen()),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.device_thermostat),
