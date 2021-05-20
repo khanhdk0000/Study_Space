@@ -4,8 +4,8 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
-import 'package:study_space/Database/serverdb.dart';
-import 'package:study_space/summary/model/session.dart';
+import 'package:study_space/Controller/sessionController.dart';
+import 'package:study_space/Model/Session.dart';
 
 class SummaryAllSessionsView extends StatefulWidget {
   const SummaryAllSessionsView({Key key}) : super(key: key);
@@ -26,7 +26,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   @override
   void initState() {
     super.initState();
-    futureSession = ServerDB().getAllSessions();
+    futureSession = SessionController().getAllSessions();
   }
 
   @override

@@ -33,8 +33,8 @@ class schedController {
         return null;
       }
   }
-  Future<Schedule> getShced
-      (int user_id, {String sort = 'id' , String filter ='*' , String limit = '10'}) {
+  Future<Schedule> getSched
+      (int user_id, {String sort = 'id' , String filter ='*' , String limit = '10'})  async{
       var response = await http.post(
       Uri.https(webhost,'get_sched.php'),
       headers: <String, String>{
@@ -58,7 +58,5 @@ class schedController {
         return null;
       }
   }
-
-}
 
 }
