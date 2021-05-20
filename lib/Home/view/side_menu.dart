@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
@@ -58,7 +59,8 @@ class SideMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SummaryAllSessionsView()),
+                MaterialPageRoute(
+                    builder: (context) => SummaryAllSessionsView()),
               );
             },
           ),
@@ -93,6 +95,16 @@ class SideMenu extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          ListTile(
+            leading: Icon(Icons.construction),
+            title: Text('Customize'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CustomViewAll()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),

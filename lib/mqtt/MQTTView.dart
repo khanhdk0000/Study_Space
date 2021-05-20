@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
-
+import 'package:study_space/constants.dart';
 
 class MQTTView extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _MQTTViewState extends State<MQTTView> {
     // Keep a reference to the app state.
     currentAppState = appState;
     final Scaffold scaffold =
-    Scaffold(appBar: _buildAppBar(context), body: _buildColumn());
+        Scaffold(appBar: _buildAppBar(context), body: _buildColumn());
     return scaffold;
   }
 
@@ -79,10 +79,13 @@ class _MQTTViewState extends State<MQTTView> {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: <Widget>[
-          _buildTextFieldWith(_hostTextController, 'Enter broker address',currentAppState.getAppConnectionState),
+          _buildTextFieldWith(_hostTextController, 'Enter broker address',
+              currentAppState.getAppConnectionState),
           const SizedBox(height: 10),
           _buildTextFieldWith(
-              _topicTextController, 'Enter a topic to subscribe or listen', currentAppState.getAppConnectionState),
+              _topicTextController,
+              'Enter a topic to subscribe or listen',
+              currentAppState.getAppConnectionState),
           const SizedBox(height: 10),
           _buildPublishMessageRow(),
           const SizedBox(height: 10),
@@ -97,7 +100,8 @@ class _MQTTViewState extends State<MQTTView> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Expanded(
-          child: _buildTextFieldWith(_messageTextController, 'Enter a message', currentAppState.getAppConnectionState),
+          child: _buildTextFieldWith(_messageTextController, 'Enter a message',
+              currentAppState.getAppConnectionState),
         ),
         _buildSendButtonFrom(currentAppState.getAppConnectionState)
       ],
@@ -123,15 +127,17 @@ class _MQTTViewState extends State<MQTTView> {
         state == MQTTAppConnectionState.connected) {
       shouldEnable = true;
     } else if ((controller == _hostTextController &&
-        state == MQTTAppConnectionState.disconnected) || (controller == _topicTextController &&
-        state == MQTTAppConnectionState.disconnected)) {
+            state == MQTTAppConnectionState.disconnected) ||
+        (controller == _topicTextController &&
+            state == MQTTAppConnectionState.disconnected)) {
       shouldEnable = true;
     }
     return TextField(
         enabled: shouldEnable,
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 0, bottom: 0, top: 0, right: 0),
+          contentPadding:
+              const EdgeInsets.only(left: 0, bottom: 0, top: 0, right: 0),
           labelText: hintText,
         ));
   }
@@ -152,7 +158,6 @@ class _MQTTViewState extends State<MQTTView> {
   Widget _buildConnecteButtonFrom(MQTTAppConnectionState state) {
     return Row(
       children: <Widget>[
-
         Expanded(
           child: RaisedButton(
             color: Colors.lightBlueAccent,
@@ -182,11 +187,12 @@ class _MQTTViewState extends State<MQTTView> {
       child: const Text('Send'),
       onPressed: state == MQTTAppConnectionState.connected
           ? () {
-        _publishMessage(_messageTextController.text);
-      }
+              _publishMessage(_messageTextController.text);
+            }
           : null, //
     );
   }
+
   // Utility functions
   String _prepareStateMessageFrom(MQTTAppConnectionState state) {
     switch (state) {
@@ -202,7 +208,7 @@ class _MQTTViewState extends State<MQTTView> {
   void _configureAndConnect() {
     // TODO: Use UUID
     String osPrefix = 'Flutter_iOS';
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       osPrefix = 'Flutter_Android';
     }
     manager = MQTTManager(
@@ -214,12 +220,13 @@ class _MQTTViewState extends State<MQTTView> {
     manager.connect();
   }
 
-  void _disconnect(){
+  void _disconnect() {
     manager.disconnect();
   }
+
   void _publishMessage(String text) {
     String osPrefix = 'Flutter_iOS';
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       osPrefix = 'Flutter_Android';
     }
     final String message = osPrefix + ' says: ' + text;
