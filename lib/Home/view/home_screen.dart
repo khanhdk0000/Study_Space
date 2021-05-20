@@ -60,6 +60,7 @@ class HomeScreen extends StatelessWidget {
                 children: [topSummary, divider, HomeSchedule()],
               ),
             ),
+
     );
   }
 }
