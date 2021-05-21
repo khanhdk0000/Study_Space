@@ -147,7 +147,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-            return Text('Nothing to show');
+            return Text('Loading...');
           }),
         ),
       ),
