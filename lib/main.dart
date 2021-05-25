@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/log_in_screen_test.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Home/view/home_screen.dart';
@@ -9,12 +10,9 @@ import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:study_space/Controller/userController.dart';
-import 'package:study_space/Model/user.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(TestApp(text: 'hello'));
+  runApp(App());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
-      home: CustomViewAll(),
+      home: LogInScreen(),
       routes: {
         kHomeScreen: (BuildContext context) => HomeScreen(),
         kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
@@ -93,34 +91,9 @@ class TestApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       home: Scaffold(
-        body: Center(
-          child:
-            TestClass(),
-        ),
+        body: Text(text),
       ),
     );
   }
 }
 
-class TestClass extends StatelessWidget {
-  String s = 'T';
-  var c = new userController();
-
-  @override
-  Widget build(BuildContext context)  {
-    return new FutureBuilder(
-        // future: getTextFromFile(),
-        future: addUsers(),
-        initialData: "Loading text..",
-        builder: (BuildContext context, AsyncSnapshot<String> text) {
-          return new Text(text.data);
-        }
-    );
-  }
-}
-
-Future<String> addUsers() async{
-  var c = new userController();
-  var  a = await c.addUser('new_user2', 'F', 'L', '1/1/1');
-  return 'Done';
-}

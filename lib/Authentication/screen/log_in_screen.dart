@@ -109,11 +109,11 @@ class _LogInFormState extends State<LogInForm> {
           .user;
       if (user != null) {
         print('success');
+        var c = new userController();
+        c.addUser(user.displayName);
         setState(() {
           _success = true;
           _userEmail = user.email;
-          var c = new userController();
-          us.User db = await c.getUser(user.displayName);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Successfully signed in ' + user.displayName),
@@ -122,7 +122,7 @@ class _LogInFormState extends State<LogInForm> {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => HomeScreen(
-                user: user, dbu: db,
+                user: user
               ),
             ),
           );

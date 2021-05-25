@@ -15,6 +15,4 @@ const webhost = "studyspace-mdp-2021.000webhostapp.com";
 const kHomeScreen = 'homeScreen';
 const kWelcomeScreen = 'welcomeScreen';
 
-const webhost = "studyspace-mdp-2021.000webhostapp.com";
-
 enum MQTTAppConnectionState { connected, disconnected, connecting }

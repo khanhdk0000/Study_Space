@@ -8,11 +8,10 @@ import 'package:study_space/Controller/userController.dart';
 const divider = SizedBox(height: 32.0);
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({this.user,this.dbu});
+  HomeScreen({this.user});
   final userName = "Gwen";
   final progress = 75;
   final User user;
-  final us.User dbu;
 
   @override
   Widget build(BuildContext context) {

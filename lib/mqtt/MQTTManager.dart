@@ -41,7 +41,8 @@ class MQTTManager {
         .withWillMessage('My Will message')
         .startClean()
         .authenticateAs('khanhdk0000',
-            'aio_JnjJ85T83gZfi2fStAMgSxKIYL84') // Non persistent session for testing
+            // 'aio_JnjJ85T83gZfi2fStAMgSxKIYL84'
+    'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR') // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
     _client.connectionMessage = connMess;
