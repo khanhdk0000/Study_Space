@@ -21,3 +21,26 @@ class MenuButton extends StatelessWidget {
         );
   }
 }
+
+
+class ReturnButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: TextButton(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child:   Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 24.0
+          ),
+        )
+
+    );
+  }
+}

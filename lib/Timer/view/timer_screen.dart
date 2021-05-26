@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
+import 'package:study_space/Timer/view/countdown_screen.dart';
+
 
 const divider = SizedBox(height: 32.0);
 
@@ -84,52 +86,90 @@ class _TimerScreenState extends State<TimerScreen> {
     padding: EdgeInsets.all(22),
     color: Color.fromRGBO(0, 0, 0, 0.06),
     width: double.infinity,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    child: Column(
       children: [
-        TextButton(
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-          ),
-          onPressed: ()  => _displayDialog(context, "hour"),
-          child:   Text(
-            "${hours.toString().padLeft(2, '0')}",
-            textAlign: TextAlign.left,
-            style: pickerTextStyle,
-          )),
-        Text(
-          ":",
-          textAlign: TextAlign.left,
-          style: pickerTextStyle,
-        ),
-        TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            ),
-            onPressed: ()  => _displayDialog(context, "minute"),
-            child:   Text(
-              "${minutes.toString().padLeft(2, '0')}",
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              ),
+              onPressed: ()  => _displayDialog(context, "hour"),
+              child:   Text(
+                "${hours.toString().padLeft(2, '0')}",
+                textAlign: TextAlign.left,
+                style: pickerTextStyle,
+              )),
+            Text(
+              ":",
               textAlign: TextAlign.left,
               style: pickerTextStyle,
-            )),
-        Text(
-          ":",
-          textAlign: TextAlign.left,
-          style: pickerTextStyle,
-        ),
-        TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "second"),
-            child:   Text(
-              "${seconds.toString().padLeft(2, '0')}",
+            TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: ()  => _displayDialog(context, "minute"),
+                child:   Text(
+                  "${minutes.toString().padLeft(2, '0')}",
+                  textAlign: TextAlign.left,
+                  style: pickerTextStyle,
+                )),
+            Text(
+              ":",
               textAlign: TextAlign.left,
               style: pickerTextStyle,
-            )),
+            ),
+            TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: ()  => _displayDialog(context, "second"),
+                child:   Text(
+                  "${seconds.toString().padLeft(2, '0')}",
+                  textAlign: TextAlign.left,
+                  style: pickerTextStyle,
+                )),
+          ],
+        ),
       ],
     )
     );
+
+    final startButton =  TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // <-- Radius
+    ),
+        ),
+        onPressed: ()  => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CountdownScreen()),
+        ),
+        child:   Container(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Start  ",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+                size: 22.0,
+              ),
+            ],
+          ),
+        ));
 
     return Scaffold(
       drawer: SideMenu(),
@@ -137,7 +177,7 @@ class _TimerScreenState extends State<TimerScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, divider, TimePicker])),
+              children: [Navigation, divider, TimePicker, startButton])),
     );
   }
 }
