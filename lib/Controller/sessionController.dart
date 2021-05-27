@@ -22,7 +22,7 @@ class SessionController {
     }
   }
 
-  Future<Session> addSession(int id, int sched_id, String date, String start_time,
+  Future<Session> addSession(int sched_id, String date, String start_time,
       String end_time, String status, String title) async {
     var response = await http.post(
         Uri.https(webhost,'add_session.php'),

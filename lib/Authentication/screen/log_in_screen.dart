@@ -8,6 +8,7 @@ import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Model/user.dart' as us;
 import 'package:study_space/Controller/userController.dart';
+import 'package:study_space/global.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -102,7 +103,7 @@ class _LogInFormState extends State<LogInForm> {
     print(_emailController.text);
     print(_passwordController.text);
     try {
-      final User user = (await _auth.signInWithEmailAndPassword(
+      user = (await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       ))

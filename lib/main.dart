@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Authentication/log_in_screen_test.dart';
+import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Home/view/home_screen.dart';
