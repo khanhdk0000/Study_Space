@@ -146,10 +146,10 @@ class _TimerScreenState extends State<TimerScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CountdownScreen()),
+          MaterialPageRoute(builder: (context) => CountdownScreen(hours, minutes, seconds)),
         ),
         child:   Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
