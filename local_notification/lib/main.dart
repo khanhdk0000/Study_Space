@@ -14,18 +14,6 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
-// class TestClass extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new FutureBuilder(
-//         future: getSchedule(),
-//         initialData: "Loading text..",
-//         builder: (BuildContext context, AsyncSnapshot<String> text) {
-//           return new Text(text.data ?? 'default value');
-//         });
-//   }
-// }
-
 class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
@@ -50,24 +38,14 @@ class _MyAppState extends State<MyApp> {
     priority: Priority.high,
   );
 
-  String test;
+  // GET STUDY-TIME AND END-TIME FUNCTION
   List<String> scheduledStudyList = [];
-  Future getSchedule() async {
+  List<String> scheduledEndtimeList = [];
+  Future updateSchedule() async {
     var c = new scheduleController();
-    scheduledStudyList = await c.testSql();
+    scheduledStudyList = await c.getScheduletime();
+    scheduledEndtimeList = await c.getEndtime();
   }
-
-  // List<String> scheduledStudyList = [
-  //   "2021-05-18 23:59:00",
-  //   "2021-05-19 00:00:00",
-  //   "2021-05-18 10:50:30"
-  // ];
-
-  List<String> scheduledEndtimeList = [
-    "2021-05-18 23:59:30",
-    "2021-05-19 00:00:30",
-    "2021-05-18 10:45:30"
-  ];
 
   // BREAK NOTIFICATION
   Future _showBreakNotification(String time, var i) async {
@@ -129,6 +107,7 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  // SWITCH
   var onoff = 'Off';
   bool switchControl = false;
   void onchange(bool value) {
@@ -162,18 +141,9 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               ElevatedButton(
-                  onPressed: () => [
-                        getSchedule(),
-                        _showStudyNotification(scheduledStudyList),
-                        _showEndtimeNotification(scheduledEndtimeList)
-                      ],
-                  child: Text('Turn on notifications'),
-                  style: ElevatedButton.styleFrom(primary: Colors.orange)),
-              for (var i in scheduledStudyList) Text(i),
-              ElevatedButton(
-                  onPressed: _cancelAllNotifications,
-                  child: Text('Turn off notifications'),
-                  style: ElevatedButton.styleFrom(primary: Colors.orange)),
+                onPressed: updateSchedule,
+                child: Text('Update schedule'),
+              ),
               Switch(
                 value: switchControl,
                 onChanged: (bool value) => onchange(value),
