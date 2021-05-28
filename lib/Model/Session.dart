@@ -78,7 +78,7 @@ class Session {
   }
 
   List<String> displaySession(){
-    return [this.getFullTime(), this.getTitle(), this.getDisplayDate(), this.getScore()];
+    return [this.getFullTime(), this.getTitle(), this.getDisplayDate(), this.getScore(), this.getId()];
   }
 
 }
