@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:local_notification/scheduleController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
@@ -12,6 +13,18 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => new _MyAppState();
 }
+
+// class TestClass extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new FutureBuilder(
+//         future: getSchedule(),
+//         initialData: "Loading text..",
+//         builder: (BuildContext context, AsyncSnapshot<String> text) {
+//           return new Text(text.data ?? 'default value');
+//         });
+//   }
+// }
 
 class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -37,11 +50,18 @@ class _MyAppState extends State<MyApp> {
     priority: Priority.high,
   );
 
-  List<String> scheduledStudyList = [
-    "2021-05-18 23:59:00",
-    "2021-05-19 00:00:00",
-    "2021-05-18 10:50:30"
-  ];
+  String test;
+  List<String> scheduledStudyList = [];
+  Future getSchedule() async {
+    var c = new scheduleController();
+    scheduledStudyList = await c.testSql();
+  }
+
+  // List<String> scheduledStudyList = [
+  //   "2021-05-18 23:59:00",
+  //   "2021-05-19 00:00:00",
+  //   "2021-05-18 10:50:30"
+  // ];
 
   List<String> scheduledEndtimeList = [
     "2021-05-18 23:59:30",
@@ -141,14 +161,15 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              for (var i in scheduledStudyList) Text(i),
               ElevatedButton(
                   onPressed: () => [
+                        getSchedule(),
                         _showStudyNotification(scheduledStudyList),
                         _showEndtimeNotification(scheduledEndtimeList)
                       ],
                   child: Text('Turn on notifications'),
                   style: ElevatedButton.styleFrom(primary: Colors.orange)),
+              for (var i in scheduledStudyList) Text(i),
               ElevatedButton(
                   onPressed: _cancelAllNotifications,
                   child: Text('Turn off notifications'),
