@@ -7,14 +7,22 @@ import 'package:http/http.dart' as http;
 const webhost = "dirtyg.000webhostapp.com";
 
 class scheduleController {
-  Future<List<String>> getScheduletime() async {
-    var folder = "get_schedule.php";
+  Future<String> getDate(int i) async {
+    var folder = "get_date.php";
+    http.Response response = await http.get(Uri.https(webhost, folder));
+    var data = jsonDecode(response.body);
+
+    return data[i].toString().substring(7, 17);
+  }
+
+  Future<List<String>> getStarttime() async {
+    var folder = "get_starttime.php";
     http.Response response = await http.get(Uri.https(webhost, folder));
     var data = jsonDecode(response.body);
 
     List<String> scheduledStudyList = [];
     for (var i = 0; i < data.length; i++) {
-      data[i] = data[i].toString().substring(16, 35);
+      data[i] = await getDate(i) + ' ' + data[i].toString().substring(13, 21);
       scheduledStudyList.add(data[i]);
       print(data[i]);
     }
@@ -28,7 +36,7 @@ class scheduleController {
 
     List<String> scheduledEndtimeList = [];
     for (var i = 0; i < data.length; i++) {
-      data[i] = data[i].toString().substring(11, 30);
+      data[i] = await getDate(i) + ' ' + data[i].toString().substring(11, 19);
       scheduledEndtimeList.add(data[i]);
       print(data[i]);
     }

@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   List<String> scheduledEndtimeList = [];
   Future updateSchedule() async {
     var c = new scheduleController();
-    scheduledStudyList = await c.getScheduletime();
+    scheduledStudyList = await c.getStarttime();
     scheduledEndtimeList = await c.getEndtime();
   }
 
