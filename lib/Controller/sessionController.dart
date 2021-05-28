@@ -21,5 +21,4 @@ class SessionController {
       throw Exception('Failed to load data from $folder');
     }
   }
-
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/Session.dart';
+import 'package:study_space/summary/view/one_session.dart';
 
 class SummaryAllSessionsView extends StatefulWidget {
   const SummaryAllSessionsView({Key key}) : super(key: key);
@@ -139,6 +139,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               var numDisplay = snapshot.data.length > _numView ? _numView : snapshot.data.length;
               List<Widget> widLst = [];
               for(int i = 0; i < numDisplay; i++){
+                print(snapshot.data[i].displaySession());
                 widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
               }
               return Column(
@@ -247,7 +248,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => OneSessionView(sessionList: oneScheduleList),
           ),
         ),
         child: Container(
@@ -298,29 +299,33 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                     )
                   ],
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    color: _circleColor(int.parse(oneScheduleList[3])),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    oneScheduleList[3],
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    )
-                  )
-                )
+                _circleScore(oneScheduleList[3])
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _circleScore(String score) {
+    return Container(
+                alignment: Alignment.center,
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  color: _circleColor(int.parse(score)),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  score,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  )
+                )
+              );
   }
 
   MaterialAccentColor _circleColor(int score){
