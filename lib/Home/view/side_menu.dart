@@ -4,6 +4,7 @@ import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
+import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/summary/view/all_sessions.dart';
 
@@ -103,6 +104,16 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CustomViewAll()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.construction),
+            title: Text('Setting'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
             },
           ),
