@@ -1,4 +1,5 @@
 import "package:flutter/cupertino.dart";
+import 'package:intl/intl.dart';
 import 'package:study_space/Controller/sensor_controller.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
@@ -10,6 +11,7 @@ class MQTTLightState with ChangeNotifier {
   String _historyText = "";
   double _valueFromServer = 0;
   SensorController sensorController = SensorController();
+  final f = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   void setReceivedText(String text) async {
     var info = json.decode(text);
@@ -19,10 +21,10 @@ class MQTTLightState with ChangeNotifier {
     _receivedText = text;
     _historyText = _historyText + '\n' + _receivedText;
     await sensorController.addSensorField(
-        name: 'Light',
+        name: 'LIGHT',
         unit: 'L1',
-        type: 'L',
-        timestamp: '2021-01-01 17:00:56',
+        type: 'Light',
+        timestamp: f.format(DateTime.now()),
         sess_id: '1',
         data: _valueFromServer.toString());
     notifyListeners();
