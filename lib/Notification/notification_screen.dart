@@ -6,7 +6,8 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 
 class NotificationScreen extends StatefulWidget {
-  MyScreen createState() => MyScreen();
+  @override
+  MyScreen createState() => new MyScreen();
 }
 
 class MyScreen extends State<NotificationScreen> {
@@ -36,7 +37,7 @@ class MyScreen extends State<NotificationScreen> {
   ///////////////////////////////////////////////
   // GET STUDY-TIME AND END-TIME FROM DATABASE //
   ///////////////////////////////////////////////
-  List<String> scheduledStudyList = [];
+  List<String> scheduledStudyList = ['2021-05-29 14:07:00'];
   List<String> scheduledEndtimeList = [];
   Future updateSchedule() async {
     var c = new scheduleController();
@@ -168,6 +169,7 @@ class MyScreen extends State<NotificationScreen> {
                   primary: kPrimaryColor,
                 ),
               ),
+              Text(scheduledStudyList[0]),
               Switch(
                 value: switchControl,
                 onChanged: (bool value) => onchange(value),
