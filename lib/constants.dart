@@ -14,5 +14,8 @@ const kWelcomeScreen = 'welcomeScreen';
 
 const webhost = "studyspace-mdp-2021.000webhostapp.com";
 
+String adaUserName = 'khanhdk0000';
+String adaPassword = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
+
 enum MQTTAppConnectionState { connected, disconnected, connecting }
-enum SensorEvaluation {normal, warning, bad}
+enum SensorEvaluation { normal, warning, bad }

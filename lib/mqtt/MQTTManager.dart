@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:study_space/constants.dart';
+// import 'package:study_space/sensitive_info.dart';
 
 class MQTTManager {
   // Private instance of client
@@ -40,8 +41,8 @@ class MQTTManager {
             'willtopic') // If you set this you must set a will message
         .withWillMessage('My Will message')
         .startClean()
-        .authenticateAs('khanhdk0000',
-            'aio_JnjJ85T83gZfi2fStAMgSxKIYL84') // Non persistent session for testing
+        .authenticateAs(
+            adaUserName, adaPassword) // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
     _client.connectionMessage = connMess;

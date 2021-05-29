@@ -3,7 +3,6 @@ import 'package:study_space/constants.dart';
 import 'dart:convert';
 import 'package:study_space/Model/Session.dart';
 
-
 class SessionController {
   SessionController();
 
