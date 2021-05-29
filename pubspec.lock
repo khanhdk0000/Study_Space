@@ -391,7 +391,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   stack_trace:
     dependency: transitive
     description:
@@ -426,7 +426,6 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.3.0"
   timezone:
     dependency: transitive
@@ -435,9 +434,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.0"
-=======
-    version: "0.2.19"
->>>>>>> 91259cfd0f1a75f1d2754c794a21778fb71a7af2
   typed_data:
     dependency: transitive
     description:
