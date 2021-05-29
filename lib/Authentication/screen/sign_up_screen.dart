@@ -45,40 +45,6 @@ class Body extends StatelessWidget {
             SizedBox(
               height: size.height * 0.03,
             ),
-            // SignUpTextField(
-            //   hintText: 'Your username',
-            //   icon: Icons.person,
-            //   onChanged: (value) {},
-            // ),
-            // SignUpTextField(
-            //   hintText: 'Your email',
-            //   icon: Icons.email_rounded,
-            //   onChanged: (value) {},
-            // ),
-            // TextFieldContainer(
-            //   child: TextField(
-            //     obscureText: true,
-            //     onChanged: (value) {},
-            //     decoration: InputDecoration(
-            //       icon: Icon(
-            //         Icons.lock,
-            //         color: kPrimaryColor,
-            //       ),
-            //       hintText: 'Your password',
-            //       border: InputBorder.none,
-            //       suffixIcon: Icon(
-            //         Icons.visibility,
-            //         color: kPrimaryColor,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // RoundedButton(
-            //   press: () {},
-            //   text: 'SIGN UP',
-            //   size: size,
-            //   color: kPrimaryColor,
-            // ),
             RegisterForm(),
             SizedBox(
               height: size.height * 0.03,
@@ -154,9 +120,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   'Successfully signed up ' + _userEmail + ' ' + _username)));
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                user: user,
-              ),
+              builder: (context) => HomeScreen(),
             ),
           );
         });
@@ -294,6 +258,7 @@ class SignUpTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        autofocus: true,
         onChanged: onChanged,
         decoration: InputDecoration(
           icon: Icon(
