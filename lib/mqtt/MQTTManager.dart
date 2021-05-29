@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:study_space/constants.dart';
-import 'package:study_space/sensitive_info.dart';
+// import 'package:study_space/sensitive_info.dart';
 
 class MQTTManager {
   // Private instance of client

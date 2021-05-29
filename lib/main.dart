@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/summary/view/all_sessions.dart';
 import 'package:study_space/theme.dart';
@@ -8,6 +9,9 @@ import 'package:study_space/mqtt/MQTTView.dart';
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+User user = FirebaseAuth.instance.currentUser;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,15 +22,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: lightThemeData(context),
-      home: WelcomeScreen(),
-      routes: {
-        kHomeScreen: (BuildContext context) => HomeScreen(),
-        kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
+        ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: lightThemeData(context),
+        home: user != null ? HomeScreen() : WelcomeScreen(),
+        routes: {
+          kHomeScreen: (BuildContext context) => HomeScreen(),
+          kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
+        },
+      ),
     );
   }
 }
