@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Sensor/controller/MQTTController.dart';
+import 'package:intl/intl.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/Sensor/view/custom_slider.dart';
+import 'package:study_space/Sensor/view/switch_button.dart';
+import 'package:study_space/Sensor/view/top_sensor_screen_part.dart';
 import 'package:study_space/constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
 import 'dart:math';
@@ -60,17 +59,14 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
       } else {
         color = Colors.orangeAccent;
       }
-      return Row(
-        children: <Widget>[
-          Container(
-              width: 20,
-              height: 20,
-              color: color,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                child: Text(status, textAlign: TextAlign.center),
-              )),
-        ],
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        child: Container(
+            width: 20,
+            height: 20,
+            // color: color,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+            child: Text('', textAlign: TextAlign.center)),
       );
     }
 
@@ -87,6 +83,7 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                   height: kDefaultPadding,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
@@ -197,17 +194,17 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                       SizedBox(
                         height: kDefaultPadding * 2,
                       ),
-                      // TextButton(
-                      //     onPressed: () {
-                      //       sensorController.addSensorField(
-                      //           name: 'Light',
-                      //           unit: 'L1',
-                      //           type: 'L',
-                      //           timestamp: '2021-01-01 17:00:56',
-                      //           sess_id: '1',
-                      //           data: '109');
-                      //     },
-                      //     child: Text('Send'))
+                      TextButton(
+                        onPressed: () {
+                          final f = DateFormat('yyyy-MM-dd hh:mm:ss');
+                          print(DateTime.now());
+                          print(f.format(DateTime.now()));
+                        },
+                        child: Text(
+                          'test',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -216,49 +213,6 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-/////////////////////////////////////
-
-class TopSensorScreen extends StatelessWidget {
-  const TopSensorScreen({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 210,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Color(0xFF2F4357),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
-          ),
-          child: Container(
-            child: SvgPicture.asset(
-              'assets/img/creativity.svg',
-            ),
-            padding: EdgeInsets.all(10),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: kContentColorDarkTheme,
-          ),
-        )
-      ],
     );
   }
 }
@@ -276,56 +230,5 @@ class _DropdownWidgetState extends State<DropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return IconButton(icon: Icon(Icons.arrow_drop_down), onPressed: () {});
-  }
-}
-
-class SwitchButton extends StatefulWidget {
-  const SwitchButton({
-    Key key,
-    @required this.lightState,
-    @required this.connect,
-    @required this.disconnect,
-  }) : super(key: key);
-
-  final MQTTLightState lightState;
-  final Function connect;
-  final Function disconnect;
-
-  @override
-  _SwitchButtonState createState() => _SwitchButtonState();
-}
-
-class _SwitchButtonState extends State<SwitchButton> {
-  bool status = false;
-
-  @override
-  Widget build(BuildContext context) {
-    MQTTLightState state = Provider.of<MQTTLightState>(context);
-    if (state.getAppConnectionState == MQTTAppConnectionState.connected) {
-      status = true;
-    }
-
-    return Container(
-      child: FlutterSwitch(
-        width: 80,
-        height: 40.0,
-        valueFontSize: 13.0,
-        toggleSize: 25.0,
-        value: status,
-        borderRadius: 30.0,
-        padding: 8.0,
-        showOnOff: true,
-        onToggle: (value) {
-          setState(() {
-            status = value;
-            if (status == true) {
-              this.widget.connect();
-            } else {
-              this.widget.disconnect();
-            }
-          });
-        },
-      ),
-    );
   }
 }
