@@ -4,12 +4,13 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 const divider = SizedBox(height: 32.0);
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({this.user});
+  // HomeScreen({this.user});
   final userName = "Gwen";
   final progress = 75;
-  final User user;
+  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {

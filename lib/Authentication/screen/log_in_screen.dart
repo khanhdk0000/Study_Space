@@ -117,9 +117,7 @@ class _LogInFormState extends State<LogInForm> {
           );
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                user: user,
-              ),
+              builder: (context) => HomeScreen(),
             ),
           );
         });
@@ -238,6 +236,7 @@ class LogInTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        autofocus: true,
         onChanged: onChanged,
         decoration: InputDecoration(
           icon: Icon(
