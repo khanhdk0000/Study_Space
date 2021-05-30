@@ -1,6 +1,5 @@
 import 'package:study_space/Sensor/state/light_state.dart';
-import 'package:provider/provider.dart';
-import 'package:study_space/mqtt/MQTTManager.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:math';
 
 final _random = new Random();

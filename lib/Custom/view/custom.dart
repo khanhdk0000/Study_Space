@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
-import 'package:study_space/mqtt/state/MQTTAppState.dart';
-import 'package:study_space/mqtt/state/MQTTSensorState.dart';
-import 'package:study_space/mqtt/MQTTManager.dart';
+import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
+import 'package:study_space/MQTTServer/state/MQTTSensorState.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 

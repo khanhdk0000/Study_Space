@@ -2,36 +2,28 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:study_space/Model/sensor.dart';
 
 class ChartView extends StatefulWidget {
-  const ChartView({Key key}) : super(key: key);
+  final List<Sensor> sensorList;
+  final String type;
+  const ChartView({Key key, this.sensorList, this.type}) : super(key: key);
 
   @override
   _ChartViewState createState() => _ChartViewState();
 }
 
 class _ChartViewState extends State<ChartView> {
-  List<charts.Series<SensorData, int>> _seriesLineData;
+  List<charts.Series<Sensor, int>> _seriesLineData;
   _generateData() {
-    var line_sensor_data = [
-      new SensorData(0, 200),
-      new SensorData(5, 205),
-      new SensorData(10, 202),
-      new SensorData(15, 187),
-      new SensorData(20, 189),
-      new SensorData(25, 193),
-      new SensorData(35, 200),
-      new SensorData(50, 201),
-      new SensorData(70, 203),
-      new SensorData(75, 209),
-    ];
+    int minId = int.parse(widget.sensorList[0].id);
     _seriesLineData.add(
       charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.red),
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(chartColor(widget.type)),
         id: 'Lux',
-        data: line_sensor_data,
-        domainFn: (SensorData sensors, _) => sensors.min,
-        measureFn: (SensorData sensors, _) => sensors.val,
+        data: widget.sensorList,
+        domainFn: (Sensor sensors, _) => int.parse(sensors.id) - minId,
+        measureFn: (Sensor sensors, _) => sensors.data.round(),
       ),
     );
   }
@@ -75,6 +67,16 @@ class _ChartViewState extends State<ChartView> {
         ],
       ),
     );
+  }
+
+  Color chartColor(String type){
+    if (type == 'Light') {
+      return Colors.deepOrange;
+    } else if (type == 'Sound') {
+      return Colors.blue;
+    } else if (type == 'Temperature') {
+      return Colors.yellow;
+    }
   }
 }
 
