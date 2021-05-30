@@ -60,7 +60,7 @@ class Session {
   }
 
   String getDisplayDate(){
-    DateTime date = DateFormat('dd/MM/yyyy').parse(this.getDate());
+    DateTime date = DateFormat('MM/dd/yyyy').parse(this.getDate());
     return DateFormat('EEEE, MMM d').format(date);
   }
 

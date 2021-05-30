@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:study_space/Sensor/controller/MQTTController.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/Sensor/view/custom_slider.dart';
 import 'package:study_space/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-import 'package:study_space/mqtt/MQTTManager.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:math';
-import 'package:study_space/Controller/sensor_controller.dart';
+import 'package:study_space/Controller/sensorController.dart';
 
 final _random = new Random();
 

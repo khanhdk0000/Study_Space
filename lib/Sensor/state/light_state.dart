@@ -1,5 +1,5 @@
 import "package:flutter/cupertino.dart";
-import 'package:study_space/Controller/sensor_controller.dart';
+import 'package:study_space/Controller/sensorController.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
 
