@@ -3,6 +3,11 @@ class Schedule {
   int rep;
   int period;
   List<Session> sessions = [];
+
+  void addSession(String name, String time){
+
+  }
+
 }
 
 class Session {
