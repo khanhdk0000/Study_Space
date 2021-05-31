@@ -57,9 +57,6 @@ class _CustomViewState extends State<CustomView> {
   @override
   void initState() {
     super.initState();
-    // if (currentAppState.getAppConnectionState == MQTTAppConnectionState.disconnected){
-    //   _configureAndConnect();
-    // }
   }
 
   @override
@@ -97,6 +94,7 @@ class _CustomViewState extends State<CustomView> {
       _overThreshold = true;
     }
 
+    // TODO: (from khanh) How to implement this but different screens?
     if (_overThreshold) {
       _publishMessage(id: '1', name: 'LED', data: '1');
       _overThreshold = false;

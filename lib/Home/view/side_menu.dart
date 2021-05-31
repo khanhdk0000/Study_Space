@@ -8,9 +8,14 @@ import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:study_space/OutputDevice/output_device_screen.dart';
+import 'package:study_space/Summary/view/all_sessions.dart';
+
 import 'package:study_space/sessions/session_test.dart';
-import 'package:study_space/summary/view/all_sessions.dart';
-import 'package:study_space/sessions/session_test.dart';
+
+
+
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -130,6 +135,16 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.construction),
+            title: Text('Output device'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OutputDeviceScreen()),
               );
             },
           ),
