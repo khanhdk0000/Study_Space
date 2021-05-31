@@ -2,12 +2,9 @@ import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
 import 'package:study_space/Controller/sensorController.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
-import 'package:study_space/OutputDevice/controller/buzzer_controller.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
-import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 import 'dart:math';
 
 final _random = new Random();
@@ -37,6 +34,8 @@ class MQTTLightState with ChangeNotifier {
         timestamp: f.format(DateTime.now()),
         sess_id: '1', // TODO: get current session ID
         data: _valueFromServer.toString());
+    // TODO: (from khanh) notify buzzer if threshold of light is exceeded,
+    // but how to publish message to buzzer feed
     if (_valueFromServer > 100) {
       notifyBuzzer();
     }
@@ -64,6 +63,8 @@ class MQTTLightState with ChangeNotifier {
   }
 
   void notifyBuzzer() async {
+    // TODO: (from khanh) I create a new manager to publish message, sounds so
+    // scam, the page got rebuilt three times, pls check this
     MQTTManager manager = MQTTManager(
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/buzzer',
