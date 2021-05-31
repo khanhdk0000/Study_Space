@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Schedule/schedule_controller.dart';
+import 'package:study_space/Controller/schedController.dart';
+import 'package:study_space/Model/schedule.dart';
 import 'package:study_space/Schedule/view/edit_schedule_screen.dart';
+import 'package:study_space/Schedule/view/add_schedule_screen.dart';
+
+
+///User arguments
+String _username = "Gwen";
+int _userid = 2;
+final User user = auth.currentUser;
+
 
 const divider = SizedBox(height: 32.0);
 
@@ -15,10 +26,12 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  var schedule = Schedule();
+  Future<List<Schedule>> schedules;
 
 
   Widget build(BuildContext context) {
+    schedules = schedController().getSched(_userid);
+
     var Navigation = Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -47,23 +60,29 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ),
     );
 
-    var YesSchedule = Container(
-        padding: EdgeInsets.all(22),
-        color: Color.fromRGBO(0, 0, 0, 0.06),
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              "You have a schedule!.",
-              textAlign: TextAlign.left,
-            ),
+    var Body = FutureBuilder(future: schedules, builder: (context, snapshot){
+              if (snapshot.hasData){
+                if (snapshot.data.length > 0) {
+                return ListBody(
+                children: [
+                for (final schedule in snapshot.data)
+                Container(
+                    padding: EdgeInsets.only(bottom: 14),
+                  child: ScheduleButton(schedule)
+                )
+                ],
+                );
+                }
+                else {
+                  return NoSchedule;
+                }
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Text('Loading...');
+            });
 
-          ],
-        )
-    );
-
-    final EditButton =  TextButton(
+    final AddButton =  TextButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
@@ -72,7 +91,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EditScheduleScreen()),
+          MaterialPageRoute(builder: (context) => AddScheduleScreen()),
         ),
         child:   Container(
           padding: EdgeInsets.all(14),
@@ -80,7 +99,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "Edit Schedule  ",
+                "Add schedule  ",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
@@ -103,7 +122,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, divider, schedule.sessions.length == 0 ? NoSchedule:YesSchedule, EditButton])),
+              children: [Navigation, divider, Body, AddButton])),
+    );
+  }
+}
+
+
+class ScheduleButton extends StatelessWidget {
+  // HomeScreen({this.user});
+  String date;
+  String startTime;
+  String endTime;
+  ScheduleButton(Schedule schedule){
+    date = schedule.upcomingDate();
+   startTime = schedule.start_time;
+   endTime = schedule.end_time;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      color: Color.fromRGBO(0, 0, 0, 0.06),
+      padding: EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Text("$date", style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+              color: Colors.black)),
+          Text("From $startTime to $endTime", style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 20,
+              color: Colors.black)),
+        ],
+      )
     );
   }
 }

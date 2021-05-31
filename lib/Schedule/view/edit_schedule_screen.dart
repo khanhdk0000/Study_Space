@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Schedule/schedule_controller.dart';
+import 'package:study_space/Controller/schedController.dart';
 import 'package:study_space/Schedule/view/add_session_screen.dart';
+import 'package:study_space/Schedule/view/add_schedule_screen.dart';
+
+
+///User arguments
+String _username = "Gwen";
+int _userid = 13;
+int _progress = 75;
+final User user = auth.currentUser;
 
 const divider = SizedBox(height: 32.0);
 
@@ -15,7 +25,7 @@ class EditScheduleScreen extends StatefulWidget {
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
   @override
 
-  var schedule = Schedule();
+  var schedule = schedController();
 
 
   Widget build(BuildContext context) {
@@ -42,7 +52,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AddSessionScreen()),
+          MaterialPageRoute(builder: (context) => AddScheduleScreen()),
         ),
         child:   Container(
           padding: EdgeInsets.all(12),

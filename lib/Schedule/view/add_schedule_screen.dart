@@ -16,18 +16,20 @@ final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 32.0);
 
-class AddSessionScreen extends StatefulWidget {
+class AddScheduleScreen extends StatefulWidget {
 
   @override
-  _AddSessionScreenState createState() => _AddSessionScreenState();
+  _AddScheduleScreenState createState() => _AddScheduleScreenState();
 }
 
-class _AddSessionScreenState extends State<AddSessionScreen> {
+class _AddScheduleScreenState extends State<AddScheduleScreen> {
   @override
 
-  var schedule = schedController();
-  var subject = "Your subject name";
-  var timeframe = "Your timeframe";
+  var date = "_";
+  var rep = 0;
+  var period = 0;
+  var startTime = "_";
+  var endTime = "_";
 
   final divider = Container(height: 1.0, color: Colors.black26);
 
@@ -49,14 +51,20 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 onPressed: () {
                   setState(() {
                     switch(type) {
-                      case "Subject": {
-                        subject = controller.text;
+                      case "Date": {
+                        date = controller.text;
                       }
                       break;
 
-                      case "Time": {
-                        timeframe = controller.text;
+                      case "Period": {
+                        period = int.parse(controller.text);
                       }
+                      break;
+
+                      case "Repeat": {
+                        rep = int.parse(controller.text);
+                      }
+                      break;
                     }
                     Navigator.of(context).pop();
                   });
@@ -74,7 +82,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ReturnButton(),
-          Text("New Session", style: TextStyle(
+          Text("New Date Schedule", style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
               color: Colors.black),
@@ -83,26 +91,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
       ),
     ]);
 
-    final SubjectField = Container(
-      padding: EdgeInsets.all(36),
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-        alignment: Alignment.topLeft,
-      child:TextButton(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-        ),
-        onPressed: ()  => _displayDialog(context, "Subject"),
-        child:   Text(
-          subject,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontWeight: FontWeight.w100,
-              fontSize: 50,
-              color: Colors.black),
-        ))
-    );
-
-    final TimeField = Container(
+    final DateField = Container(
         padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -110,13 +99,51 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Time"),
+            onPressed: ()  => _displayDialog(context, "Date"),
             child:   Text(
-              timeframe,
+              "Date: $date",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontWeight: FontWeight.w100,
                   fontSize: 50,
+                  color: Colors.black),
+            ))
+    );
+
+    final PeriodField = Container(
+        padding: EdgeInsets.all(36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Period"),
+            child:   Text(
+              "This schedule repeats every $period days",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 30,
+                  color: Colors.black),
+            ))
+    );
+
+    final RepeatCountField = Container(
+        padding: EdgeInsets.all(36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Repeat"),
+            child:   Text(
+              "This schedule repeat $rep times",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 30,
                   color: Colors.black),
             ))
     );
@@ -129,7 +156,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () {
-          //schedule.addSession(subject, timeframe);
+          schedController().addSched(rep, period, date, startTime, endTime, _userid);
           Navigator.pop(context);
         },
         child:   Container(
@@ -143,7 +170,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 size: 22.0,
               ),
               Text(
-                "  Save Session",
+                "  Save schedule",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
@@ -161,7 +188,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, SubjectField, divider, TimeField, SaveButton])),
+              children: [Navigation, spacer, DateField, divider, PeriodField, divider, RepeatCountField, SaveButton])),
     );
   }
 }
