@@ -29,6 +29,33 @@ class SessionController {
     }
   }
 
+  Future<Session> addSession(int sched_id, String date, String start_time,
+      String end_time, String status, String title) async {
+    var response = await http.post(
+        Uri.https(webhost,'add_session.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode( <String, String> {
+          'sched_id' : sched_id.toString(),
+          'date' : date,
+          'start_time' : start_time,
+          'end_time' : end_time,
+          'status' : status,
+          'title' : title,
+        })
+    );
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      print("Success");
+      var id = response.body.toString();
+      return Session(id: id, sched_id: sched_id.toString(), date: date, start_time: start_time, end_time: end_time, status: status, title: title);
+    }
+    else {
+      print('failed');
+      return null;
+    }
+  }
   String setFilter(String option) {
     List<String> sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
     if (option == sortSelection[0]){

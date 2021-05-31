@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';

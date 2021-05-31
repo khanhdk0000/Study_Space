@@ -19,7 +19,7 @@ class userController {
   }
 
   Future<User> addUser(
-      String username, String fname, String lname, String dob) async {
+      String username, {String fname, String lname, String dob}) async {
     print('in func');
     var response = await http.post(Uri.https(webhost, 'add_user.php'),
         headers: <String, String>{

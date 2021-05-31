@@ -6,6 +6,8 @@ import 'package:study_space/Authentication/screen/sign_up_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/global.dart';
+import 'package:study_space/Controller/userController.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -100,13 +102,15 @@ class _LogInFormState extends State<LogInForm> {
     print(_emailController.text);
     print(_passwordController.text);
     try {
-      final User user = (await _auth.signInWithEmailAndPassword(
+      user = (await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       ))
           .user;
       if (user != null) {
         print('success');
+        var c = new userController();
+        c.addUser(user.displayName);
         setState(() {
           _success = true;
           _userEmail = user.email;

@@ -14,4 +14,6 @@ class Schedule {
   }
 
   int getUserId() => this._user_id;
+
+
 }

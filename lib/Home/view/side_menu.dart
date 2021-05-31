@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/Timer/view/timer_screen.dart';
+import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:study_space/OutputDevice/output_device_screen.dart';
 import 'package:study_space/Summary/view/all_sessions.dart';
+
+import 'package:study_space/sessions/session_test.dart';
+
+
+
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -53,7 +62,12 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.cast_for_education),
             title: Text('Session'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SessionsView()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
@@ -69,12 +83,18 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.calendar_today_sharp),
             title: Text('Schedule'),
-            onTap: () => null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ScheduleScreen()),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.timer_outlined),
             title: Text('Timer'),
-            onTap: () => null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TimerScreen()),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.device_thermostat),
