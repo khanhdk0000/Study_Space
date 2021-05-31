@@ -7,6 +7,7 @@ import 'package:study_space/constants.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/Session.dart';
 import 'package:study_space/global.dart';
+import 'package:study_space/Controller/schedController.dart';
 
 class SessionsView extends StatefulWidget {
   const SessionsView({Key key}) : super(key: key);
@@ -110,8 +111,8 @@ class _SessionsViewState extends State<SessionsView> {
   }
 
   void addSes() {
-    var c = new SessionController();
-    c.addSession(1, '01/01/2000', '19:00:00', '21:00:00', 'missed', 'AI');
+    var c = new schedController();
+    c.getSched('user');
   }
 }
 

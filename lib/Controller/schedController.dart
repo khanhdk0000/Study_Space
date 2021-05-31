@@ -9,7 +9,7 @@ class schedController {
   Future<Schedule> addSched
       (int rep , int period , String date, String start_time, String end_time, int user_id) async {
       var response = await http.post(
-        Uri.https(webhost,'add_sched.php'),
+        Uri.https(webhost,'add_schedule.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -34,14 +34,14 @@ class schedController {
       }
   }
   Future<Schedule> getSched
-      (int user_id, {String sort = 'id' , String filter ='*' , String limit = '10'})  async{
+      (String username, {String sort = 'id' , String filter ='*' , String limit = '10'})  async{
       var response = await http.post(
-      Uri.https(webhost,'get_sched.php'),
+      Uri.https(webhost,'get_user_schedule.php'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode( <String, String> {
-        'user_id' : user_id.toString(),
+        'username' : username,
         'sort' : sort,
         'filter' : filter,
         'limit' : limit,

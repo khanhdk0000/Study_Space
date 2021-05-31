@@ -6,6 +6,8 @@ import 'package:study_space/Authentication/screen/sign_up_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/global.dart';
+import 'package:study_space/Controller/userController.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 

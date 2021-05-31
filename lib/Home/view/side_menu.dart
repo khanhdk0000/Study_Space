@@ -8,7 +8,10 @@ import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/sessions/session_test.dart';
 import 'package:study_space/summary/view/all_sessions.dart';
+import 'package:study_space/sessions/session_test.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -54,7 +57,12 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.cast_for_education),
             title: Text('Session'),
-            onTap: () => null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SessionsView()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
