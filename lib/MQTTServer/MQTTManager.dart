@@ -49,7 +49,7 @@ class MQTTManager {
   }
 
   // Connect to the host
-  void connect() async {
+  Future connect() async {
     assert(_client != null);
     try {
       print('EXAMPLE::Mosquitto start client connecting....');

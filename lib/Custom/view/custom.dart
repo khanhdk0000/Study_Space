@@ -57,9 +57,6 @@ class _CustomViewState extends State<CustomView> {
   @override
   void initState() {
     super.initState();
-    // if (currentAppState.getAppConnectionState == MQTTAppConnectionState.disconnected){
-    //   _configureAndConnect();
-    // }
   }
 
   @override
