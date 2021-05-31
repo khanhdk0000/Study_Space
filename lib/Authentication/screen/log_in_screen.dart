@@ -6,9 +6,6 @@ import 'package:study_space/Authentication/screen/sign_up_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:study_space/Model/user.dart' as us;
-import 'package:study_space/Controller/userController.dart';
-import 'package:study_space/global.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -122,9 +119,7 @@ class _LogInFormState extends State<LogInForm> {
           );
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                user: user
-              ),
+              builder: (context) => HomeScreen(),
             ),
           );
         });
@@ -243,6 +238,7 @@ class LogInTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        autofocus: true,
         onChanged: onChanged,
         decoration: InputDecoration(
           icon: Icon(

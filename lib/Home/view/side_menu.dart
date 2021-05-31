@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
-import 'package:study_space/sessions/session_test.dart' show SessionsView;
+import 'package:study_space/Timer/view/timer_screen.dart';
+import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
+import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/summary/view/all_sessions.dart';
 
@@ -52,13 +54,7 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.cast_for_education),
             title: Text('Session'),
-            onTap: ()  {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SessionsView() ),
-              );
-            },
+            onTap: () => null,
           ),
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
@@ -74,12 +70,18 @@ class SideMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.calendar_today_sharp),
             title: Text('Schedule'),
-            onTap: () => null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ScheduleScreen()),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.timer_outlined),
             title: Text('Timer'),
-            onTap: () => null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TimerScreen()),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.device_thermostat),
@@ -110,6 +112,16 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CustomViewAll()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.construction),
+            title: Text('Setting'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
             },
           ),

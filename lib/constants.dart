@@ -9,10 +9,13 @@ const kErrorColor = Color(0xFFF03738);
 const kShadowColor = Color(0xFF343a40);
 const kDefaultPadding = 20.0;
 
-
-const webhost = "studyspace-mdp-2021.000webhostapp.com";
-
 const kHomeScreen = 'homeScreen';
 const kWelcomeScreen = 'welcomeScreen';
 
+const webhost = "studyspace-mdp-2021.000webhostapp.com";
+
+String adaUserName = 'khanhdk0000';
+String adaPassword = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
+
 enum MQTTAppConnectionState { connected, disconnected, connecting }
+enum SensorEvaluation { normal, warning, bad }

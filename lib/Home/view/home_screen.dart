@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:study_space/Model/user.dart' as us;
-import 'package:study_space/Controller/userController.dart';
 
 const divider = SizedBox(height: 32.0);
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({this.user,this.dbu});
+  // HomeScreen({this.user});
   final userName = "Gwen";
   final progress = 75;
-  final User user;
-  final us.User dbu;
+  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {

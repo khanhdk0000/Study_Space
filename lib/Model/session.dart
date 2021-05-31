@@ -60,7 +60,7 @@ class Session {
   }
 
   String getDisplayDate(){
-    DateTime date = DateFormat('dd/MM/yyyy').parse(this.getDate());
+    DateTime date = DateFormat('MM/dd/yyyy').parse(this.getDate());
     return DateFormat('EEEE, MMM d').format(date);
   }
 
@@ -78,7 +78,7 @@ class Session {
   }
 
   List<String> displaySession(){
-    return [this.getFullTime(), this.getTitle(), this.getDisplayDate(), this.getScore()];
+    return [this.getFullTime(), this.getTitle(), this.getDisplayDate(), this.getScore(), this.getId()];
   }
 
 }
