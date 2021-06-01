@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
@@ -8,6 +9,8 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/Session.dart';
 import 'package:study_space/global.dart';
 import 'package:study_space/Controller/schedController.dart';
+
+User user = FirebaseAuth.instance.currentUser;
 
 class SessionsView extends StatefulWidget {
   const SessionsView({Key key}) : super(key: key);
@@ -111,8 +114,8 @@ class _SessionsViewState extends State<SessionsView> {
   }
 
   void addSes() {
-    var c = new schedController();
-    c.getSched('user');
+    var c = new SessionController();
+    c.getCurrentSession('user');
   }
 }
 

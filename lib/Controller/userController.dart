@@ -51,13 +51,20 @@ class userController {
         body: jsonEncode(<String, String>{
           'username': username,
         }));
-    if (response.statusCode == 201) {
+    print(response.statusCode);
+    if ((response.statusCode == 201)&&(response.body.isNotEmpty)) {
       print("Success");
       var data = jsonDecode(response.body);
-      return User.fromJson(data);
+      print(data);
+      return User(int.parse(data[0]),data[1],data[2],data[3],data[4]);
     } else {
       print('failed');
       return null;
     }
+  }
+  
+  Future<int> getUserId(String username) async {
+      var u = await getUser(username);
+      return u.getId();
   }
 }

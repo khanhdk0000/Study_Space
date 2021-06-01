@@ -26,6 +26,7 @@ class schedController {
       if (response.statusCode == 201) {
         print("Success");
         var id = response.body.toString();
+        print(id);
         return Schedule(int.parse(id), rep, period, date, start_time, end_time, user_id);
       }
       else {
