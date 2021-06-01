@@ -6,9 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
+<<<<<<< HEAD
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:study_space/mqtt/state/MQTTSensorState.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
+=======
+import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
+import 'package:study_space/MQTTServer/state/MQTTSensorState.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
+>>>>>>> main
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
@@ -57,9 +63,12 @@ class _CustomViewState extends State<CustomView> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
     // if (currentAppState.getAppConnectionState == MQTTAppConnectionState.disconnected){
     //   _configureAndConnect();
     // }
+=======
+>>>>>>> main
   }
 
   @override
@@ -97,6 +106,10 @@ class _CustomViewState extends State<CustomView> {
       _overThreshold = true;
     }
 
+<<<<<<< HEAD
+=======
+    // TODO: (from khanh) How to implement this but different screens?
+>>>>>>> main
     if (_overThreshold) {
       _publishMessage(id: '1', name: 'LED', data: '1');
       _overThreshold = false;

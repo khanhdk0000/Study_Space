@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
@@ -7,6 +8,17 @@ import 'package:study_space/summary/view/all_sessions.dart';
 import 'package:study_space/theme.dart';
 import 'package:study_space/mqtt/MQTTView.dart';
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
+=======
+import 'package:study_space/Authentication/screen/log_in_screen.dart';
+import 'package:study_space/Authentication/screen/welcome_screen.dart';
+import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/OutputDevice/state/buzzer_state.dart';
+import 'package:study_space/Sensor/state/light_state.dart';
+import 'package:study_space/constants.dart';
+import 'package:study_space/theme.dart';
+import 'package:study_space/MQTTServer/MQTTView.dart';
+import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
+>>>>>>> main
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +37,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
+<<<<<<< HEAD
         ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
+=======
+        // ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
+
+        ChangeNotifierProvider<MQTTBuzzerState>(
+            create: (_) => MQTTBuzzerState()),
+        ChangeNotifierProxyProvider<MQTTBuzzerState, MQTTLightState>(
+          create: (_) => MQTTLightState(),
+          update: (_, myModel, myNotifier) =>
+              myNotifier..setBuzzerState(myModel),
+        )
+>>>>>>> main
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

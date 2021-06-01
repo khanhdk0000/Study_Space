@@ -1,8 +1,19 @@
 import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
+<<<<<<< HEAD
 import 'package:study_space/Controller/sensor_controller.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
+=======
+import 'package:study_space/Controller/sensorController.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
+import 'package:study_space/OutputDevice/state/buzzer_state.dart';
+import 'package:study_space/constants.dart';
+import 'dart:convert';
+import 'dart:math';
+
+final _random = new Random();
+>>>>>>> main
 
 class MQTTLightState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState =
@@ -11,6 +22,11 @@ class MQTTLightState with ChangeNotifier {
   String _historyText = "";
   double _valueFromServer = 0;
   SensorController sensorController = SensorController();
+<<<<<<< HEAD
+=======
+  MQTTBuzzerState mqttBuzzerState;
+
+>>>>>>> main
   final f = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   void setReceivedText(String text) async {
@@ -25,8 +41,18 @@ class MQTTLightState with ChangeNotifier {
         unit: 'L1',
         type: 'Light',
         timestamp: f.format(DateTime.now()),
+<<<<<<< HEAD
         sess_id: '1',
         data: _valueFromServer.toString());
+=======
+        sess_id: '1', // TODO: get current session ID
+        data: _valueFromServer.toString());
+    // TODO: (from khanh) notify buzzer if threshold of light is exceeded,
+    // but how to publish message to buzzer feed
+    if (_valueFromServer > 100) {
+      notifyBuzzer();
+    }
+>>>>>>> main
     notifyListeners();
   }
 
@@ -44,4 +70,39 @@ class MQTTLightState with ChangeNotifier {
   void valueFromServer(double d) {
     _valueFromServer = d;
   }
+<<<<<<< HEAD
+=======
+
+  void setBuzzerState(MQTTBuzzerState state) {
+    mqttBuzzerState = state;
+    notifyListeners();
+  }
+
+  void notifyBuzzer() async {
+    // TODO: (from khanh) I create a new manager to publish message, sounds so
+    // scam, the page got rebuilt three times, pls check this
+    MQTTManager manager = MQTTManager(
+        host: 'io.adafruit.com',
+        topic: 'khanhdk0000/feeds/buzzer',
+        identifier: _random.nextInt(10).toString(),
+        state: mqttBuzzerState);
+    print('fuck' + mqttBuzzerState.getAppConnectionState.toString());
+    manager.initializeMQTTClient();
+    await manager.connect();
+    Message buzz = Message(id: '1', name: 'buzzer', data: '13', unit: '');
+    String message = jsonEncode(buzz);
+    manager.publish(message);
+  }
+}
+
+class Message {
+  String id;
+  String name;
+  String data;
+  String unit;
+
+  Message({this.id, this.name, this.data, this.unit});
+
+  Map toJson() => {'id': id, 'name': name, 'data': data, 'unit': unit};
+>>>>>>> main
 }

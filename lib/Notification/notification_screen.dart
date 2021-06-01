@@ -37,7 +37,11 @@ class MyScreen extends State<NotificationScreen> {
   ///////////////////////////////////////////////
   // GET STUDY-TIME AND END-TIME FROM DATABASE //
   ///////////////////////////////////////////////
+<<<<<<< HEAD
   List<String> scheduledStudyList = [];
+=======
+  List<String> scheduledStudyList = ['2021-05-29 14:07:00'];
+>>>>>>> main
   List<String> scheduledEndtimeList = [];
   Future updateSchedule() async {
     var c = new scheduleController();
@@ -169,6 +173,10 @@ class MyScreen extends State<NotificationScreen> {
                   primary: kPrimaryColor,
                 ),
               ),
+<<<<<<< HEAD
+=======
+              Text(scheduledStudyList[0]),
+>>>>>>> main
               Switch(
                 value: switchControl,
                 onChanged: (bool value) => onchange(value),

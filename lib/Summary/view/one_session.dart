@@ -1,8 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
+<<<<<<< HEAD
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
+=======
+import 'package:study_space/Controller/sensorController.dart';
+import 'package:study_space/Home/view/side_menu.dart';
+import 'package:study_space/constants.dart';
+import 'package:study_space/Model/sensor.dart';
+>>>>>>> main
 import 'dart:math' as math;
 
 import 'chart.dart';
@@ -16,13 +23,35 @@ class OneSessionView extends StatefulWidget {
 }
 
 class _OneSessionViewState extends State<OneSessionView> {
+<<<<<<< HEAD
   final List<String> sensor = ['200', '37', '30'];
   //TODO: Implement a SensorData list for storing data, compute average & evaluate result
+=======
+  ///Arguments to handle the sensor data of a session
+  Future<List<Sensor>> tempSensorData;
+  Future<List<Sensor>> soundSensorData;
+  Future<List<Sensor>> lightSensorData;
+
+  ///Arguments to display charts for each component. Default is false.
+>>>>>>> main
   bool lightVisible = false;
   bool soundVisible = false;
   bool tempVisible = false;
 
   @override
+<<<<<<< HEAD
+=======
+  void initState() {
+    super.initState();
+    print("[DATABASE] Retrieving data");
+    ///widget.sessionList[4] means we take the ID of the session recorded in the session list
+    tempSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'TH');
+    soundSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'S');
+    lightSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'L');
+  }
+
+  @override
+>>>>>>> main
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
@@ -41,6 +70,10 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _topView(){
+<<<<<<< HEAD
+=======
+    ///The top view include the drawer button and screen name.
+>>>>>>> main
     return Padding(
       padding: const EdgeInsets.only(top:10.0),
       child: Center(
@@ -64,6 +97,10 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _sessionView(){
+<<<<<<< HEAD
+=======
+    ///Display the information of the session in table format.
+>>>>>>> main
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
       child: Column(
@@ -81,6 +118,10 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _circleScore(String score) {
+<<<<<<< HEAD
+=======
+    String scoreText = (score == '-99') ? 'NA' : score;
+>>>>>>> main
     return Container(
         alignment: Alignment.center,
         width: 150.0,
@@ -90,7 +131,11 @@ class _OneSessionViewState extends State<OneSessionView> {
           shape: BoxShape.circle,
         ),
         child: Text(
+<<<<<<< HEAD
             score,
+=======
+            scoreText,
+>>>>>>> main
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 35.0,
@@ -100,15 +145,26 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
+<<<<<<< HEAD
   MaterialAccentColor _circleColor(int score){
+=======
+  Color _circleColor(int score){
+>>>>>>> main
     if (score == 100.0){
       return Colors.greenAccent;
     }
     else if (score >= 70.0){
       return Colors.orangeAccent;
     }
+<<<<<<< HEAD
     else {
       return Colors.redAccent;
+=======
+    else if (score > 0){
+      return Colors.redAccent;
+    } else {
+      return Colors.grey;
+>>>>>>> main
     }
   }
 
@@ -126,11 +182,21 @@ class _OneSessionViewState extends State<OneSessionView> {
             ),
           ),
         ),
+<<<<<<< HEAD
         Text(
           str2,
           style: TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 16.0,
+=======
+        Expanded(
+          child: Text(
+            str2,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 16.0,
+            ),
+>>>>>>> main
           ),
         ),
       ],
@@ -138,8 +204,12 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _sensorView(){
+<<<<<<< HEAD
     return Container(
       height: 420.0,
+=======
+    return Expanded(
+>>>>>>> main
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
@@ -158,6 +228,7 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _sensorTile(String type){
+<<<<<<< HEAD
     String text;
     int value;
     bool visible;
@@ -175,11 +246,45 @@ class _OneSessionViewState extends State<OneSessionView> {
       visible = tempVisible;
     }
     print(type + visible.toString());
+=======
+    String unit;
+    String text;
+    double value;
+    bool visible;
+    Future future;
+    if (type == 'Light') {
+      unit = 'Lux';
+      visible = lightVisible;
+      future = lightSensorData;
+    } else if (type == 'Sound') {
+      unit = 'dB';
+      visible = soundVisible;
+      future = soundSensorData;
+    } else if (type == 'Temperature') {
+      unit = 'degC';
+      visible = tempVisible;
+      future = tempSensorData;
+    }
+    return FutureBuilder(future: future, builder: (context, snapshot){
+      if (snapshot.hasData){
+        value = SensorController().getAverage(snapshot.data);
+        text = value.toString() + ' ' + unit;
+        return _displaySensorTile(type, visible, text, value, snapshot.data);
+      } else if (snapshot.hasError) {
+        return Text("${snapshot.error}");
+      }
+      return Text('Loading...');
+    });
+  }
+
+  Widget _displaySensorTile(String type, bool visible, String text, double value, List<Sensor> sensorList) {
+>>>>>>> main
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         focusColor: Colors.grey,
         onTap: () {
+<<<<<<< HEAD
           setState(() {
             if (type == 'Light'){
               lightVisible = !lightVisible;
@@ -189,6 +294,19 @@ class _OneSessionViewState extends State<OneSessionView> {
               tempVisible = !tempVisible;
             }
           });
+=======
+          if (sensorList.length != 0){
+            setState(() {
+              if (type == 'Light'){
+                lightVisible = !lightVisible;
+              } else if (type == 'Sound') {
+                soundVisible = !soundVisible;
+              } else if (type == 'Temperature') {
+                tempVisible = !tempVisible;
+              }
+            });
+          }
+>>>>>>> main
         },
         child: Container(
           width: double.infinity,
@@ -225,7 +343,11 @@ class _OneSessionViewState extends State<OneSessionView> {
                         ),
                         SizedBox(height: 4.0),
                         Text(
+<<<<<<< HEAD
                             'Average: $text',
+=======
+                            sensorList.length == 0 ? 'No record' : 'Average: $text',
+>>>>>>> main
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 14,
@@ -246,7 +368,11 @@ class _OneSessionViewState extends State<OneSessionView> {
                     children: [
                       Container(
                         height: 250.0,
+<<<<<<< HEAD
                         child: ChartView(),
+=======
+                        child: ChartView(sensorList: sensorList, type: type),
+>>>>>>> main
                       ),
                       _reviewView(value, type),
                     ],
@@ -260,6 +386,7 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
+<<<<<<< HEAD
   // This will be moved to SensorData class after built
   SensorEvaluation getEvaluation(int value, String type){
     if (type == 'Light') {
@@ -302,20 +429,31 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _reviewView(int value, String type){
+=======
+  Widget _reviewView(double value, String type){
+>>>>>>> main
     return Padding(
       padding: EdgeInsets.only(left: 5.0, right: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
+<<<<<<< HEAD
             getReviewText(getEvaluation(value, type), type),
+=======
+            SensorController().getReviewText(SensorController().getEvaluation(value, type), type),
+>>>>>>> main
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14.0,
             ),
           ),
           Text(
+<<<<<<< HEAD
             getRandomComment(type),
+=======
+            SensorController().getRandomComment(type),
+>>>>>>> main
             style: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 14.0,
@@ -325,6 +463,7 @@ class _OneSessionViewState extends State<OneSessionView> {
       ),
     );
   }
+<<<<<<< HEAD
 }
 
 class SensorData {
@@ -333,3 +472,6 @@ class SensorData {
 
   SensorData({this.min, this.val});
 }
+=======
+}
+>>>>>>> main

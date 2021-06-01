@@ -28,6 +28,11 @@ class _SwitchButtonState extends State<SwitchButton> {
     MQTTLightState state = Provider.of<MQTTLightState>(context);
     if (state.getAppConnectionState == MQTTAppConnectionState.connected) {
       status = true;
+<<<<<<< HEAD
+=======
+    } else {
+      status = false;
+>>>>>>> main
     }
 
     return Container(
