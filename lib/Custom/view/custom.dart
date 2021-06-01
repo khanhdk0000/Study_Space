@@ -9,6 +9,7 @@ import 'package:study_space/constants.dart';
 <<<<<<< HEAD
 import 'package:study_space/mqtt/state/MQTTAppState.dart';
 import 'package:study_space/mqtt/state/MQTTSensorState.dart';
+import 'package:study_space/mqtt/state/MQTTInfraredState.dart';
 import 'package:study_space/mqtt/MQTTManager.dart';
 =======
 import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
@@ -32,6 +33,10 @@ class CustomViewAll extends StatelessWidget {
         ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
         ChangeNotifierProvider<MQTTSensorState>(
             create: (_) => MQTTSensorState()),
+        ChangeNotifierProvider<MQTTInfraredState>(
+            create: (_) => MQTTInfraredState()),
+        ChangeNotifierProvider<MQTTInfraredState2>(
+            create: (_) => MQTTInfraredState2()),
       ],
       child: CustomView(),
     );
@@ -55,9 +60,14 @@ class _CustomViewState extends State<CustomView> {
   MQTTManager manager;
   MQTTSensorState sensorCurrentAppState;
   MQTTManager sensorManager;
+  MQTTInfraredState infraredCurrentAppState;
+  MQTTManager infraredManager;
+  MQTTManager infraredManager2;
   bool _lightStatus = false;
   bool _overThreshold = false;
   bool _sensorTest = false;
+  bool _infraredStatus1 = false;
+  bool _infraredStatus2 = false;
   double _currentSliderValue = 0;
 
   @override
@@ -118,6 +128,23 @@ class _CustomViewState extends State<CustomView> {
 
       // ScaffoldMessenger.of(context).showSnackBar(
       //     SnackBar(content: Text('Value from server exceeds threshold')));
+    }
+
+    // Infrared sensor part
+    String data1 = '0';
+    String data2 = '0';
+    final MQTTInfraredState infraredState =
+        Provider.of<MQTTInfraredState>(context);
+    infraredCurrentAppState = infraredState;
+    String infraredText = infraredState.getReceivedText;
+    if (infraredText != "") {
+      var nmessage = jsonDecode(infraredText);
+      String ndata = nmessage['data'].toString();
+      // if (ndata == "0" && _infraredStatus1) {
+      //   _infraredStatus1 = false;
+      // } else if (ndata != "0" && !_infraredStatus1) {
+      //   _infraredStatus1 = true;
+      // }
     }
 
     return Scaffold(
@@ -201,6 +228,53 @@ class _CustomViewState extends State<CustomView> {
                       _disconnect2),
                   _connectionStateDisplay(_prepareStateMessageFrom(
                       sensorCurrentAppState.getAppConnectionState)),
+                  Divider(
+                    color: Colors.black87,
+                  ),
+
+                  // Infrared Sensor
+                  _titleWidget('Infrared Sensor', 25.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FlutterSwitch(
+                        value: _infraredStatus1,
+                        showOnOff: true,
+                        onToggle: (value) {
+                          setState(() {
+                            _infraredStatus1 = value;
+                            // data1 = value ? '1' : '0';
+                          });
+                          print(data1);
+                        },
+                      ),
+                      FlutterSwitch(
+                        value: _infraredStatus2,
+                        showOnOff: true,
+                        onToggle: (value) {
+                          setState(() {
+                            _infraredStatus2 = value;
+                            data1 = _infraredStatus1 ? '1' : '0';
+                            data2 = value ? '1' : '0';
+                            String data = data1 + data2;
+                            _publishMessage3(id: '1', name: 'XYZ', data: data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  _titleWidget('History Request', 16.0),
+                  _buildScrollableTextWith(
+                      infraredCurrentAppState.getHistoryText),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _buildConnectedButtonFrom(
+                      infraredCurrentAppState.getAppConnectionState,
+                      _configureAndConnect3,
+                      _disconnect3),
+                  _connectionStateDisplay(_prepareStateMessageFrom(
+                      infraredCurrentAppState.getAppConnectionState)),
                 ],
               ),
             ),
@@ -437,6 +511,60 @@ class _CustomViewState extends State<CustomView> {
       ],
     );
   }
+
+  void _configureAndConnect3() {
+    infraredManager = MQTTManager(
+        host: 'io.adafruit.com',
+        topic: 'khanhdk0000/feeds/welcome-dashboard',
+        identifier: _random.nextInt(10).toString(),
+        state: infraredCurrentAppState);
+    infraredManager.initializeMQTTClient();
+    infraredManager.connect();
+
+    _getLatestData3().then((value) {
+      setState(() {
+        if (value['data'] == '0') {
+          _infraredStatus1 = false;
+        } else {
+          _infraredStatus1 = true;
+        }
+      });
+    });
+  }
+
+  void _disconnect3() {
+    setState(() {
+      _infraredStatus1 = false;
+      _infraredStatus2 = false;
+    });
+    infraredManager.disconnect();
+    infraredManager2.disconnect();
+  }
+
+  _getLatestData3() async {
+    var req = await http.get(Uri.https(
+        'io.adafruit.com', 'api/v2/khanhdk0000/feeds/welcome-dashboard/data'));
+    var infos = json.decode(req.body);
+    // print(infos[0]['value']);
+    var temp = infos[0]['value'];
+    var temp2 = json.decode(temp);
+    // print(temp2['data'] + '1');
+    return temp2;
+  }
+
+  void _publishMessage3({String id, String name, String data}) {
+    Message light = Message(id: id, name: name, data: data, unit: '');
+    String message = jsonEncode(light);
+    infraredManager.publish(message);
+    // _messageTextController.clear();
+  }
+
+  // void _publishMessage4({String id, String name, String data}) {
+  //   Message light = Message(id: id, name: name, data: data, unit: '');
+  //   String message = jsonEncode(light);
+  //   infraredManager2.publish(message);
+  //   // _messageTextController.clear();
+  // }
 }
 
 class Message {
