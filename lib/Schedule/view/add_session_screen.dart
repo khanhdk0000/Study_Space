@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
@@ -8,7 +9,7 @@ import 'package:study_space/Controller/schedController.dart';
 
 ///User arguments
 String _username = "Gwen";
-int _userid = 13;
+int _userid = 2;
 int _progress = 75;
 final User user = auth.currentUser;
 
@@ -26,8 +27,12 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
   @override
 
   var schedule = schedController();
-  var subject = "Your subject name";
-  var timeframe = "Your timeframe";
+  var subject = "_";
+  var startDate = "06/09/2069";
+  var startTime = "00:00:00";
+  var endTime = "00:00:00";
+  int repeat = 0;
+  int period = 1;
 
   final divider = Container(height: 1.0, color: Colors.black26);
 
@@ -54,9 +59,30 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                       }
                       break;
 
-                      case "Time": {
-                        timeframe = controller.text;
+                      case "Date": {
+                        startDate = controller.text;
                       }
+                      break;
+
+                      case "Start Time": {
+                        startTime = controller.text;
+                      }
+                      break;
+
+                      case "End Time": {
+                        endTime = controller.text;
+                      }
+                      break;
+
+                      case "Period": {
+                        period = int.parse(controller.text);
+                      }
+                      break;
+
+                      case "Repeat": {
+                        repeat = int.parse(controller.text);
+                      }
+                      break;
                     }
                     Navigator.of(context).pop();
                   });
@@ -93,7 +119,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         ),
         onPressed: ()  => _displayDialog(context, "Subject"),
         child:   Text(
-          subject,
+          "Your session name is $subject",
           textAlign: TextAlign.left,
           style: TextStyle(
               fontWeight: FontWeight.w100,
@@ -102,7 +128,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         ))
     );
 
-    final TimeField = Container(
+    final DateField = Container(
         padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -110,13 +136,89 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Time"),
+            onPressed: ()  => _displayDialog(context, "Date"),
             child:   Text(
-              timeframe,
+              "This session begins on $startDate",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontWeight: FontWeight.w100,
-                  fontSize: 50,
+                  fontSize: 26,
+                  color: Colors.black),
+            ))
+    );
+
+    final TimeField = Container(
+        padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: ()  => _displayDialog(context, "Start Time"),
+                child:   Text(
+                  "This session starts from $startTime",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w100,
+                      fontSize: 26,
+                      color: Colors.black),
+                )),
+            TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: ()  => _displayDialog(context, "End Time"),
+                child:   Text(
+                  "to $endTime",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w100,
+                      fontSize: 26,
+                      color: Colors.black),
+                )),
+          ],
+        )
+    );
+
+    final RepeatField = Container(
+        padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Repeat"),
+            child:   Text(
+              "This session repeats $repeat times",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 26,
+                  color: Colors.black),
+            ))
+    );
+
+    final PeriodField = Container(
+        padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Period"),
+            child:   Text(
+              "This session repeats every $period days",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 26,
                   color: Colors.black),
             ))
     );
@@ -129,6 +231,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () {
+          SessionController().addSessions(repeat, period, startDate, startTime, endTime, subject, _userid);
           //schedule.addSession(subject, timeframe);
           Navigator.pop(context);
         },
@@ -161,7 +264,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, SubjectField, divider, TimeField, SaveButton])),
+              children: [Navigation, spacer, SubjectField, divider, DateField, TimeField, RepeatField, PeriodField, SaveButton])),
     );
   }
 }

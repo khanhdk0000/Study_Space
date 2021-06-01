@@ -29,6 +29,29 @@ class SessionController {
     }
   }
 
+  Future<List<Session>> getUnfinishedSessions(int userId, String filter, int limit) async {
+    var response = await http.post(Uri.https(webhost, 'get_unfinished_sessions.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'user_id': userId.toString(),
+          'filter': filter,
+          'limit': limit.toString(),
+        }));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var data = jsonDecode(response.body);
+      return (data as List).map((s) => Session.fromJson(s)).toList();
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      print("failed");
+    }
+  }
+
   String setFilter(String option) {
     List<String> sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
     if (option == sortSelection[0]){
@@ -43,6 +66,47 @@ class SessionController {
       return 'sessions.date DESC, sessions.start_time DESC';
     } else if (option == sortSelection[5]){
       return 'sessions.date, sessions.start_time';
+    }
+  }
+
+  void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id) async {
+    final dateValues = date.split("/");
+    final startDate = DateTime.parse("${dateValues[2]}-${dateValues[0]}-${dateValues[1]} " + start_time);
+
+    for(var i = 0; i <= repeat; i++){
+      final repeatDate = startDate.add(Duration(days: period * i));
+
+      final year = repeatDate.year.toString();
+      final month = repeatDate.month.toString();
+      final day = repeatDate.day.toString();
+
+      addSession("$month/$day/$year", start_time, end_time, title, user_id);
+    }
+  }
+
+  void addSession (String date, String start_time, String end_time, String title, int user_id) async {
+    var response = await http.post(
+        Uri.https(webhost,'add_session.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode( <String, String> {
+          'sched_id' : "69",
+          'date' : date,
+          'start_time' : start_time,
+          'end_time' : end_time,
+          'status' : "0",
+          'title' : title,
+          'user_id' : user_id.toString(),
+        })
+    );
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      print("Success");
+      print(response.body);
+    }
+    else {
+      print('failed');
     }
   }
 }

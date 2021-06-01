@@ -3,10 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Controller/schedController.dart';
-import 'package:study_space/Model/schedule.dart';
-import 'package:study_space/Schedule/view/edit_schedule_screen.dart';
-import 'package:study_space/Schedule/view/add_schedule_screen.dart';
+import 'package:study_space/Controller/sessionController.dart';
+import 'package:study_space/Model/session.dart';
+import 'package:study_space/Schedule/view/add_session_screen.dart';
 
 
 ///User arguments
@@ -26,11 +25,14 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  Future<List<Schedule>> schedules;
+  int _sortedBy = 0;
+  int timeFrame = 0;
+  List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
+  Future<List<Session>> sessions;
 
 
   Widget build(BuildContext context) {
-    schedules = schedController().getSched(_userid);
+    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]), 30);
 
     var Navigation = Column(children: [
       Row(
@@ -46,6 +48,37 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
     ]);
 
+    var Filterer = Container (
+      color: Color.fromRGBO(0, 0, 0, 0.06),
+    child: Row(
+      children: [
+        TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: timeFrame == 0 ? Colors.black: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, // <-- Radius
+              ),
+            ),
+          onPressed: (){setState((){timeFrame = 0;});},
+          child: Text(
+            "Today"
+          )
+        ),
+        TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: timeFrame == 1 ? Colors.black: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, // <-- Radius
+              ),
+            ),
+            onPressed: (){setState((){timeFrame = 1;});},
+            child: Text(
+                "All"
+            )
+        )
+      ],
+    ));
+
     var NoSchedule = Container(
     padding: EdgeInsets.all(36),
     color: Color.fromRGBO(0, 0, 0, 0.06),
@@ -60,15 +93,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ),
     );
 
-    var Body = FutureBuilder(future: schedules, builder: (context, snapshot){
+    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
               if (snapshot.hasData){
                 if (snapshot.data.length > 0) {
                 return ListBody(
                 children: [
-                for (final schedule in snapshot.data)
+                  Filterer,
+                for (final session in snapshot.data)
                 Container(
                     padding: EdgeInsets.only(bottom: 14),
-                  child: ScheduleButton(schedule)
+                  child: SessionButton(session)
                 )
                 ],
                 );
@@ -91,7 +125,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AddScheduleScreen()),
+          MaterialPageRoute(builder: (context) => AddSessionScreen()),
         ),
         child:   Container(
           padding: EdgeInsets.all(14),
@@ -99,7 +133,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "Add schedule  ",
+                "Add session  ",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
@@ -128,35 +162,53 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 }
 
 
-class ScheduleButton extends StatelessWidget {
+class SessionButton extends StatelessWidget {
   // HomeScreen({this.user});
+  String title;
   String date;
   String startTime;
   String endTime;
-  ScheduleButton(Schedule schedule){
-    date = schedule.upcomingDate();
-   startTime = schedule.start_time;
-   endTime = schedule.end_time;
+  SessionButton(Session session){
+    title = session.getTitle();
+    date = session.getDate();
+   startTime = session.getStartTime().substring(0,5);
+   endTime = session.getEndTime().substring(0,5);
   }
 
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-      padding: EdgeInsets.all(12),
+    return TextButton(
+        onPressed: ()  => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        ),
+        style: TextButton.styleFrom(
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // <-- Radius
+          ),
+        ),
+      child: Container(
+        alignment: Alignment.topLeft,
+      padding: EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$date", style: TextStyle(
+          Text("$title", style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 32,
               color: Colors.black)),
-          Text("From $startTime to $endTime", style: TextStyle(
+          Text("$date", style: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 20,
               color: Colors.black)),
+          Text("From $startTime to $endTime", style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 18,
+              color: Colors.black)),
         ],
       )
-    );
+    ));
   }
 }
