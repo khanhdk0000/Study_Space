@@ -18,4 +18,7 @@ class User {
   {
     return this._fname + ' ' + this._lname;
   }
+  int getId() {
+    return this._id;
+  }
 }
