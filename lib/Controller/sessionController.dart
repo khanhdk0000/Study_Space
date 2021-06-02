@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
 import 'package:study_space/Model/session.dart';
@@ -29,7 +30,7 @@ class SessionController {
     }
   }
 
-  Future<List<Session>> getUnfinishedSessions(int userId, String filter, int limit) async {
+  Future<List<Session>> getUnfinishedSessions(int userId, String filter, String maxDate, int limit) async {
     var response = await http.post(Uri.https(webhost, 'get_unfinished_sessions.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -38,9 +39,11 @@ class SessionController {
           'user_id': userId.toString(),
           'filter': filter,
           'limit': limit.toString(),
+          'max_date': maxDate,
         }));
     print(response.statusCode);
     if (response.statusCode == 200) {
+      print(response.body);
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = jsonDecode(response.body);
@@ -70,17 +73,15 @@ class SessionController {
   }
 
   void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id) async {
-    final dateValues = date.split("/");
-    final startDate = DateTime.parse("${dateValues[2]}-${dateValues[0]}-${dateValues[1]} " + start_time);
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final startDate = dateFormat.parse(date);
 
     for(var i = 0; i <= repeat; i++){
       final repeatDate = startDate.add(Duration(days: period * i));
 
-      final year = repeatDate.year.toString();
-      final month = repeatDate.month.toString();
-      final day = repeatDate.day.toString();
+      final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      addSession("$month/$day/$year", start_time, end_time, title, user_id);
+      addSession(dateString, start_time, end_time, title, user_id);
     }
   }
 

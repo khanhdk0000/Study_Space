@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
+import 'package:study_space/Schedule/view/session_screen.dart';
 import 'package:study_space/Schedule/view/add_session_screen.dart';
 
 
@@ -14,7 +16,8 @@ int _userid = 2;
 final User user = auth.currentUser;
 
 
-const divider = SizedBox(height: 32.0);
+const spacer = SizedBox(height: 20.0);
+final divider = Container(height: 1.0, color: Colors.black26);
 
 class ScheduleScreen extends StatefulWidget {
 
@@ -25,14 +28,40 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  int _sortedBy = 0;
-  int timeFrame = 0;
+  int _sortedBy = 5;
+  final filters = ["Today", "Next Week", "Next Month", "Next Year"];
+  String filterMode = "Today";
   List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
   Future<List<Session>> sessions;
 
 
   Widget build(BuildContext context) {
-    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]), 30);
+    int dateRange;
+    switch(filterMode) {
+      case "Today": {
+        dateRange = 0;
+      }
+      break;
+
+      case "Next Week": {
+        dateRange = 7;
+      }
+      break;
+
+      case "Next Month": {
+        dateRange = 30;
+      }
+      break;
+
+      case "Next Year": {
+        dateRange = 365;
+      }
+      break;
+    }
+    final maxDate = DateTime.now().add(Duration(days: dateRange));
+    String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
+
+    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),formattedDate , 30);
 
     var Navigation = Column(children: [
       Row(
@@ -51,31 +80,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     var Filterer = Container (
       color: Color.fromRGBO(0, 0, 0, 0.06),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        for (final filter in filters)
         TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: timeFrame == 0 ? Colors.black: Colors.transparent,
+              backgroundColor: filterMode == filter ? Colors.black: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero, // <-- Radius
               ),
             ),
-          onPressed: (){setState((){timeFrame = 0;});},
+          onPressed: (){setState((){filterMode = filter;});},
           child: Text(
-            "Today"
+            filter, style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 13,
+              color: filterMode == filter ? Colors.white: Colors.black)
           )
         ),
-        TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: timeFrame == 1 ? Colors.black: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, // <-- Radius
-              ),
-            ),
-            onPressed: (){setState((){timeFrame = 1;});},
-            child: Text(
-                "All"
-            )
-        )
       ],
     ));
 
@@ -84,7 +106,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     color: Color.fromRGBO(0, 0, 0, 0.06),
     width: double.infinity,
           child: Text(
-              "Your schedule is empty at the moment. Try adding some study sessions.",
+              "You have nothing scheduled for $filterMode. Try adding some study sessions.",
               textAlign: TextAlign.left,
             style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -95,14 +117,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
               if (snapshot.hasData){
+
                 if (snapshot.data.length > 0) {
                 return ListBody(
                 children: [
-                  Filterer,
                 for (final session in snapshot.data)
-                Container(
-                    padding: EdgeInsets.only(bottom: 14),
-                  child: SessionButton(session)
+                  ListBody(
+                      children: [
+                        divider,
+                        SessionButton(session)
+      ]
                 )
                 ],
                 );
@@ -156,7 +180,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, divider, Body, AddButton])),
+              children: [Navigation, spacer, Filterer, Body, AddButton])),
     );
   }
 }
@@ -164,11 +188,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
 class SessionButton extends StatelessWidget {
   // HomeScreen({this.user});
+  Session session;
   String title;
   String date;
   String startTime;
   String endTime;
   SessionButton(Session session){
+    this.session = session;
     title = session.getTitle();
     date = session.getDate();
    startTime = session.getStartTime().substring(0,5);
@@ -181,7 +207,7 @@ class SessionButton extends StatelessWidget {
     return TextButton(
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => SessionScreen(session)),
         ),
         style: TextButton.styleFrom(
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
