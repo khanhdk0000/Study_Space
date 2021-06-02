@@ -9,7 +9,15 @@ class MQTTInfraredState with ChangeNotifier {
 
   void setReceivedText(String text) {
     _receivedText = text;
-    _historyText = _receivedText + '\n' + _historyText;
+    String inputData = _receivedText.substring(37, 38);
+    if (inputData == '0') {
+      _historyText =
+          'Input data = ' + inputData + ': Vắng mặt\n' + _historyText;
+    } else if (inputData == '1') {
+      _historyText = 'Input data = ' + inputData + ': Có mặt\n' + _historyText;
+    } else {
+      _historyText = 'There is no input!\n' + _historyText;
+    }
     notifyListeners();
   }
 
