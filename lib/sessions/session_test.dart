@@ -115,6 +115,6 @@ class _SessionsViewState extends State<SessionsView> {
 
   void addSes() {
     var c = new SessionController();
-    c.getCurrentSession('user');
+    c.addSession(2, '06/01/2021', '22:00:00', '22:01:00', 'testing', 'b');
   }
 }
