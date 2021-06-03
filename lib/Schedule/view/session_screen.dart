@@ -29,9 +29,31 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   Session session;
+  String title;
+  String date;
+  String upcoming;
+  String startTime;
+  String endTime;
 
   _SessionScreenState(Session session){
     this.session = session;
+    this.title = session.getTitle();
+    this.date = session.getDate();
+    this.startTime = session.getStartTime();
+    this.endTime = session.getEndTime();
+
+    final today = DateTime.now();
+    final dateDate = DateFormat('MM/dd/yyyy').parse(date);
+    final difference = today.difference(dateDate);
+    if (difference.inDays == 0){
+      upcoming = "Coming later today";
+    }
+    else if (dateDate.isBefore(today)) {
+      upcoming = "You missed this session";
+    }
+    else {
+      upcoming = "Coming in ${difference.inDays} days";
+    }
   }
 
   @override
@@ -52,10 +74,15 @@ class _SessionScreenState extends State<SessionScreen> {
       ),
     ]);
 
-
     var Body = ListBody(
             children: [
-              Text(session.getTitle())
+              Text(title, style: TextStyle(
+                fontSize: 50,
+                fontWeight: FontWeight.bold
+              )),
+              Text("$upcoming - $date"),
+              Text("From $startTime to $endTime"),
+
             ],
           );
 
@@ -63,11 +90,11 @@ class _SessionScreenState extends State<SessionScreen> {
     return Scaffold(
       drawer: SideMenu(),
       body: SafeArea(
-          child: ListView(
+      child:ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, divider, Body])),
-    );
+              children: [Navigation, divider, Body]),
+    ));
   }
 }
 

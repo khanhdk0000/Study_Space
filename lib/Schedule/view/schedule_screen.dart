@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
@@ -18,6 +20,7 @@ final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 20.0);
 final divider = Container(height: 1.0, color: Colors.black26);
+const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 
 class ScheduleScreen extends StatefulWidget {
 
@@ -30,7 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   int _sortedBy = 5;
   final filters = ["Today", "Next Week", "Next Month", "Next Year"];
-  String filterMode = "Today";
+  String filterMode = "Next Month";
   List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
   Future<List<Session>> sessions;
 
@@ -106,7 +109,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     color: Color.fromRGBO(0, 0, 0, 0.06),
     width: double.infinity,
           child: Text(
-              "You have nothing scheduled for $filterMode. Try adding some study sessions.",
+              "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
               textAlign: TextAlign.left,
             style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -121,13 +124,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 if (snapshot.data.length > 0) {
                 return ListBody(
                 children: [
+                  SessionsScatter(snapshot.data),
                 for (final session in snapshot.data)
                   ListBody(
                       children: [
                         divider,
                         SessionButton(session)
       ]
-                )
+                ),
+                  SessionsPie(snapshot.data),
                 ],
                 );
                 }
@@ -185,9 +190,117 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 }
 
+class SessionsPie extends StatelessWidget{
+  List<PieChartSectionData> pieData = [];
+  final colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
+
+  SessionsPie(List<Session> sessions){
+    Set<String> titles = {};
+    for (final session in sessions) {
+      titles.add(session.getTitle());
+    }
+
+    for (var i = 0 ; i < titles.length; i++) {
+      var totalMinutes = 0.0;
+      for (final session in sessions) {
+        if (session.getTitle() == titles.elementAt(i)) {
+            totalMinutes += session.getDuration();
+        }
+      }
+      pieData.add(PieChartSectionData(
+        title: titles.elementAt(i),
+        value: totalMinutes,
+        color:colors[i],
+        radius: 140,
+      ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+        height: 400,
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        child: PieChart(
+          PieChartData(
+            sections: pieData,
+            sectionsSpace: 0,
+            centerSpaceRadius: 0,
+          ),
+          swapAnimationDuration: Duration(milliseconds: 150), // Optional
+          swapAnimationCurve: Curves.linear, // Optional
+        ));
+  }
+}
+
+class SessionsScatter extends StatelessWidget{
+  List<ScatterSpot> sessionSpots = [];
+
+  SessionsScatter(List<Session> sessions){
+    var titles = [];  // Ordered list of unique titles
+    for (final session in sessions){
+      final title = session.getTitle();
+      if (!titles.contains(title)){
+        titles.add(title);
+      }
+    }
+
+    final now = new DateTime.now();
+    var today = new DateTime(now.year, now.month, now.day);
+    for (var i = 1; i <= 7; i++) {
+      for (final session in sessions) {
+        if (DateFormat('MM/dd/yyyy').parse(session.getDate()).isAtSameMomentAs(today)){
+          final startTime = DateFormat('hh:mm:ss').parse(session.getStartTime());
+          final startMinute = startTime.hour + startTime.minute.toDouble()/100;
+          sessionSpots.add(ScatterSpot(i.toDouble(), startMinute,
+            color: colors[titles.indexOf(session.getTitle())]
+          ));
+        }
+      }
+      today = today.add(Duration(days: 1));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      height: 450,
+      child: ListView(
+          // This next line does the trick.
+          scrollDirection: Axis.horizontal,
+          children: [Container(
+          height: 450,
+          width: 500,
+          padding: EdgeInsets.only(top: 20, right: 24, bottom: 4),
+          color: Color.fromRGBO(0, 0, 0, 0.06),
+          child: ScatterChart(
+            ScatterChartData(
+              scatterSpots: sessionSpots,
+              minX: 1,
+              maxX: 7,
+              minY: 0,
+              maxY: 24.toDouble(),
+              gridData: FlGridData(
+                show: true,
+                drawHorizontalLine: true,
+                checkToShowHorizontalLine: (value) => true,
+                getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
+                drawVerticalLine: true,
+                checkToShowVerticalLine: (value) => true,
+                getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
+              ),
+            ),
+            swapAnimationDuration: Duration(milliseconds: 150), // Optional
+            swapAnimationCurve: Curves.linear, // Optional
+          ))]),
+    );
+  }
+}
 
 class SessionButton extends StatelessWidget {
-  // HomeScreen({this.user});
   Session session;
   String title;
   String date;
