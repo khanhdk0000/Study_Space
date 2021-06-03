@@ -1,34 +1,37 @@
 import 'dart:math';
+import 'package:study_space/InputOutputDevice/controller/controller.dart';
+import 'package:study_space/InputOutputDevice/state/temp_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
-import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
-class BuzzerController {
-  final MQTTBuzzerState buzzerState;
+class TempController extends Controller {
+  final TempState tempState;
   MQTTManager manager;
 
-  BuzzerController(this.buzzerState) {
+  TempController(this.tempState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/buzzer',
-        identifier: _random.nextInt(10).toString(),
-        state: buzzerState);
+        topic: 'khanhdk0000/feeds/temp',
+        identifier: _random.nextInt(20).toString(),
+        state: tempState);
   }
 
+  @override
   void connectAdaServer() async {
     manager.initializeMQTTClient();
     await manager.connect();
   }
 
+  @override
   void disconnectAdaServer() {
     manager.disconnect();
   }
 
   void publishMessage({String id, String name, String data}) {
-    Message buzz = Message(id: id, name: name, data: data, unit: '');
-    String message = jsonEncode(buzz);
+    Message light = Message(id: id, name: name, data: data, unit: '');
+    String message = jsonEncode(light);
     manager.publish(message);
   }
 }

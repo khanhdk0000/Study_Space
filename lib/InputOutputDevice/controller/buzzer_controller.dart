@@ -1,19 +1,19 @@
 import 'dart:math';
+import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
-import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
 class BuzzerController {
-  final MQTTBuzzerState buzzerState;
+  final BuzzerState buzzerState;
   MQTTManager manager;
 
   BuzzerController(this.buzzerState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/buzzer',
-        identifier: _random.nextInt(10).toString(),
+        identifier: _random.nextInt(20).toString(),
         state: buzzerState);
   }
 
