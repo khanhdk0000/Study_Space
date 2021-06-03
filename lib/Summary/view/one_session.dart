@@ -120,7 +120,7 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Color _circleColor(int score){
-    if (score == 100.0){
+    if (score >= 90.0){
       return Colors.greenAccent;
     }
     else if (score >= 70.0){
