@@ -34,10 +34,10 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   ];
 
   ///User arguments
+  final User user = auth.currentUser;
   String _username = "Gwen";
   int _userid = 13;
   int _progress = 75;
-  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {

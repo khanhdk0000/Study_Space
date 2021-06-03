@@ -99,7 +99,7 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-99') ? 'NA' : score;
+    String scoreText = (score == '-1') ? 'NA' : score;
     return Container(
         alignment: Alignment.center,
         width: 150.0,
