@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
+import 'package:study_space/InputOutputDevice/state/light_state.dart';
+import 'package:study_space/InputOutputDevice/state/temp_state.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/constants.dart';
@@ -34,7 +37,10 @@ class MyApp extends StatelessWidget {
           create: (_) => MQTTLightState(),
           update: (_, myModel, myNotifier) =>
               myNotifier..setBuzzerState(myModel),
-        )
+        ),
+        ChangeNotifierProvider<LightState>(create: (_) => LightState()),
+        ChangeNotifierProvider<TempState>(create: (_) => TempState()),
+        ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

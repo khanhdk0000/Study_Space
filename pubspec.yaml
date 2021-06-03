@@ -43,6 +43,7 @@ dependencies:
   flutter_local_notifications: ^6.0.0
   sliding_card: ^0.1.2
   awesome_dialog: ^2.1.0
+  syncfusion_flutter_gauges: ^19.1.66
 
 dev_dependencies:
   flutter_test:
