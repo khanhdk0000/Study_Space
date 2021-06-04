@@ -52,7 +52,7 @@ class _SessionScreenState extends State<SessionScreen> {
       upcoming = "Scheduled for today";
     }
     else if (difference < 0) {
-      upcoming = "You missed this session";
+      upcoming = "You missed this event";
     }
     else {
       upcoming = "Scheduled for ${difference} days from now";
@@ -99,7 +99,7 @@ class _SessionScreenState extends State<SessionScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "Delete session  ",
+                "Remove event  ",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,

@@ -36,14 +36,47 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
 
   final bodyText = TextStyle(
       fontWeight: FontWeight.w100,
-      fontSize: 24,
+      fontSize: 20,
       color: Colors.black);
 
   _displayDialog(BuildContext context, String type) async {
     return showDialog(
         context: context,
         builder: (context) {
-          final controller = TextEditingController(text: '');
+          var text = "";
+          switch(type) {
+            case "Event Name": {
+              text = subject;
+            }
+            break;
+
+            case "Start Date": {
+              text = startDate;
+            }
+            break;
+
+            case "Start Time": {
+              text = startTime;
+            }
+            break;
+
+            case "End Time": {
+              text = endTime;
+            }
+            break;
+
+            case "Period": {
+              text = period.toString();
+            }
+            break;
+
+            case "Repeat": {
+              text = repeat.toString();
+            }
+            break;
+          }
+          
+          final controller = TextEditingController(text: text);
           return AlertDialog(
             title: Text('$type'),
             content: TextField(
@@ -56,12 +89,12 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 onPressed: () {
                   setState(() {
                     switch(type) {
-                      case "Subject": {
+                      case "Event Name": {
                         subject = controller.text;
                       }
                       break;
 
-                      case "Date": {
+                      case "Start Date": {
                         startDate = controller.text;
                       }
                       break;
@@ -102,7 +135,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ReturnButton(),
-          Text("New Session", style: TextStyle(
+          Text("New Study Event", style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
               color: Colors.black),
@@ -112,74 +145,74 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     ]);
 
     final SubjectField = Container(
-      padding: EdgeInsets.all(36),
+      padding: EdgeInsets.all(20),
       color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
       child:TextButton(
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
         ),
-        onPressed: ()  => _displayDialog(context, "Subject"),
+        onPressed: ()  => _displayDialog(context, "Event Name"),
         child:   Text(
-          "Your session name is $subject",
+          "Event name : $subject",
           textAlign: TextAlign.left,
           style: TextStyle(
               fontWeight: FontWeight.w100,
-              fontSize: 50,
+              fontSize: 30,
               color: Colors.black),
         ))
     );
 
     final DateField = Container(
-        padding: EdgeInsets.all(36),
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Date"),
+            onPressed: ()  => _displayDialog(context, "Start Date"),
             child:   Text(
-              "This session begins on $startDate",
+              "Begins on: $startDate",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
     );
 
-    final TimeField = Container(
-        padding: EdgeInsets.all(36),
+    final StartTimeField = Container(
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                ),
-                onPressed: ()  => _displayDialog(context, "Start Time"),
-                child:   Text(
-                  "This session starts from $startTime",
-                  textAlign: TextAlign.left,
-                  style: bodyText,
-                )),
-            TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                ),
-                onPressed: ()  => _displayDialog(context, "End Time"),
-                child:   Text(
-                  "to $endTime",
-                  textAlign: TextAlign.left,
-                  style: bodyText,
-                )),
-          ],
-        )
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Start Time"),
+            child:   Text(
+              "Start Time: $startTime",
+              textAlign: TextAlign.left,
+              style: bodyText,
+            ))
+    );
+
+    final EndTimeField = Container(
+        padding: EdgeInsets.all(20),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "End Time"),
+            child:   Text(
+              "End Time: $endTime",
+              textAlign: TextAlign.left,
+              style: bodyText,
+            ))
     );
 
     final RepeatField = Container(
-        padding: EdgeInsets.all(36),
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
@@ -188,14 +221,14 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             ),
             onPressed: ()  => _displayDialog(context, "Repeat"),
             child:   Text(
-              "This session repeats $repeat times",
+              "Repeat: $repeat times",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
     );
 
     final PeriodField = Container(
-        padding: EdgeInsets.only(left: 36, top: 36, bottom: 50, right: 36),
+        padding: EdgeInsets.only(left: 20, top: 20, bottom: 24, right: 20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
@@ -204,7 +237,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             ),
             onPressed: ()  => _displayDialog(context, "Period"),
             child:   Text(
-              "This session repeats every $period days",
+              "Repeat every: $period days",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
@@ -212,7 +245,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
 
     final SaveButton =  TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.green,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero, // <-- Radius
           ),
@@ -223,17 +256,17 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           Navigator.pop(context);
         },
         child:   Container(
-          padding: EdgeInsets.only(left: 36, top: 18, bottom: 18),
+          padding: EdgeInsets.only(left: 22, top: 12, bottom: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(
                 Icons.arrow_back,
                 color: Colors.white,
-                size: 22.0,
+                size: 20.0,
               ),
               Text(
-                "  Save Session",
+                "  Save Event",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
@@ -251,7 +284,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, SubjectField, divider, DateField, divider, TimeField, divider, RepeatField, divider, PeriodField, SaveButton])),
+              children: [Navigation, spacer, SubjectField, divider, DateField, divider, StartTimeField, divider, EndTimeField, divider, RepeatField, divider, PeriodField, SaveButton])),
     );
   }
 }
