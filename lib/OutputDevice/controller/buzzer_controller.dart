@@ -3,6 +3,8 @@ import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'dart:convert';
 
+import 'package:study_space/constants.dart';
+
 final _random = new Random();
 
 class BuzzerController {
@@ -14,6 +16,8 @@ class BuzzerController {
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/buzzer',
         identifier: _random.nextInt(10).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: buzzerState);
   }
 

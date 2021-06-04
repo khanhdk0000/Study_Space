@@ -215,6 +215,8 @@ class _MQTTViewState extends State<MQTTView> {
         host: _hostTextController.text,
         topic: _topicTextController.text,
         identifier: osPrefix,
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: currentAppState);
     manager.initializeMQTTClient();
     manager.connect();

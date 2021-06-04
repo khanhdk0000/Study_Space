@@ -16,10 +16,10 @@ import 'package:study_space/Summary/view/all_sessions.dart';
 import 'package:study_space/sessions/session_test.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final User user = FirebaseAuth.instance.currentUser;
 
 class SideMenu extends StatelessWidget {
-  SideMenu({this.user});
-  final User user;
+  // SideMenu({this.user});
 
   @override
   Widget build(BuildContext context) {

@@ -12,8 +12,6 @@ class SensorCard extends StatelessWidget {
     @required this.deviceName,
     @required this.imgUrl,
     this.imgPadding = 2,
-    @required this.connect,
-    @required this.disconnect,
     @required this.controller,
     @required this.state,
     @required this.value,
@@ -22,8 +20,6 @@ class SensorCard extends StatelessWidget {
   final String deviceName;
   final String imgUrl;
   final double imgPadding;
-  final Function connect;
-  final Function disconnect;
   final Controller controller;
   final double value;
 
@@ -53,8 +49,6 @@ class SensorCard extends StatelessWidget {
           builder: (context) {
             if (deviceName == "Light") {
               return LightSensorScreen(
-                connect: connect,
-                disconnect: disconnect,
                 controller: controller,
               );
             } else if (deviceName == "Temperature") {
@@ -62,11 +56,9 @@ class SensorCard extends StatelessWidget {
                 controller: controller,
               );
             } else
-
               return SoundSensorScreen(
                 controller: controller,
               );
-
           },
         ),
       ),

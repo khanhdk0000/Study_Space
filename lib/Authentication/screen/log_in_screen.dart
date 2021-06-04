@@ -95,8 +95,6 @@ class _LogInFormState extends State<LogInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _success;
-  String _userEmail;
 
   void _logIn() async {
     print(_emailController.text);
@@ -111,28 +109,20 @@ class _LogInFormState extends State<LogInForm> {
         print('success');
         var c = new userController();
         c.addUser(user.displayName);
-        user_id =  await c.getUserId(user.displayName);
-        setState(() {
-          _success = true;
-          _userEmail = user.email;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Successfully signed in ' + user.displayName),
-            ),
-          );
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-        });
+        user_id = await c.getUserId(user.displayName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Successfully signed in ' + user.displayName),
+          ),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
       } else {
-        setState(() {
-          print('no');
-          _success = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Invalid email or password')));
-        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Invalid email or password')));
       }
     } on FirebaseAuthException catch (e) {
       print('exception: ' + e.code);

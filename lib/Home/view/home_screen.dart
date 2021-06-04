@@ -49,9 +49,7 @@ class HomeScreen extends StatelessWidget {
     ]);
 
     return Scaffold(
-      drawer: SideMenu(
-        user: user,
-      ),
+      drawer: SideMenu(),
       body: user == null
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
