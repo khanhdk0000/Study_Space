@@ -14,11 +14,22 @@ const kWelcomeScreen = 'welcomeScreen';
 
 const webhost = "studyspace-mdp-2021.000webhostapp.com";
 
-String adaUserName = 'khanhdk0000';
-String adaPassword = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
-// String adaUserName = 'CSE_BBC';
-// String adaUserName = 'CSE_BBC1';
-// String adaPassword = 'aio_lubo29QRBLOP6OoDkQ5RDsmUSukr';
+String adaTopic = '$khanhuser/feeds/';
+String adaUserName = khanhuser;
+String adaPassword = khanhApi;
+
+String adaTopicTemp = adaTopic + 'temp';
+String adaTopicLight = adaTopic + 'light';
+String adaTopicSound = adaTopic + 'sound';
+String adaTopicBuzzer = adaTopic + 'buzzer';
+String adaTopicLCD = adaTopic + 'iot_led';
+
+String khanhuser = 'khanhdk0000';
+String khanhApi = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
+String cseBBC = 'CSE_BBC';
+String cseBBC1 = 'CSE_BBC1';
+String bbcAPIKey = 'aio_aaXQ56Mtv3RWWwps1wWDPCWdq8S6';
+String bbc1APIKey = 'aio_wXPC09rE51bD1CFHcZnaBmTzeFiW';
 
 enum MQTTAppConnectionState { connected, disconnected, connecting }
 enum SensorEvaluation { normal, warning, bad }

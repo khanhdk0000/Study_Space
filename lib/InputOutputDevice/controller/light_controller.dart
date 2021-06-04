@@ -3,6 +3,7 @@ import 'package:study_space/InputOutputDevice/controller/controller.dart';
 import 'package:study_space/InputOutputDevice/state/light_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
+import 'package:study_space/constants.dart';
 
 final _random = new Random();
 
@@ -13,8 +14,10 @@ class LightController extends Controller {
   LightController(this.lightState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/light',
+        topic: adaTopicLight,
         identifier: _random.nextInt(20).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: lightState);
 
     manager.initializeMQTTClient();

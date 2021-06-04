@@ -3,6 +3,7 @@ import 'package:study_space/InputOutputDevice/controller/controller.dart';
 import 'package:study_space/InputOutputDevice/state/sound_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
+import 'package:study_space/constants.dart';
 
 final _random = new Random();
 
@@ -13,8 +14,10 @@ class SoundController extends Controller {
   SoundController(this.soundState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/sound',
+        topic: adaTopicSound,
         identifier: _random.nextInt(20).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: soundState);
     manager.initializeMQTTClient();
   }

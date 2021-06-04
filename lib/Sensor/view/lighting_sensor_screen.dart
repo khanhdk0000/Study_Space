@@ -30,6 +30,8 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
           host: 'io.adafruit.com',
           topic: 'khanhdk0000/feeds/sensor',
           identifier: _random.nextInt(10).toString(),
+          adaAPIKey: adaPassword,
+          adaUserName: adaUserName,
           state: lightState);
       manager.initializeMQTTClient();
       manager.connect();
