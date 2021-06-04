@@ -44,6 +44,8 @@ dependencies:
   sliding_card: ^0.1.2
   awesome_dialog: ^2.1.0
   syncfusion_flutter_gauges: ^19.1.66
+  fab_circular_menu: ^1.0.2
+  circular_menu: ^1.2.2
 
 dev_dependencies:
   flutter_test:

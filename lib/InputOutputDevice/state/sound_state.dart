@@ -1,16 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
 import 'package:study_space/Controller/sensorController.dart';
-import 'package:study_space/Controller/sessionController.dart';
-import 'package:study_space/Model/session.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
 
-final FirebaseAuth auth = FirebaseAuth.instance;
-final User user = auth.currentUser;
-
-class LightState with ChangeNotifier {
+class SoundState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState =
       MQTTAppConnectionState.disconnected;
   String _receivedText = "";
@@ -28,30 +22,18 @@ class LightState with ChangeNotifier {
     print(_valueFromServer);
     _receivedText = text;
     _historyText = _historyText + '\n' + _receivedText;
-    // String sessid = await getSessionId();
-
     await sensorController.addSensorField(
-        name: 'LIGHT',
-        unit: 'L1',
-        type: 'L',
+        name: 'SOUND',
+        unit: '',
+        type: 'S',
         timestamp: f.format(DateTime.now()),
-        // sess_id: sessid != null ? sessid : '1',
-        //TODO: get current session ID
-        sess_id: '1',
+        sess_id: '1', // TODO: get current session ID
         data: _valueFromServer.toString());
-    // print('\nhella' + sessid + '\n');
     if (_valueFromServer > 100) {
       _overThreshold = true;
     }
     notifyListeners();
   }
-
-  // Future<String> getSessionId() async {
-  //   SessionController sessionController = SessionController();
-  //   Session session =
-  //       await sessionController.getCurrentSession(user.displayName);
-  //   return session.getId();
-  // }
 
   void setAppConnectionState(MQTTAppConnectionState state) {
     _appConnectionState = state;

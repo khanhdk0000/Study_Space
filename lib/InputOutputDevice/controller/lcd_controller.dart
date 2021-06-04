@@ -1,21 +1,21 @@
 import 'dart:math';
 import 'package:study_space/InputOutputDevice/controller/controller.dart';
-import 'package:study_space/InputOutputDevice/state/temp_state.dart';
+import 'package:study_space/InputOutputDevice/state/lcd_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
-class TempController extends Controller {
-  final TempState tempState;
+class LCDController extends Controller {
+  final LCDState lcdState;
   MQTTManager manager;
 
-  TempController(this.tempState) {
+  LCDController(this.lcdState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/temp',
+        topic: 'khanhdk0000/feeds/iot_led',
         identifier: _random.nextInt(20).toString(),
-        state: tempState);
+        state: lcdState);
     manager.initializeMQTTClient();
   }
 
@@ -30,8 +30,8 @@ class TempController extends Controller {
   }
 
   void publishMessage({String id, String name, String data}) {
-    Message light = Message(id: id, name: name, data: data, unit: '');
-    String message = jsonEncode(light);
+    Message buzz = Message(id: id, name: name, data: data, unit: '');
+    String message = jsonEncode(buzz);
     manager.publish(message);
   }
 }

@@ -1,21 +1,21 @@
 import 'dart:math';
 import 'package:study_space/InputOutputDevice/controller/controller.dart';
-import 'package:study_space/InputOutputDevice/state/temp_state.dart';
+import 'package:study_space/InputOutputDevice/state/sound_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
-class TempController extends Controller {
-  final TempState tempState;
+class SoundController extends Controller {
+  final SoundState soundState;
   MQTTManager manager;
 
-  TempController(this.tempState) {
+  SoundController(this.soundState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/temp',
+        topic: 'khanhdk0000/feeds/sound',
         identifier: _random.nextInt(20).toString(),
-        state: tempState);
+        state: soundState);
     manager.initializeMQTTClient();
   }
 
