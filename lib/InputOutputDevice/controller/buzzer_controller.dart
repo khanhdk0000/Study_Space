@@ -1,12 +1,17 @@
 import 'dart:math';
+
 import 'package:study_space/InputOutputDevice/controller/controller.dart';
+
 import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
+
 class BuzzerController extends Controller {
+
+
   final BuzzerState buzzerState;
   MQTTManager manager;
 

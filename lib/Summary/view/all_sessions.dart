@@ -34,10 +34,10 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   ];
 
   ///User arguments
+  final User user = auth.currentUser;
   String _username = "Gwen";
   int _userid = 13;
   int _progress = 75;
-  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +165,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
-                return Text('Loading...');
+                return Text('Loading...\nIf you have just finished a session, it may take a while to process.');
               }),
         ),
       ),
@@ -320,7 +320,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-99') ? 'NA' : score;
+    String scoreText = (score == '-1') ? 'NA' : score;
     return Container(
         alignment: Alignment.center,
         width: 100.0,
@@ -338,7 +338,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Color _circleColor(int score) {
-    if (score == 100.0) {
+    if (score >= 90.0) {
       return Colors.greenAccent;
     } else if (score >= 70.0) {
       return Colors.orangeAccent;

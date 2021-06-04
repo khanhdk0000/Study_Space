@@ -45,12 +45,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SoundState>(create: (_) => SoundState()),
         ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
         ChangeNotifierProvider<LCDState>(create: (_) => LCDState()),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: lightThemeData(context),
-        home: user != null ? HomeScreen() : WelcomeScreen(),
+        home:WelcomeScreen(),
         routes: {
           kHomeScreen: (BuildContext context) => HomeScreen(),
           kWelcomeScreen: (BuildContext context) => WelcomeScreen(),

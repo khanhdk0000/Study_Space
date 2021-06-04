@@ -20,7 +20,7 @@ class userController {
 
   Future<User> addUser(
       String username, {String fname, String lname, String dob}) async {
-    print('in func');
+    print('add user');
     var response = await http.post(Uri.https(webhost, 'add_user.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -44,6 +44,7 @@ class userController {
   }
 
   Future<User> getUser(String username) async {
+    print("get user");
     var response = await http.post(Uri.https(webhost, 'get_user.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -64,6 +65,7 @@ class userController {
   }
   
   Future<int> getUserId(String username) async {
+      print('get user id');
       var u = await getUser(username);
       return u.getId();
   }

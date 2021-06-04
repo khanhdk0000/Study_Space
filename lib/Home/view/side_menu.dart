@@ -125,19 +125,9 @@ class SideMenu extends StatelessWidget {
           //     );
           //   },
           // ),
-          // ListTile(
-          //   leading: Icon(Icons.construction),
-          //   title: Text('Setting'),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => NotificationScreen()),
-          //     );
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.construction),
-            title: Text('Output device'),
+            title: Text('Setting'),
             onTap: () {
               Navigator.push(
                 context,
@@ -145,6 +135,16 @@ class SideMenu extends StatelessWidget {
               );
             },
           ),
+          // ListTile(
+          //   leading: Icon(Icons.construction),
+          //   title: Text('Output device'),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => OutputDeviceScreen()),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.wb_shade),
             title: Text('Device'),

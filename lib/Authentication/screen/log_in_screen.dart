@@ -111,6 +111,7 @@ class _LogInFormState extends State<LogInForm> {
         print('success');
         var c = new userController();
         c.addUser(user.displayName);
+        user_id =  await c.getUserId(user.displayName);
         setState(() {
           _success = true;
           _userEmail = user.email;

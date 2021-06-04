@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/InputOutputDevice/controller/buzzer_controller.dart';
+
 import 'package:study_space/InputOutputDevice/controller/lcd_controller.dart';
 import 'package:study_space/InputOutputDevice/controller/light_controller.dart';
 import 'package:study_space/InputOutputDevice/controller/sound_controller.dart';
@@ -25,6 +26,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:circular_menu/circular_menu.dart';
+
 
 final _random = new Random();
 
@@ -165,7 +167,9 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
   @override
   void initState() {
     super.initState();
+
     print('init called');
+
     controller = SlidingCardController();
     controller2 = SlidingCardController();
   }
@@ -183,6 +187,7 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
     }
   }
 
+
   void notifyDevice(var state, String device, String data) async {
     MQTTManager manager = MQTTManager(
         host: 'io.adafruit.com',
@@ -192,6 +197,7 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
     manager.initializeMQTTClient();
     await manager.connect();
     Message buzz = Message(id: '1', name: '$device', data: '$data', unit: '');
+
     String message = jsonEncode(buzz);
     manager.publish(message);
   }
@@ -440,6 +446,7 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
                   color: Colors.amber,
                 ),
               ]),
+
         ],
       ),
     );
