@@ -16,11 +16,11 @@ class TempController extends Controller {
         topic: 'khanhdk0000/feeds/temp',
         identifier: _random.nextInt(20).toString(),
         state: tempState);
+    manager.initializeMQTTClient();
   }
 
   @override
   void connectAdaServer() async {
-    manager.initializeMQTTClient();
     await manager.connect();
   }
 

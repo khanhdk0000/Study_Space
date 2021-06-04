@@ -3,7 +3,9 @@ import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
+import 'package:study_space/InputOutputDevice/state/lcd_state.dart';
 import 'package:study_space/InputOutputDevice/state/light_state.dart';
+import 'package:study_space/InputOutputDevice/state/sound_state.dart';
 import 'package:study_space/InputOutputDevice/state/temp_state.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
@@ -40,7 +42,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<LightState>(create: (_) => LightState()),
         ChangeNotifierProvider<TempState>(create: (_) => TempState()),
+        ChangeNotifierProvider<SoundState>(create: (_) => SoundState()),
         ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
+        ChangeNotifierProvider<LCDState>(create: (_) => LCDState()),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

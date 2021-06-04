@@ -1,4 +1,6 @@
-import 'devicesize.dart';
+import 'package:study_space/InputOutputDevice/controller/controller.dart';
+
+import '../OutputDevice/devicesize.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
 
@@ -12,7 +14,8 @@ class CustomCard extends StatefulWidget {
       @required this.message,
       @required this.connect,
       @required this.disconnect,
-      @required this.imgPath})
+      @required this.imgPath,
+      @required this.controller})
       : super(key: key);
 
   final SlidingCardController slidingCardController;
@@ -23,6 +26,7 @@ class CustomCard extends StatefulWidget {
   final Function connect;
   final Function disconnect;
   final String imgPath;
+  final Controller controller;
 
   @override
   _CustomCardState createState() => _CustomCardState();
@@ -31,37 +35,33 @@ class CustomCard extends StatefulWidget {
 class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.onTapped();
-      },
-      child: SlidingCard(
-        slidingAnimmationForwardCurve: Curves.easeIn,
-        slimeCardElevation: 0.5,
-        slidingAnimationReverseCurve: Curves.easeOut,
-        cardsGap: DeviceSize.safeBlockVertical,
-        controller: widget.slidingCardController,
-        slidingCardWidth: DeviceSize.horizontalBloc * 90,
-        visibleCardHeight: DeviceSize.safeBlockVertical * 30,
-        hiddenCardHeight: DeviceSize.safeBlockVertical * 15,
-        frontCardWidget: CustomFrontCard(
-          state: widget.state,
-          device: widget.device,
-          message: widget.message,
-          connect: widget.connect,
-          disconnect: widget.disconnect,
-          imgPath: widget.imgPath,
-          onInfoTapped: () {
-            print('info pressed');
-            widget.slidingCardController.expandCard();
-          },
-          onCloseButtonTapped: () {
-            widget.slidingCardController.collapseCard();
-          },
-        ),
-        backCardWidget:
-            CustomBackCard(onPhoneTapped: () {}, companyInfo: widget.message),
+    return SlidingCard(
+      slidingAnimmationForwardCurve: Curves.easeIn,
+      slimeCardElevation: 0.5,
+      slidingAnimationReverseCurve: Curves.easeOut,
+      cardsGap: DeviceSize.safeBlockVertical,
+      controller: widget.slidingCardController,
+      slidingCardWidth: DeviceSize.horizontalBloc * 90,
+      visibleCardHeight: DeviceSize.safeBlockVertical * 30,
+      hiddenCardHeight: DeviceSize.safeBlockVertical * 15,
+      frontCardWidget: CustomFrontCard(
+        state: widget.state,
+        device: widget.device,
+        message: widget.message,
+        connect: widget.connect,
+        disconnect: widget.disconnect,
+        imgPath: widget.imgPath,
+        controller: widget.controller,
+        onInfoTapped: () {
+          print('info pressed');
+          widget.slidingCardController.expandCard();
+        },
+        onCloseButtonTapped: () {
+          widget.slidingCardController.collapseCard();
+        },
       ),
+      backCardWidget:
+          CustomBackCard(onPhoneTapped: () {}, companyInfo: widget.message),
     );
   }
 }
@@ -75,23 +75,27 @@ class CustomFrontCard extends StatefulWidget {
   final Function onInfoTapped;
   final Function onCloseButtonTapped;
   final String imgPath;
-  const CustomFrontCard(
-      {Key key,
-      @required this.state,
-      @required this.device,
-      @required this.onInfoTapped,
-      @required this.onCloseButtonTapped,
-      @required this.message,
-      @required this.connect,
-      @required this.disconnect,
-      @required this.imgPath})
-      : super(key: key);
+  final Controller controller;
+
+  const CustomFrontCard({
+    Key key,
+    @required this.state,
+    @required this.device,
+    @required this.onInfoTapped,
+    @required this.onCloseButtonTapped,
+    @required this.message,
+    @required this.connect,
+    @required this.disconnect,
+    @required this.imgPath,
+    @required this.controller,
+  }) : super(key: key);
   @override
   _CustomFrontCardState createState() => _CustomFrontCardState();
 }
 
 class _CustomFrontCardState extends State<CustomFrontCard> {
   bool isInfoPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -245,24 +249,27 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                             Expanded(
                               child: SizedBox(
                                 height: DeviceSize.safeBlockVertical * 6,
-                                child: RaisedButton(
-                                  disabledElevation: 0,
-                                  focusElevation: 0,
-                                  highlightElevation: 0,
-                                  hoverElevation: 0,
-                                  elevation: 0.5,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50)),
-                                  textColor: Colors.black87,
-                                  color: Colors.greenAccent,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: widget.state ==
+                                            'Disconnected'
+                                        ? Colors.greenAccent
+                                        : Colors.greenAccent.withOpacity(0.35),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                  ),
                                   child: Text(
                                     'Connect',
                                     style: TextStyle(
-                                      fontSize:
-                                          DeviceSize.safeBlockHorizontal * 5.5,
-                                    ),
+                                        fontSize:
+                                            DeviceSize.safeBlockHorizontal *
+                                                5.5,
+                                        color: Colors.black87),
                                   ),
-                                  onPressed: widget.connect,
+                                  onPressed: widget.state == 'Disconnected'
+                                      ? widget.controller.connectAdaServer
+                                      : null,
                                 ),
                               ),
                             ),
@@ -272,16 +279,15 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                             Expanded(
                               child: SizedBox(
                                 height: DeviceSize.safeBlockVertical * 6,
-                                child: RaisedButton(
-                                  disabledElevation: 0,
-                                  focusElevation: 0,
-                                  highlightElevation: 0,
-                                  hoverElevation: 0,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50)),
-                                  textColor: Colors.black26,
-                                  color: Colors.redAccent,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: widget.state == 'Connected'
+                                        ? Colors.redAccent
+                                        : Colors.redAccent.withOpacity(0.35),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                  ),
                                   child: Text(
                                     'Disconnect',
                                     style: TextStyle(
@@ -290,7 +296,9 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                                           DeviceSize.safeBlockHorizontal * 5,
                                     ),
                                   ),
-                                  onPressed: widget.disconnect,
+                                  onPressed: widget.state == 'Connected'
+                                      ? widget.controller.disconnectAdaServer
+                                      : null,
                                 ),
                               ),
                             ),
@@ -338,7 +346,7 @@ class CustomBackCard extends StatelessWidget {
                     child: Text(
                       'Message :',
                       style: TextStyle(
-                        fontSize: DeviceSize.safeBlockHorizontal * 5,
+                        fontSize: DeviceSize.safeBlockHorizontal * 4,
                         fontWeight: FontWeight.bold,
                         color: Colors.black54,
                       ),

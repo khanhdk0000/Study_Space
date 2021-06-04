@@ -1,11 +1,17 @@
 import 'dart:math';
+
+import 'package:study_space/InputOutputDevice/controller/controller.dart';
+
 import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
 
 final _random = new Random();
 
-class BuzzerController {
+
+class BuzzerController extends Controller {
+
+
   final BuzzerState buzzerState;
   MQTTManager manager;
 
@@ -15,13 +21,16 @@ class BuzzerController {
         topic: 'khanhdk0000/feeds/buzzer',
         identifier: _random.nextInt(20).toString(),
         state: buzzerState);
+    manager.initializeMQTTClient();
   }
 
+  @override
   void connectAdaServer() async {
-    manager.initializeMQTTClient();
+    // manager.initializeMQTTClient();
     await manager.connect();
   }
 
+  @override
   void disconnectAdaServer() {
     manager.disconnect();
   }

@@ -4,7 +4,7 @@ import 'package:sliding_card/sliding_card.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
 import 'package:study_space/OutputDevice/controller/buzzer_controller.dart';
-import 'package:study_space/OutputDevice/custom_card.dart';
+import 'package:study_space/InputOutputDevice/custom_card.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/constants.dart';
 import 'devicesize.dart';
@@ -81,51 +81,51 @@ class _BodyState extends State<Body> {
               EdgeInsets.symmetric(horizontal: 15, vertical: kDefaultPadding),
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomCard(
-              onTapped: () {
-                if (controller.isCardSeparated == true) {
-                  controller.collapseCard();
-                } else {
-                  controller.expandCard();
-                }
-              },
-              slidingCardController: controller,
-              device: 'Buzzer',
-              state: getState(buzzerState.getAppConnectionState),
-              connect: () {
-                print('buzzer connect');
-                buzzerController.connectAdaServer();
-              },
-              disconnect: () {
-                print('buzzer disconnect');
-                buzzerController.disconnectAdaServer();
-              },
-              message: buzzerState.getHistoryText,
-              imgPath: 'assets/img/alarm.png',
-            ),
+            // CustomCard(
+            //   onTapped: () {
+            //     if (controller.isCardSeparated == true) {
+            //       controller.collapseCard();
+            //     } else {
+            //       controller.expandCard();
+            //     }
+            //   },
+            //   slidingCardController: controller,
+            //   device: 'Buzzer',
+            //   state: getState(buzzerState.getAppConnectionState),
+            //   connect: () {
+            //     print('buzzer connect');
+            //     buzzerController.connectAdaServer();
+            //   },
+            //   disconnect: () {
+            //     print('buzzer disconnect');
+            //     buzzerController.disconnectAdaServer();
+            //   },
+            //   message: buzzerState.getHistoryText,
+            //   imgPath: 'assets/img/alarm.png',
+            // ),
             SizedBox(
               height: kDefaultPadding,
             ),
-            CustomCard(
-              onTapped: () {
-                if (controller2.isCardSeparated == true) {
-                  controller2.collapseCard();
-                } else {
-                  controller2.expandCard();
-                }
-              },
-              slidingCardController: controller2,
-              device: 'LCD',
-              state: 'Connected',
-              connect: () {
-                print('LCD connect');
-              },
-              disconnect: () {
-                print('LCD disconnect');
-              },
-              message: '12345',
-              imgPath: 'assets/img/lcd.png',
-            ),
+            // CustomCard(
+            //   onTapped: () {
+            //     if (controller2.isCardSeparated == true) {
+            //       controller2.collapseCard();
+            //     } else {
+            //       controller2.expandCard();
+            //     }
+            //   },
+            //   slidingCardController: controller2,
+            //   device: 'LCD',
+            //   state: 'Connected',
+            //   connect: () {
+            //     print('LCD connect');
+            //   },
+            //   disconnect: () {
+            //     print('LCD disconnect');
+            //   },
+            //   message: '12345',
+            //   imgPath: 'assets/img/lcd.png',
+            // ),
           ],
         ),
       ),
