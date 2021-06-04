@@ -60,6 +60,11 @@ class _SessionScreenState extends State<SessionScreen> {
     }
   }
 
+  final bodyText = TextStyle(
+    fontWeight: FontWeight.normal,
+    fontSize: 17
+  );
+
   @override
 
   Widget build(BuildContext context) {
@@ -107,17 +112,20 @@ class _SessionScreenState extends State<SessionScreen> {
           ),
         ));
 
-    var Body = ListBody(
+    var Body = Container(
+      padding: EdgeInsets.all(22),
+        child: ListBody(
             children: [
               Text(title, style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold
               )),
-              Text("$upcoming - $date"),
-              Text("About $duration minutes - From $startTime to $endTime"),
+              spacer,
+              Text("$upcoming - $date", style: bodyText),
+              Text("About $duration minutes - From $startTime to $endTime", style: bodyText),
 
             ],
-          );
+          ));
 
 
     return Scaffold(
@@ -126,7 +134,7 @@ class _SessionScreenState extends State<SessionScreen> {
       child:ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, divider, Body, spacer, DeleteButton]),
+              children: [Navigation, Body, DeleteButton]),
     ));
   }
 }
