@@ -45,7 +45,40 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     return showDialog(
         context: context,
         builder: (context) {
-          final controller = TextEditingController(text: '');
+          var text = "";
+          switch(type) {
+            case "Event Name": {
+              text = subject;
+            }
+            break;
+
+            case "Start Date": {
+              text = startDate;
+            }
+            break;
+
+            case "Start Time": {
+              text = startTime;
+            }
+            break;
+
+            case "End Time": {
+              text = endTime;
+            }
+            break;
+
+            case "Period": {
+              text = period.toString();
+            }
+            break;
+
+            case "Repeat": {
+              text = repeat.toString();
+            }
+            break;
+          }
+          
+          final controller = TextEditingController(text: text);
           return AlertDialog(
             title: Text('$type'),
             content: TextField(
