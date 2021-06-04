@@ -51,7 +51,6 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             content: TextField(
               controller: controller,
               textInputAction: TextInputAction.go,
-              keyboardType: TextInputType.numberWithOptions(),
             ),
             actions: <Widget>[
               TextButton(
