@@ -63,7 +63,7 @@ class Session {
     // Session duration in minutes
       final startTime = DateFormat('hh:mm:ss').parse(this._start_time);
       final endTime = DateFormat('hh:mm:ss').parse(this._end_time);
-      final difference = startTime.difference(endTime);
+      final difference = endTime.difference(startTime);
       return difference.inMinutes;
   }
 

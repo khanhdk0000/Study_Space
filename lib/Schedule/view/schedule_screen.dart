@@ -274,7 +274,7 @@ class SessionsScatter extends StatelessWidget{
             child: Row(
                 children: [
                   Container(
-                    width: 16, height: 16,
+                    width: 14, height: 14,
                       decoration: BoxDecoration(
                           color: colors[titles.indexOf(title)],
                           shape: BoxShape.circle

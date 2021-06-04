@@ -92,7 +92,31 @@ class SessionController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode( <String, String> {
-          'sched_id' : "69",
+          'date' : date,
+          'start_time' : start_time,
+          'end_time' : end_time,
+          'status' : "0",
+          'title' : title,
+          'user_id' : user_id.toString(),
+        })
+    );
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      print("Success");
+      print(response.body);
+    }
+    else {
+      print('failed');
+    }
+  }
+
+  void removeSession (String date, String start_time, String end_time, String title, int user_id) async {
+    var response = await http.post(
+        Uri.https(webhost,'remove_session.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode( <String, String> {
           'date' : date,
           'start_time' : start_time,
           'end_time' : end_time,
