@@ -94,7 +94,7 @@ class SessionController {
     }
   }
 
-  Future<Session> getCurrentSession(String username) async{
+  Future<int> getCurrentSession(String username) async{
       var con = new userController();
       var curUser = await con.getUser(username);
       var curId = curUser.getId();
@@ -118,13 +118,13 @@ class SessionController {
       print(response.statusCode);
       if (response.statusCode == 201) {
         print("Success");
-        var data = jsonDecode(response.body);
-        print(data);
-        return Session(id:data[0],sched_id: data[1], date: data[2], start_time: data[3], end_time: data[4],status: data[5],title: data[6]);
+        var id = response.body.toString();
+        print(id);
+        return int.parse(id);
       }
       else {
         print('failed');
-        return null;
+        return -1;
       }
   }
 

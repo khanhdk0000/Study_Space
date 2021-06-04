@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: lightThemeData(context),
-        home: user != null ? HomeScreen() : WelcomeScreen(),
+        home:WelcomeScreen(),
         routes: {
           kHomeScreen: (BuildContext context) => HomeScreen(),
           kWelcomeScreen: (BuildContext context) => WelcomeScreen(),
