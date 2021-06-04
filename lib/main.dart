@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SoundState>(create: (_) => SoundState()),
         ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
         ChangeNotifierProvider<LCDState>(create: (_) => LCDState()),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -16,7 +16,9 @@ class BuzzerState with ChangeNotifier {
     _valueFromServer = double.parse(info['data']);
     print("From server");
     print(_valueFromServer);
+
     final f = DateFormat('dd-MM hh:mm');
+
     _receivedText = info['data'] + 'dB at ' + f.format(DateTime.now());
     _historyText = _historyText + '\n' + _receivedText;
     notifyListeners();

@@ -16,6 +16,7 @@ class LightController extends Controller {
         topic: 'khanhdk0000/feeds/light',
         identifier: _random.nextInt(20).toString(),
         state: lightState);
+
     manager.initializeMQTTClient();
   }
 

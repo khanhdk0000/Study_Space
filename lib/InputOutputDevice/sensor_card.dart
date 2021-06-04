@@ -62,9 +62,11 @@ class SensorCard extends StatelessWidget {
                 controller: controller,
               );
             } else
+
               return SoundSensorScreen(
                 controller: controller,
               );
+
           },
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:study_space/InputOutputDevice/controller/controller.dart';
 import 'package:study_space/InputOutputDevice/state/sound_state.dart';
+
 import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -13,18 +14,22 @@ class SoundSensorScreen extends StatelessWidget {
 
   final Controller controller;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
+
       body: Body(
         controller: controller,
       ),
+
     );
   }
 }
 
 class Body extends StatelessWidget {
+
   const Body({Key key, @required this.controller}) : super(key: key);
 
   final Controller controller;
@@ -32,6 +37,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SoundState soundState = Provider.of<SoundState>(context);
+
     return Column(
       children: [
         LightSensorScreenHeader(),
@@ -48,6 +54,7 @@ class Body extends StatelessWidget {
                     SizedBox(
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
+
                           backgroundColor: soundState.getAppConnectionState ==
                                   MQTTAppConnectionState.disconnected
                               ? Colors.greenAccent
@@ -59,6 +66,7 @@ class Body extends StatelessWidget {
                                 MQTTAppConnectionState.disconnected
                             ? controller.connectAdaServer
                             : null,
+
                         icon: Icon(
                           Icons.power_settings_new_rounded,
                           color: Colors.indigo,
@@ -77,6 +85,7 @@ class Body extends StatelessWidget {
                     SizedBox(
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
+
                           backgroundColor: soundState.getAppConnectionState ==
                                   MQTTAppConnectionState.connected
                               ? Colors.redAccent
@@ -88,6 +97,7 @@ class Body extends StatelessWidget {
                                 MQTTAppConnectionState.connected
                             ? controller.disconnectAdaServer
                             : null,
+
                         icon: Icon(
                           Icons.close,
                           color: Colors.white,
@@ -122,9 +132,11 @@ class CircleGauge extends StatefulWidget {
 }
 
 class _CircleGaugeState extends State<CircleGauge> {
+
   @override
   Widget build(BuildContext context) {
     double value = Provider.of<SoundState>(context).getValueFromServer;
+
     return Container(
       child: Center(
         child: SfRadialGauge(
@@ -190,7 +202,9 @@ class _CircleGaugeState extends State<CircleGauge> {
                         padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
                         child: Container(
                           child: Text(
+
                             '${value.toStringAsFixed(0)}',
+
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 25),
                           ),
