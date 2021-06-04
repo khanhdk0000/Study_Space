@@ -237,9 +237,9 @@ class SessionsPie extends StatelessWidget{
 
 class SessionsScatter extends StatelessWidget{
   List<ScatterSpot> sessionSpots = [];
+  List<String> titles = [];  // Ordered list of unique titles
 
   SessionsScatter(List<Session> sessions){
-    var titles = [];  // Ordered list of unique titles
     for (final session in sessions){
       final title = session.getTitle();
       if (!titles.contains(title)){
@@ -266,36 +266,64 @@ class SessionsScatter extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
+    var legend = Row(
+      children: [
+        for (final title in titles)
+          Container(
+            padding: EdgeInsets.only(left: 24),
+            child: Row(
+                children: [
+                  Container(
+                    width: 16, height: 16,
+                      decoration: BoxDecoration(
+                          color: colors[titles.indexOf(title)],
+                          shape: BoxShape.circle
+                      )),
+                  Text("  "+title, style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ))
+                ]
+            ),
+          )
+      ],
+    );
+
     return Container(
-      height: 450,
+      height: 480,
+      color: Color.fromRGBO(0, 0, 0, 0.06),
       child: ListView(
           // This next line does the trick.
           scrollDirection: Axis.horizontal,
-          children: [Container(
-          height: 450,
-          width: 500,
-          padding: EdgeInsets.only(top: 20, right: 24, bottom: 4),
-          color: Color.fromRGBO(0, 0, 0, 0.06),
-          child: ScatterChart(
-            ScatterChartData(
-              scatterSpots: sessionSpots,
-              minX: 1,
-              maxX: 7,
-              minY: 0,
-              maxY: 24.toDouble(),
-              gridData: FlGridData(
-                show: true,
-                drawHorizontalLine: true,
-                checkToShowHorizontalLine: (value) => true,
-                getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
-                drawVerticalLine: true,
-                checkToShowVerticalLine: (value) => true,
-                getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
-              ),
-            ),
-            swapAnimationDuration: Duration(milliseconds: 150), // Optional
-            swapAnimationCurve: Curves.linear, // Optional
-          ))]),
+          children: [Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+              height: 440,
+              width: 500,
+              padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
+              child: ScatterChart(
+                ScatterChartData(
+                  scatterSpots: sessionSpots,
+                  minX: 1,
+                  maxX: 7,
+                  minY: 0,
+                  maxY: 24.toDouble(),
+                  gridData: FlGridData(
+                    show: true,
+                    drawHorizontalLine: true,
+                    checkToShowHorizontalLine: (value) => true,
+                    getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
+                    drawVerticalLine: true,
+                    checkToShowVerticalLine: (value) => true,
+                    getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
+                  ),
+                ),
+                swapAnimationDuration: Duration(milliseconds: 150), // Optional
+                swapAnimationCurve: Curves.linear, // Optional
+              )),
+              legend
+            ],
+          )]),
     );
   }
 }
