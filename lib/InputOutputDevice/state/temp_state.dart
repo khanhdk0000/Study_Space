@@ -17,7 +17,8 @@ class TempState with ChangeNotifier {
 
   void setReceivedText(String text) async {
     var info = json.decode(text);
-    _valueFromServer = double.parse(info['data']);
+    // String data = info['data'];
+    _valueFromServer = double.parse(info['data'].split('-')[0]);
     print("From server");
     print(_valueFromServer);
     _receivedText = text;

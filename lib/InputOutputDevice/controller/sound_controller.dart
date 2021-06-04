@@ -16,8 +16,8 @@ class SoundController extends Controller {
         host: 'io.adafruit.com',
         topic: adaTopicSound,
         identifier: _random.nextInt(20).toString(),
-        adaAPIKey: adaPassword,
-        adaUserName: adaUserName,
+        adaAPIKey: adaPassword1,
+        adaUserName: adaUserName1,
         state: soundState);
     manager.initializeMQTTClient();
   }

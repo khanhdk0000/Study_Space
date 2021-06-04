@@ -16,8 +16,8 @@ class LightController extends Controller {
         host: 'io.adafruit.com',
         topic: adaTopicLight,
         identifier: _random.nextInt(20).toString(),
-        adaAPIKey: adaPassword,
-        adaUserName: adaUserName,
+        adaAPIKey: adaPassword1,
+        adaUserName: adaUserName1,
         state: lightState);
 
     manager.initializeMQTTClient();

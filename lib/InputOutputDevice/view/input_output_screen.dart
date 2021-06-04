@@ -113,7 +113,11 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         state: state);
     manager.initializeMQTTClient();
     await manager.connect();
-    Message buzz = Message(id: '1', name: '$device', data: '$data', unit: '');
+    Message buzz = Message(
+        id: device == 'LCD' ? '3' : '2',
+        name: '$device',
+        data: '$data',
+        unit: '');
 
     String message = jsonEncode(buzz);
     manager.publish(message);
@@ -184,16 +188,16 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         notifyDevice(buzzerState, 'SPEAKER', '13');
       });
       if (lightState.getOverThreshold) {
-        notifyDevice(lcdState, 'LCD', 'light overthershold');
+        notifyDevice(lcdState, 'LCD', 'Light alert');
         lightState.setBoolThreshold(false);
       }
       if (tempState.getOverThreshold) {
-        notifyDevice(lcdState, 'LCD', 'Temperature overthershold');
+        notifyDevice(lcdState, 'LCD', 'Tempe over');
         tempState.setBoolThreshold(false);
       }
       if (soundState.getOverThreshold) {
         soundState.setBoolThreshold(false);
-        notifyDevice(lcdState, 'LCD', 'Sound overthershold');
+        notifyDevice(lcdState, 'LCD', 'Sound over');
       }
     }
   }

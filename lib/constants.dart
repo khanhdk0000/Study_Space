@@ -14,15 +14,19 @@ const kWelcomeScreen = 'welcomeScreen';
 
 const webhost = "studyspace-mdp-2021.000webhostapp.com";
 
-String adaTopic = '$khanhuser/feeds/';
-String adaUserName = khanhuser;
-String adaPassword = khanhApi;
+String adaTopic = '$cseBBC/feeds/';
+String adaUserName = cseBBC;
+String adaPassword = bbcAPIKey;
 
-String adaTopicTemp = adaTopic + 'temp';
-String adaTopicLight = adaTopic + 'light';
-String adaTopicSound = adaTopic + 'sound';
-String adaTopicBuzzer = adaTopic + 'buzzer';
-String adaTopicLCD = adaTopic + 'iot_led';
+String adaTopic1 = '$cseBBC1/feeds/';
+String adaUserName1 = cseBBC1;
+String adaPassword1 = bbc1APIKey;
+
+String adaTopicTemp = adaTopic + 'bk-iot-temp-humid';
+String adaTopicLight = adaTopic1 + 'bk-iot-light';
+String adaTopicSound = adaTopic1 + 'bk-iot-sound';
+String adaTopicBuzzer = adaTopic + 'bk-iot-speaker';
+String adaTopicLCD = adaTopic + 'bk-iot_lcd';
 
 String khanhuser = 'khanhdk0000';
 String khanhApi = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
