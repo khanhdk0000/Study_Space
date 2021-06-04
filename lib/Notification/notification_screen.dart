@@ -2,12 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:study_space/Notification/scheduleController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:study_space/MQTTServer/state/MQTTInfraredState.dart';
+// import 'package:study_space/MQTTServer/MQTTManager.dart';
+// import 'package:provider/provider.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
-  MyScreen createState() => new MyScreen();
+  MyScreen createState() => MyScreen();
 }
 
 class MyScreen extends State<NotificationScreen> {
@@ -41,8 +44,14 @@ class MyScreen extends State<NotificationScreen> {
   List<String> scheduledEndtimeList = [];
   Future updateSchedule() async {
     var c = new scheduleController();
+    clearSchedule();
     scheduledStudyList = await c.getStarttime();
     scheduledEndtimeList = await c.getEndtime();
+  }
+
+  void clearSchedule() {
+    scheduledStudyList.clear();
+    scheduledEndtimeList.clear();
   }
 
   ////////////////////////
@@ -65,7 +74,8 @@ class MyScreen extends State<NotificationScreen> {
   //////////////////////////////////////
   // START STUDY SESSION NOTIFICATION //
   //////////////////////////////////////
-  Future _showStudyNotification(List<String> scheduledStudyList) async {
+  Future _showStudyNotification(
+      List<String> scheduledStudyList, bool useBreak) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     var priority = 0;
@@ -80,8 +90,10 @@ class MyScreen extends State<NotificationScreen> {
           platformChannelSpecifics,
           payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
         );
-        priority++;
-        _showBreakNotification(scheduledStudyList[i], priority);
+        if (useBreak) {
+          priority++;
+          _showBreakNotification(scheduledStudyList[i], priority);
+        }
       }
     }
   }
@@ -116,39 +128,68 @@ class MyScreen extends State<NotificationScreen> {
   ////////////
   // SWITCH //
   ////////////
-  var onoff = 'Off';
   bool switchControl = false;
+  bool breakSwitchControl = false;
+
   void onchange(bool value) {
     if (switchControl == false) {
       setState(() {
         switchControl = true;
-        onoff = 'On';
-        _showStudyNotification(scheduledStudyList);
+        breakSwitchControl = true;
+        _cancelAllNotifications();
+        _showStudyNotification(scheduledStudyList, true);
         _showEndtimeNotification(scheduledEndtimeList);
       });
     } else {
       setState(() {
         switchControl = false;
-        onoff = 'Off';
         _cancelAllNotifications();
       });
     }
   }
 
-  ////////
-  // UI //
-  ////////
+  void onchangeBreak(bool value) {
+    if (breakSwitchControl == false) {
+      setState(() {
+        breakSwitchControl = true;
+      });
+    } else {
+      setState(() {
+        breakSwitchControl = false;
+        _cancelAllNotifications();
+        _showStudyNotification(scheduledStudyList, false);
+        _showEndtimeNotification(scheduledEndtimeList);
+      });
+    }
+  }
+
+  bool presenceSwitchControl = false;
+  void onchangePresence(bool value) {
+    if (presenceSwitchControl == false) {
+      setState(() {
+        presenceSwitchControl = true;
+      });
+    } else {
+      setState(() {
+        presenceSwitchControl = false;
+      });
+    }
+  }
+
+  ////////////////////
+  // User Interface //
+  ////////////////////
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
+    return MaterialApp(
+      home: Scaffold(
         drawer: SideMenu(),
-        appBar: new AppBar(
+        appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: kContentColorLightTheme),
           title: Text(
-            'Để tạm thôi, thay sau :))',
+            'Settings',
             style: TextStyle(
               color: kContentColorLightTheme,
               fontSize: 20,
@@ -156,27 +197,14 @@ class MyScreen extends State<NotificationScreen> {
             textAlign: TextAlign.center,
           ),
         ),
-        body: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: updateSchedule,
-                child: Text('Update schedule',
-                    style: TextStyle(color: kContentColorLightTheme)),
-                style: ElevatedButton.styleFrom(
-                  primary: kPrimaryColor,
-                ),
-              ),
-              Switch(
-                value: switchControl,
-                onChanged: (bool value) => onchange(value),
-                activeColor: kPrimaryColor,
-              ),
-              Center(child: new Text("Notification ${onoff}")),
-            ],
-          ),
+        body: ListView(
+          padding: const EdgeInsets.all(15),
+          children: [
+            StudySwitch(onchange, switchControl),
+            PresenceSwitch(onchangePresence, presenceSwitchControl),
+            BreakSwitch(onchangeBreak, breakSwitchControl),
+            SnackBarPage(updateSchedule, clearSchedule),
+          ],
         ),
       ),
     );
@@ -191,6 +219,97 @@ class MyScreen extends State<NotificationScreen> {
           content: Text("Nội dung : $payload"),
         );
       },
+    );
+  }
+}
+
+class StudySwitch extends StatelessWidget {
+  final Function onchange;
+  final bool switchControl;
+  StudySwitch(this.onchange, this.switchControl);
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Allow Study Notification"),
+        Switch(
+          value: switchControl,
+          onChanged: (bool value) => onchange(value),
+          activeColor: kPrimaryColor,
+        ),
+      ],
+    );
+  }
+}
+
+class PresenceSwitch extends StatelessWidget {
+  final Function onchangePresence;
+  final bool presenceSwitchControl;
+  PresenceSwitch(this.onchangePresence, this.presenceSwitchControl);
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Allow Presence Notification"),
+        Switch(
+          value: presenceSwitchControl,
+          onChanged: (bool value) => onchangePresence(value),
+          activeColor: kPrimaryColor,
+        ),
+      ],
+    );
+  }
+}
+
+class BreakSwitch extends StatelessWidget {
+  final Function onchangeBreak;
+  final bool breakSwitchControl;
+  BreakSwitch(this.onchangeBreak, this.breakSwitchControl);
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Allow Break Notification"),
+        Switch(
+          value: breakSwitchControl,
+          onChanged: (bool value) => onchangeBreak(value),
+          activeColor: kPrimaryColor,
+        ),
+      ],
+    );
+  }
+}
+
+class SnackBarPage extends StatelessWidget {
+  final Function updateSchedule;
+  final Function clearSchedule;
+  SnackBarPage(this.updateSchedule, this.clearSchedule);
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () async {
+          await updateSchedule();
+          final snackBar = SnackBar(
+            content: Text('Updated Successfully!'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                clearSchedule();
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+        child: Text('Update schedule',
+            style: TextStyle(color: kContentColorLightTheme)),
+        style: ElevatedButton.styleFrom(
+          primary: kPrimaryColor,
+        ),
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ class scheduleController {
     var data = jsonDecode(response.body);
 
     List<String> scheduledStudyList = [];
-    for (var i = data.length - 3; i < data.length; i++) {
+    for (var i = 0; i < 3; i++) {
       data[i] = await getDate(i) + ' ' + data[i].toString().substring(13, 21);
       scheduledStudyList.add(data[i]);
       print(data[i]);
@@ -38,7 +38,8 @@ class scheduleController {
     var data = jsonDecode(response.body);
 
     List<String> scheduledEndtimeList = [];
-    for (var i = data.length - 3; i < data.length; i++) {
+    // for (var i = data.length - 3; i < data.length; i++) {
+    for (var i = 0; i < 3; i++) {
       data[i] = await getDate(i) + ' ' + data[i].toString().substring(11, 19);
       scheduledEndtimeList.add(data[i]);
       print(data[i]);

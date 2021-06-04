@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
+import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 const divider = SizedBox(height: 32.0);
@@ -132,7 +133,12 @@ class HomeSchedule extends StatelessWidget {
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.black),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                  );
+                },
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   Text(
                     "Show my schedule  ",

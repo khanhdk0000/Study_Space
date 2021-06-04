@@ -57,6 +57,14 @@ class Session {
     return "${this.getStartTime().substring(0, 5)} - ${this.getEndTime().substring(0, 5)}";
   }
 
+  int getDuration(){
+    // Session duration in minutes
+      final startTime = DateFormat('hh:mm:ss').parse(this._start_time);
+      final endTime = DateFormat('hh:mm:ss').parse(this._end_time);
+      final difference = endTime.difference(startTime);
+      return difference.inMinutes;
+  }
+
   String getDisplayDate(){
     DateTime date = DateFormat('MM/dd/yyyy').parse(this.getDate());
     return DateFormat('EEEE, MMM d').format(date);
