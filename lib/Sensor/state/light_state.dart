@@ -69,6 +69,8 @@ class MQTTLightState with ChangeNotifier {
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/buzzer',
         identifier: _random.nextInt(10).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: mqttBuzzerState);
     print('fuck' + mqttBuzzerState.getAppConnectionState.toString());
     manager.initializeMQTTClient();

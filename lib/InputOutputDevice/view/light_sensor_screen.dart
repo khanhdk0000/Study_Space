@@ -9,15 +9,9 @@ import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class LightSensorScreen extends StatelessWidget {
-  const LightSensorScreen(
-      {Key key,
-      @required this.connect,
-      @required this.disconnect,
-      @required this.controller})
+  const LightSensorScreen({Key key, @required this.controller})
       : super(key: key);
 
-  final Function connect;
-  final Function disconnect;
   final Controller controller;
 
   @override
@@ -25,8 +19,6 @@ class LightSensorScreen extends StatelessWidget {
     return Scaffold(
       drawer: SideMenu(),
       body: Body(
-        connect: connect,
-        disconnect: disconnect,
         controller: controller,
       ),
     );
@@ -34,15 +26,8 @@ class LightSensorScreen extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  const Body(
-      {Key key,
-      @required this.connect,
-      @required this.disconnect,
-      @required this.controller})
-      : super(key: key);
+  const Body({Key key, @required this.controller}) : super(key: key);
 
-  final Function connect;
-  final Function disconnect;
   final Controller controller;
 
   @override

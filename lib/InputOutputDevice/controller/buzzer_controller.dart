@@ -6,19 +6,20 @@ import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:convert';
 
+import 'package:study_space/constants.dart';
+
 final _random = new Random();
 
-
 class BuzzerController extends Controller {
-
-
   final BuzzerState buzzerState;
   MQTTManager manager;
 
   BuzzerController(this.buzzerState) {
     manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/buzzer',
+        topic: adaTopicBuzzer,
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         identifier: _random.nextInt(20).toString(),
         state: buzzerState);
     manager.initializeMQTTClient();

@@ -94,7 +94,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _success;
   String _userEmail;
   String _username;
 
@@ -111,24 +110,19 @@ class _RegisterFormState extends State<RegisterForm> {
       if (user != null) {
         await user.updateProfile(displayName: _usernameController.text.trim());
         print('success');
-        setState(() {
-          _success = true;
-          _userEmail = user.email;
-          _username = user.displayName;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                  'Successfully signed up ' + _userEmail + ' ' + _username)));
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-        });
+
+        _userEmail = user.email;
+        _username = user.displayName;
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     content: Text(
+        //         'Successfully signed up ' + _userEmail + ' ' + _username)));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
       } else {
         print('no');
-        setState(() {
-          _success = false;
-        });
       }
     } on FirebaseAuthException catch (e) {
       print('exception: ' + e.code);
@@ -227,8 +221,6 @@ class _RegisterFormState extends State<RegisterForm> {
           RoundedButton(
             press: () async {
               if (_formKey.currentState.validate()) {
-                // ScaffoldMessenger.of(context)
-                //     .showSnackBar(SnackBar(content: Text('Processing Data')));
                 _register();
               }
             },

@@ -11,13 +11,17 @@ class MQTTManager {
   final String _identifier;
   final String _host;
   final String _topic;
+  final String adaUserName;
+  final String adaAPIKey;
 
   // Constructor
   MQTTManager(
       {@required String host,
       @required String topic,
       @required String identifier,
-      @required state})
+      @required state,
+      @required this.adaUserName,
+      @required this.adaAPIKey})
       : _identifier = identifier,
         _host = host,
         _topic = topic,
@@ -42,7 +46,7 @@ class MQTTManager {
         .withWillMessage('My Will message')
         .startClean()
         .authenticateAs(
-            adaUserName, adaPassword) // Non persistent session for testing
+            adaUserName, adaAPIKey) // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
     _client.connectionMessage = connMess;

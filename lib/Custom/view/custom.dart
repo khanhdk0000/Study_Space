@@ -362,6 +362,8 @@ class _CustomViewState extends State<CustomView> {
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/bbc-led',
         identifier: _random.nextInt(10).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: currentAppState);
     manager.initializeMQTTClient();
     manager.connect();
@@ -415,6 +417,8 @@ class _CustomViewState extends State<CustomView> {
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/sensor',
         identifier: _random.nextInt(10).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: sensorCurrentAppState);
     sensorManager.initializeMQTTClient();
     sensorManager.connect();
@@ -472,7 +476,8 @@ class _CustomViewState extends State<CustomView> {
     infraredManager = MQTTManager(
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/infrared-sensor-1',
-        // topic: 'CSE_BBC1/feeds/bk-iot-infrared',
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         identifier: _random.nextInt(10).toString(),
         state: infraredCurrentAppState);
 

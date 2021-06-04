@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/InputOutputDevice/controller/buzzer_controller.dart';
-
 import 'package:study_space/InputOutputDevice/controller/lcd_controller.dart';
 import 'package:study_space/InputOutputDevice/controller/light_controller.dart';
 import 'package:study_space/InputOutputDevice/controller/sound_controller.dart';
@@ -24,9 +23,7 @@ import 'package:study_space/constants.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import 'dart:convert';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:circular_menu/circular_menu.dart';
-
 
 final _random = new Random();
 
@@ -39,88 +36,10 @@ class Message {
   Map toJson() => {'id': id, 'name': name, 'data': data, 'unit': unit};
 }
 
-class InputOutputScreen extends StatefulWidget {
-  @override
-  _InputOutputScreenState createState() => _InputOutputScreenState();
-}
-
-class _InputOutputScreenState extends State<InputOutputScreen> {
-  LightController lightController;
-
-  BuzzerController buzzerController;
-
-  LCDController lcdController;
-
-  TempController tempController;
-
-  SoundController soundController;
-
-  void initializeEverything(BuildContext context) {
-    LightState lightState = Provider.of<LightState>(context);
-    BuzzerState buzzerState = Provider.of<BuzzerState>(context);
-    TempState tempState = Provider.of<TempState>(context);
-    SoundState soundState = Provider.of<SoundState>(context);
-    LCDState lcdState = Provider.of<LCDState>(context);
-    lightController = LightController(lightState);
-    buzzerController = BuzzerController(buzzerState);
-    tempController = TempController(tempState);
-    soundController = SoundController(soundState);
-    lcdController = LCDController(lcdState);
-    lightController.connectAdaServer();
-    buzzerController.connectAdaServer();
-    tempController.connectAdaServer();
-    soundController.connectAdaServer();
-    lcdController.connectAdaServer();
-  }
-
-  void disableEverything() {
-    lightController.disconnectAdaServer();
-    buzzerController.disconnectAdaServer();
-    tempController.disconnectAdaServer();
-    soundController.disconnectAdaServer();
-    lcdController.disconnectAdaServer();
-  }
-
+class InputOutputScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FabCircularMenu(
-      //   fabColor: Color(0xFF53B3CB),
-      //   fabOpenIcon: Icon(
-      //     Icons.settings,
-      //     color: Colors.white,
-      //   ),
-      //   fabCloseIcon: Icon(
-      //     Icons.close,
-      //     color: Colors.white,
-      //   ),
-      //   ringColor: Color(0xff1d3557).withOpacity(0.85),
-      //   children: [
-      //     IconButton(
-      //         tooltip: 'Disconnect devices',
-      //         icon: Icon(
-      //           Icons.signal_wifi_off_rounded,
-      //           color: Colors.white,
-      //           size: 40,
-      //         ),
-      //         onPressed: () {
-      //           print('Home');
-      //           disableEverything();
-      //         }),
-      //     IconButton(
-      //         tooltip: 'Connect devices',
-      //         icon: Icon(
-      //           Icons.sensors,
-      //           color: Colors.white,
-      //           semanticLabel: 'hey',
-      //           size: 40,
-      //         ),
-      //         onPressed: () {
-      //           print('Favorite');
-      //           initializeEverything(context);
-      //         }),
-      //   ],
-      // ),
       drawer: SideMenu(),
       body: Body(),
     );
@@ -167,9 +86,6 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
   @override
   void initState() {
     super.initState();
-
-    print('init called');
-
     controller = SlidingCardController();
     controller2 = SlidingCardController();
   }
@@ -187,12 +103,13 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
     }
   }
 
-
   void notifyDevice(var state, String device, String data) async {
     MQTTManager manager = MQTTManager(
         host: 'io.adafruit.com',
-        topic: 'khanhdk0000/feeds/$device',
+        topic: device == 'LCD' ? adaTopicLCD : adaTopicBuzzer,
         identifier: _random.nextInt(20).toString(),
+        adaAPIKey: adaPassword,
+        adaUserName: adaUserName,
         state: state);
     manager.initializeMQTTClient();
     await manager.connect();
@@ -264,19 +181,19 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         tempState.getOverThreshold ||
         soundState.getOverThreshold) {
       Future.delayed(Duration.zero, () async {
-        notifyDevice(buzzerState, 'buzzer', '13');
+        notifyDevice(buzzerState, 'SPEAKER', '13');
       });
       if (lightState.getOverThreshold) {
-        notifyDevice(lcdState, 'iot_led', 'light overthershold');
+        notifyDevice(lcdState, 'LCD', 'light overthershold');
         lightState.setBoolThreshold(false);
       }
       if (tempState.getOverThreshold) {
-        notifyDevice(lcdState, 'iot_led', 'Temperature overthershold');
+        notifyDevice(lcdState, 'LCD', 'Temperature overthershold');
         tempState.setBoolThreshold(false);
       }
       if (soundState.getOverThreshold) {
         soundState.setBoolThreshold(false);
-        notifyDevice(lcdState, 'iot_led', 'Sound overthershold');
+        notifyDevice(lcdState, 'LCD', 'Sound overthershold');
       }
     }
   }
@@ -303,12 +220,6 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
                           deviceName: 'Light',
                           imgUrl: 'assets/img/ceiling-light.svg',
                           imgPadding: 0,
-                          connect: () {
-                            // lightController.connectAdaServer();
-                          },
-                          disconnect: () {
-                            // lightController.disconnectAdaServer();
-                          },
                           controller: lightController,
                           state: lightState.getAppConnectionState,
                           value: lightState.getValueFromServer,
@@ -317,12 +228,6 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
                           deviceName: 'Temperature',
                           imgUrl: 'assets/img/thermometer2.svg',
                           imgPadding: 6,
-                          connect: () {
-                            // lightController.connectAdaServer();
-                          },
-                          disconnect: () {
-                            // lightController.disconnectAdaServer();
-                          },
                           controller: tempController,
                           state: tempState.getAppConnectionState,
                           value: tempState.getValueFromServer,
@@ -338,12 +243,6 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
                           deviceName: 'Sound',
                           imgUrl: 'assets/img/stereo.svg',
                           imgPadding: 8,
-                          connect: () {
-                            // lightController.connectAdaServer();
-                          },
-                          disconnect: () {
-                            // lightController.disconnectAdaServer();
-                          },
                           controller: soundController,
                           state: soundState.getAppConnectionState,
                           value: soundState.getValueFromServer,
@@ -415,38 +314,31 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
             ],
           ),
           CircularMenu(
-              startingAngleInRadian: pi + 0.1,
-              endingAngleInRadian: pi + 1.2,
-              toggleButtonColor: Colors.deepPurpleAccent,
-              alignment: Alignment.bottomRight,
-              items: [
-                CircularMenuItem(
-                  iconSize: 40,
-                  onTap: () {
-                    print('tapped');
-                    disableEverything();
-                    // Navigator.pop(context); // pop current page
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => InputOutputScreen(),
-                    //   ),
-                    // );
-                  },
-                  icon: Icons.refresh,
-                  color: Colors.teal,
-                ),
-                CircularMenuItem(
-                  iconSize: 40,
-                  onTap: () {
-                    print('tapped');
-                    initializeEverything();
-                  },
-                  icon: Icons.sensors,
-                  color: Colors.amber,
-                ),
-              ]),
-
+            startingAngleInRadian: pi + 0.1,
+            endingAngleInRadian: pi + 1.2,
+            toggleButtonColor: Colors.deepPurpleAccent,
+            alignment: Alignment.bottomRight,
+            items: [
+              CircularMenuItem(
+                iconSize: 40,
+                onTap: () {
+                  print('tapped');
+                  disableEverything();
+                },
+                icon: Icons.refresh,
+                color: Colors.teal,
+              ),
+              CircularMenuItem(
+                iconSize: 40,
+                onTap: () {
+                  print('tapped');
+                  initializeEverything();
+                },
+                icon: Icons.sensors,
+                color: Colors.amber,
+              ),
+            ],
+          ),
         ],
       ),
     );
