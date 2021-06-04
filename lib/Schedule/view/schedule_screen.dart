@@ -10,11 +10,11 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/Schedule/view/session_screen.dart';
 import 'package:study_space/Schedule/view/add_session_screen.dart';
-
+import 'package:study_space/global.dart';
 
 ///User arguments
 String _username = "Gwen";
-int _userid = 2;
+int _userid = user_id;
 final User user = auth.currentUser;
 
 

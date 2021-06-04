@@ -5,15 +5,13 @@ import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/schedController.dart';
-
+import 'package:study_space/global.dart';
 
 ///User arguments
 String _username = "Gwen";
-int _userid = 2;
+int _userid = user_id;
 int _progress = 75;
 final User user = auth.currentUser;
-
-
 
 const spacer = SizedBox(height: 20.0);
 
@@ -220,7 +218,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () {
-          SessionController().addSessions(repeat, period, startDate, startTime, endTime, subject, _userid);
+          SessionController().addSessions(repeat, period, startDate, startTime, endTime, subject, _userid, username: user.displayName);
           //schedule.addSession(subject, timeframe);
           Navigator.pop(context);
         },

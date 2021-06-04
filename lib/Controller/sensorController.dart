@@ -2,8 +2,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Model/sensor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+final User user = auth.currentUser;
 
 class SensorController {
   SensorController() {
@@ -16,7 +21,9 @@ class SensorController {
       String timestamp,
       String sess_id,
       String data}) async {
-    print('in func');
+    var session_id = await SessionController().getCurrentSession(user.displayName);
+    print('[USERNAME] ${user.displayName}');
+    print('[SESSION ID] $session_id');
     var response = await http.post(Uri.https(webhost, 'add_sensor.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -26,15 +33,15 @@ class SensorController {
           'unit': unit,
           'type': type,
           'timestamp': timestamp,
-          'sess_id': sess_id,
+          'sess_id': session_id,
           'data': data
         }));
     print(response.statusCode);
 
     if (response.statusCode == 201) {
-      print('hell yea');
+      print('[CONTROLLER] Success');
     } else {
-      print('fucking failed');
+      print('[CONTROLLER] Fail to connect');
       return null;
     }
   }

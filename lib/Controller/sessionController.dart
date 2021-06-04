@@ -12,6 +12,9 @@ class SessionController {
 
   Future<List<Session>> getAllSessions(int uid, String filter, int limit) async {
     print("[CONTROLLER] Getting all sessions.");
+    var now = DateTime.now();
+    String date = DateFormat('MM/dd/yyyy').format(now);
+    print('$date, $uid, $filter, $limit');
     var folder = "get_finished_session.php";
     var response = await http.post(Uri.https(webhost, 'get_finished_session.php'),
         headers: <String, String>{
@@ -21,7 +24,9 @@ class SessionController {
           'uid': uid.toString(),
           'filter': filter,
           'limit': limit.toString(),
+          'date': date,
         }));
+    print(response.body);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -90,9 +95,13 @@ class SessionController {
     }
     }
 
-    void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id) async {
+    void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id, {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final startDate = dateFormat.parse(date);
+    if(user_id == null){
+      user_id = await userController().getUserId(username);
+    }
+    print('[USER ID] $user_id');
 
     for(var i = 0; i <= repeat; i++){
     final repeatDate = startDate.add(Duration(days: period * i));
@@ -153,12 +162,12 @@ class SessionController {
     }
   }
 
-    Future<int> getCurrentSession(String username) async{
+    Future<String> getCurrentSession(String username) async {
     var con = new userController();
     var curUser = await con.getUser(username);
     var curId = curUser.getId();
     var now = DateTime.now();
-    String date = DateFormat('dd/MM/yyyy').format(now);
+    String date = DateFormat('MM/dd/yyyy').format(now);
     String time = DateFormat('kk:mm:ss').format(now);
     print(date);
     print(time);
@@ -179,11 +188,11 @@ class SessionController {
     print("Success");
     var id = response.body.toString();
     print(id);
-    return int.parse(id);
+    return id;
     }
     else {
     print('failed');
-    return -1;
+    return '-1';
     }
     }
 

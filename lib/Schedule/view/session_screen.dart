@@ -6,13 +6,12 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
-
+import 'package:study_space/global.dart';
 
 ///User arguments
 String _username = "Gwen";
-int _userid = 2;
+int _userid = user_id;
 final User user = auth.currentUser;
-
 
 const spacer = SizedBox(height: 20.0);
 final divider = Container(height: 1.0, color: Colors.black26);

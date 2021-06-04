@@ -3,8 +3,10 @@ import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
 import 'package:study_space/Controller/sensorController.dart';
 import 'package:study_space/Controller/sessionController.dart';
+import 'package:study_space/Controller/userController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/constants.dart';
+import 'package:study_space/global.dart';
 import 'dart:convert';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -36,9 +38,6 @@ class LightState with ChangeNotifier {
         unit: 'L1',
         type: 'L',
         timestamp: f.format(DateTime.now()),
-
-        // sess_id: sessid != null ? sessid : '1',
-        //TODO: get current session ID
         sess_id: '1',
         data: _valueFromServer.toString());
     // print('\nhella' + sessid + '\n');
