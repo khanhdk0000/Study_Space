@@ -18,7 +18,7 @@ int _userid = 2;
 final User user = auth.currentUser;
 
 
-const spacer = SizedBox(height: 20.0);
+const spacer = SizedBox(height: 16.0);
 final divider = Container(height: 1.0, color: Colors.black26);
 const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 

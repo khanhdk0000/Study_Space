@@ -58,12 +58,12 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 onPressed: () {
                   setState(() {
                     switch(type) {
-                      case "Subject": {
+                      case "Event Name": {
                         subject = controller.text;
                       }
                       break;
 
-                      case "Date": {
+                      case "Start Date": {
                         startDate = controller.text;
                       }
                       break;
@@ -114,14 +114,14 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     ]);
 
     final SubjectField = Container(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.all(20),
       color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
       child:TextButton(
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
         ),
-        onPressed: ()  => _displayDialog(context, "Subject"),
+        onPressed: ()  => _displayDialog(context, "Event Name"),
         child:   Text(
           "Event name : $subject",
           textAlign: TextAlign.left,
@@ -133,14 +133,14 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     );
 
     final DateField = Container(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Date"),
+            onPressed: ()  => _displayDialog(context, "Start Date"),
             child:   Text(
               "Begins on: $startDate",
               textAlign: TextAlign.left,
@@ -148,40 +148,40 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             ))
     );
 
-    final TimeField = Container(
-        padding: EdgeInsets.all(24),
+    final StartTimeField = Container(
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                ),
-                onPressed: ()  => _displayDialog(context, "Start Time"),
-                child:   Text(
-                  "Starts time: $startTime",
-                  textAlign: TextAlign.left,
-                  style: bodyText,
-                )),
-            TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                ),
-                onPressed: ()  => _displayDialog(context, "End Time"),
-                child:   Text(
-                  "End time: $endTime",
-                  textAlign: TextAlign.left,
-                  style: bodyText,
-                )),
-          ],
-        )
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Start Time"),
+            child:   Text(
+              "Start Time: $startTime",
+              textAlign: TextAlign.left,
+              style: bodyText,
+            ))
+    );
+
+    final EndTimeField = Container(
+        padding: EdgeInsets.all(20),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        alignment: Alignment.topLeft,
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "End Time"),
+            child:   Text(
+              "End Time: $endTime",
+              textAlign: TextAlign.left,
+              style: bodyText,
+            ))
     );
 
     final RepeatField = Container(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
@@ -190,14 +190,14 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             ),
             onPressed: ()  => _displayDialog(context, "Repeat"),
             child:   Text(
-              "Repeats: $repeat times",
+              "Repeat: $repeat times",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
     );
 
     final PeriodField = Container(
-        padding: EdgeInsets.only(left: 24, top: 24, bottom: 28, right: 24),
+        padding: EdgeInsets.only(left: 20, top: 20, bottom: 24, right: 20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
         child:TextButton(
@@ -206,7 +206,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             ),
             onPressed: ()  => _displayDialog(context, "Period"),
             child:   Text(
-              "Repeats every: $period days",
+              "Repeat every: $period days",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
@@ -225,7 +225,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           Navigator.pop(context);
         },
         child:   Container(
-          padding: EdgeInsets.only(left: 24, top: 14, bottom: 14),
+          padding: EdgeInsets.only(left: 22, top: 12, bottom: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -253,7 +253,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, SubjectField, divider, DateField, divider, TimeField, divider, RepeatField, divider, PeriodField, SaveButton])),
+              children: [Navigation, spacer, SubjectField, divider, DateField, divider, StartTimeField, divider, EndTimeField, divider, RepeatField, divider, PeriodField, SaveButton])),
     );
   }
 }
