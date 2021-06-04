@@ -192,12 +192,12 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         lightState.setBoolThreshold(false);
       }
       if (tempState.getOverThreshold) {
-        notifyDevice(lcdState, 'LCD', 'Tempe over');
+        notifyDevice(lcdState, 'LCD', 'Tempe alert');
         tempState.setBoolThreshold(false);
       }
       if (soundState.getOverThreshold) {
         soundState.setBoolThreshold(false);
-        notifyDevice(lcdState, 'LCD', 'Sound over');
+        notifyDevice(lcdState, 'LCD', 'Sound alert');
       }
     }
   }

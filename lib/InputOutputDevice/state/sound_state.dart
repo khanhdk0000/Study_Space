@@ -29,7 +29,7 @@ class SoundState with ChangeNotifier {
         timestamp: f.format(DateTime.now()),
         sess_id: '1', // TODO: get current session ID
         data: _valueFromServer.toString());
-    if (_valueFromServer > 100) {
+    if (_valueFromServer > 400) {
       _overThreshold = true;
     }
     notifyListeners();

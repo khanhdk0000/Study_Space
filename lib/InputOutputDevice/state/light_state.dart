@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
@@ -10,7 +9,6 @@ import 'dart:convert';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final User user = auth.currentUser;
-
 
 class LightState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState =
@@ -33,7 +31,6 @@ class LightState with ChangeNotifier {
 
     // String sessid = await getSessionId();
 
-
     await sensorController.addSensorField(
         name: 'LIGHT',
         unit: 'L1',
@@ -46,12 +43,11 @@ class LightState with ChangeNotifier {
         data: _valueFromServer.toString());
     // print('\nhella' + sessid + '\n');
 
-    if (_valueFromServer > 100) {
+    if (_valueFromServer > 650) {
       _overThreshold = true;
     }
     notifyListeners();
   }
-
 
   // Future<String> getSessionId() async {
   //   SessionController sessionController = SessionController();
@@ -59,7 +55,6 @@ class LightState with ChangeNotifier {
   //       await sessionController.getCurrentSession(user.displayName);
   //   return session.getId();
   // }
-
 
   void setAppConnectionState(MQTTAppConnectionState state) {
     _appConnectionState = state;

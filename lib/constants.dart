@@ -26,7 +26,7 @@ String adaTopicTemp = adaTopic + 'bk-iot-temp-humid';
 String adaTopicLight = adaTopic1 + 'bk-iot-light';
 String adaTopicSound = adaTopic1 + 'bk-iot-sound';
 String adaTopicBuzzer = adaTopic + 'bk-iot-speaker';
-String adaTopicLCD = adaTopic + 'bk-iot_lcd';
+String adaTopicLCD = adaTopic + 'bk-iot-lcd';
 
 String khanhuser = 'khanhdk0000';
 String khanhApi = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
