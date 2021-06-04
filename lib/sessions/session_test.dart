@@ -50,6 +50,7 @@ class _SessionsViewState extends State<SessionsView> {
           children: [
             _topView(context),
             ElevatedButton(onPressed: addSes, child: Text("add session")),
+            ElevatedButton(onPressed: getId, child: Text("get user id")),
             Text("data"),
           ],
         ),
@@ -115,6 +116,10 @@ class _SessionsViewState extends State<SessionsView> {
 
   void addSes() {
     var c = new SessionController();
-    c.addSession(2, '06/01/2021', '22:00:00', '22:01:00', 'testing', 'b');
+    c.getCurrentSession('user');
+  }
+
+  void getId() {
+    print(user_id);
   }
 }
