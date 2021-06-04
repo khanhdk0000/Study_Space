@@ -31,84 +31,80 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TempState tempState = Provider.of<TempState>(context);
-    return Column(
-      children: [
-        LightSensorScreenHeader(),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              CircleGauge(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          backgroundColor: tempState.getAppConnectionState ==
-                                  MQTTAppConnectionState.disconnected
-                              ? Colors.greenAccent
-                              : Colors.greenAccent.withOpacity(0.35),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        onPressed: tempState.getAppConnectionState ==
-                                MQTTAppConnectionState.disconnected
-                            ? controller.connectAdaServer
-                            : null,
-                        icon: Icon(
-                          Icons.power_settings_new_rounded,
-                          color: Colors.indigo,
-                          size: 20,
-                        ),
-                        label: Text(
-                          'Connect',
-                          style: TextStyle(color: Colors.indigo, fontSize: 18),
-                        ),
-                      ),
-                      width: (MediaQuery.of(context).size.width -
-                                  kDefaultPadding * 2) /
-                              2 -
-                          kDefaultPadding,
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          LightSensorScreenHeader(),
+          CircleGauge(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: tempState.getAppConnectionState ==
+                              MQTTAppConnectionState.disconnected
+                          ? Colors.greenAccent
+                          : Colors.greenAccent.withOpacity(0.35),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                     ),
-                    SizedBox(
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          backgroundColor: tempState.getAppConnectionState ==
-                                  MQTTAppConnectionState.connected
-                              ? Colors.redAccent
-                              : Colors.redAccent.withOpacity(0.35),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        onPressed: tempState.getAppConnectionState ==
-                                MQTTAppConnectionState.connected
-                            ? controller.disconnectAdaServer
-                            : null,
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        label: Text(
-                          'Disconnect',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                      width: (MediaQuery.of(context).size.width -
-                                  kDefaultPadding * 2) /
-                              2 -
-                          kDefaultPadding,
-                    )
-                  ],
+                    onPressed: tempState.getAppConnectionState ==
+                            MQTTAppConnectionState.disconnected
+                        ? controller.connectAdaServer
+                        : null,
+                    icon: Icon(
+                      Icons.power_settings_new_rounded,
+                      color: Colors.indigo,
+                      size: 20,
+                    ),
+                    label: Text(
+                      'Connect',
+                      style: TextStyle(color: Colors.indigo, fontSize: 18),
+                    ),
+                  ),
+                  width: (MediaQuery.of(context).size.width -
+                              kDefaultPadding * 2) /
+                          2 -
+                      kDefaultPadding,
                 ),
-              ),
-            ],
+                SizedBox(
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: tempState.getAppConnectionState ==
+                              MQTTAppConnectionState.connected
+                          ? Colors.redAccent
+                          : Colors.redAccent.withOpacity(0.35),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                    onPressed: tempState.getAppConnectionState ==
+                            MQTTAppConnectionState.connected
+                        ? controller.disconnectAdaServer
+                        : null,
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    label: Text(
+                      'Disconnect',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                  width: (MediaQuery.of(context).size.width -
+                              kDefaultPadding * 2) /
+                          2 -
+                      kDefaultPadding,
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
