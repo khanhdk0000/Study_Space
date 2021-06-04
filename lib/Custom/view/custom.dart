@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -8,7 +9,9 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/MQTTServer/state/MQTTAppState.dart';
 import 'package:study_space/MQTTServer/state/MQTTSensorState.dart';
+import 'package:study_space/MQTTServer/state/MQTTInfraredState.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
@@ -26,6 +29,8 @@ class CustomViewAll extends StatelessWidget {
         ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
         ChangeNotifierProvider<MQTTSensorState>(
             create: (_) => MQTTSensorState()),
+        ChangeNotifierProvider<MQTTInfraredState>(
+            create: (_) => MQTTInfraredState()),
       ],
       child: CustomView(),
     );
@@ -49,17 +54,24 @@ class _CustomViewState extends State<CustomView> {
   MQTTManager manager;
   MQTTSensorState sensorCurrentAppState;
   MQTTManager sensorManager;
+  MQTTInfraredState infraredCurrentAppState;
+  MQTTManager infraredManager;
   bool _lightStatus = false;
   bool _overThreshold = false;
   bool _sensorTest = false;
+  bool _infraredStatus = false;
   double _currentSliderValue = 0;
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
     super.initState();
-    // if (currentAppState.getAppConnectionState == MQTTAppConnectionState.disconnected){
-    //   _configureAndConnect();
-    // }
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettings =
+        new InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   @override
@@ -97,6 +109,7 @@ class _CustomViewState extends State<CustomView> {
       _overThreshold = true;
     }
 
+    // TODO: (from khanh) How to implement this but different screens?
     if (_overThreshold) {
       _publishMessage(id: '1', name: 'LED', data: '1');
       _overThreshold = false;
@@ -105,6 +118,20 @@ class _CustomViewState extends State<CustomView> {
 
       // ScaffoldMessenger.of(context).showSnackBar(
       //     SnackBar(content: Text('Value from server exceeds threshold')));
+    }
+
+    // Infrared sensor part
+    final MQTTInfraredState infraredState =
+        Provider.of<MQTTInfraredState>(context);
+    infraredCurrentAppState = infraredState;
+
+    String infraredText = infraredState.getReceivedText;
+    if (infraredText != "") {
+      var nmessage = jsonDecode(infraredText);
+      String ndata = nmessage['data'].toString();
+      if (ndata == "0") {
+        _showPresenceNotification();
+      }
     }
 
     return Scaffold(
@@ -188,6 +215,20 @@ class _CustomViewState extends State<CustomView> {
                       _disconnect2),
                   _connectionStateDisplay(_prepareStateMessageFrom(
                       sensorCurrentAppState.getAppConnectionState)),
+                  // Infrared Sensor
+                  _titleWidget('Infrared Sensor', 25.0),
+                  _titleWidget('Input History', 16.0),
+                  _buildScrollableTextWith(
+                      infraredCurrentAppState.getHistoryText),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _buildConnectedButtonFrom(
+                      infraredCurrentAppState.getAppConnectionState,
+                      _configureAndConnect3,
+                      _disconnect3),
+                  _connectionStateDisplay(_prepareStateMessageFrom(
+                      infraredCurrentAppState.getAppConnectionState)),
                 ],
               ),
             ),
@@ -337,7 +378,6 @@ class _CustomViewState extends State<CustomView> {
   }
 
   void _disconnect() {
-    print('bitch');
     setState(() {
       _lightStatus = false;
     });
@@ -422,6 +462,49 @@ class _CustomViewState extends State<CustomView> {
           },
         ),
       ],
+    );
+  }
+
+  /////////////////////////////////////////////
+  // Quoc Anh's Part, Sorry for the mess :)) //
+  /////////////////////////////////////////////
+  void _configureAndConnect3() {
+    infraredManager = MQTTManager(
+        host: 'io.adafruit.com',
+        topic: 'khanhdk0000/feeds/infrared-sensor-1',
+        // topic: 'CSE_BBC1/feeds/bk-iot-infrared',
+        identifier: _random.nextInt(10).toString(),
+        state: infraredCurrentAppState);
+
+    infraredManager.initializeMQTTClient();
+    infraredManager.connect();
+  }
+
+  void _disconnect3() {
+    infraredManager.disconnect();
+  }
+
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+    'id',
+    'name',
+    'description',
+    sound: RawResourceAndroidNotificationSound('mysound'),
+    playSound: true,
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+
+  Future _showPresenceNotification() async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    var scheduledTime = DateTime.now();
+    await flutterLocalNotificationsPlugin.schedule(
+      1,
+      'Vắng mặt',
+      'Tới giờ rồi mà chưa vô vậy bro',
+      scheduledTime,
+      platformChannelSpecifics,
+      // payload: 'Ra chơi 15 phút',
     );
   }
 }

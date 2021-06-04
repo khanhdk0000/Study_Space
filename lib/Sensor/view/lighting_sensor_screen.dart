@@ -5,8 +5,6 @@ import 'package:study_space/Sensor/view/custom_slider.dart';
 import 'package:study_space/Sensor/view/switch_button.dart';
 import 'package:study_space/Sensor/view/top_sensor_screen_part.dart';
 import 'package:study_space/constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:study_space/MQTTServer/MQTTManager.dart';
 import 'dart:math';
@@ -93,7 +91,7 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                         'Lighting',
                         style: Theme.of(context)
                             .textTheme
-                            .headline3
+                            .headline4
                             .copyWith(color: Colors.black87),
                       ),
                     ),
@@ -124,7 +122,7 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                             'Connect',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyText2
                                 .copyWith(fontSize: 27, color: Colors.black87),
                           ),
                           Spacer(),
@@ -155,7 +153,7 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                             'Real time value',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyText2
                                 .copyWith(fontSize: 27, color: Colors.black87),
                           ),
                           Spacer(),
@@ -186,7 +184,7 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                             'Lighting threshold',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyText2
                                 .copyWith(fontSize: 27, color: Colors.black87),
                           ),
                           Spacer(),
@@ -196,17 +194,17 @@ class _LightingSensorScreenState extends State<LightingSensorScreen> {
                       SizedBox(
                         height: kDefaultPadding * 2,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          final f = DateFormat('yyyy-MM-dd hh:mm:ss');
-                          print(DateTime.now());
-                          print(f.format(DateTime.now()));
-                        },
-                        child: Text(
-                          'test',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      )
+                      // TextButton(
+                      //   onPressed: () {
+                      //     final f = DateFormat('yyyy-MM-dd hh:mm:ss');
+                      //     print(DateTime.now());
+                      //     print(f.format(DateTime.now()));
+                      //   },
+                      //   child: Text(
+                      //     'test',
+                      //     style: TextStyle(color: Colors.black),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

@@ -99,7 +99,7 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-99') ? 'NA' : score;
+    String scoreText = (score == '-1') ? 'NA' : score;
     return Container(
         alignment: Alignment.center,
         width: 150.0,
@@ -120,7 +120,7 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Color _circleColor(int score){
-    if (score == 100.0){
+    if (score >= 90.0){
       return Colors.greenAccent;
     }
     else if (score >= 70.0){

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class CustomSliderThumbRect extends SliderComponentShape {
   final double thumbRadius;
@@ -88,7 +89,7 @@ class SliderWidget extends StatefulWidget {
 }
 
 class _SliderWidgetState extends State<SliderWidget> {
-  double _value = 0;
+  double threshold = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +99,16 @@ class _SliderWidgetState extends State<SliderWidget> {
     if (this.widget.fullWidth) paddingFactor = .3;
     print('Value from server');
     print('$value, ${this.widget.max}, ${this.widget.min}');
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (value > 100) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Threshold exceeded'),
+          ),
+        );
+      }
+    });
 
     return Container(
       width: this.widget.fullWidth

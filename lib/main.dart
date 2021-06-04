@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
+import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
+import 'package:study_space/InputOutputDevice/state/lcd_state.dart';
+import 'package:study_space/InputOutputDevice/state/light_state.dart';
+import 'package:study_space/InputOutputDevice/state/sound_state.dart';
+import 'package:study_space/InputOutputDevice/state/temp_state.dart';
+import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/theme.dart';
@@ -24,13 +31,27 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
-        ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
+        // ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
+
+        ChangeNotifierProvider<MQTTBuzzerState>(
+            create: (_) => MQTTBuzzerState()),
+        ChangeNotifierProxyProvider<MQTTBuzzerState, MQTTLightState>(
+          create: (_) => MQTTLightState(),
+          update: (_, myModel, myNotifier) =>
+              myNotifier..setBuzzerState(myModel),
+        ),
+        ChangeNotifierProvider<LightState>(create: (_) => LightState()),
+        ChangeNotifierProvider<TempState>(create: (_) => TempState()),
+        ChangeNotifierProvider<SoundState>(create: (_) => SoundState()),
+        ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
+        ChangeNotifierProvider<LCDState>(create: (_) => LCDState()),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: lightThemeData(context),
-        home: user != null ? HomeScreen() : WelcomeScreen(),
+        home:WelcomeScreen(),
         routes: {
           kHomeScreen: (BuildContext context) => HomeScreen(),
           kWelcomeScreen: (BuildContext context) => WelcomeScreen(),

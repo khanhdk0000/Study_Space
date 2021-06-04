@@ -41,14 +41,12 @@ class Session {
     return this._end_time;
   }
 
-  String getScore(){
-    //finished sessions but don't have score
-    if (double.parse(this._status) == -1.0) {
-      //TODO: update the score
-      return "-1";
-    } else {
-      return (double.parse(this._status) * 100).toInt().toString();
-    }
+  String getScore() {
+    return int.parse(this._status).toString();
+  }
+
+  String setScore(String score) {
+    this._status = score;
   }
 
   String getTitle(){
@@ -85,7 +83,7 @@ class Session {
     );
   }
 
-  List<String> displaySession(){
+  List<String> displaySession() {
     return [this.getFullTime(), this.getTitle(), this.getDisplayDate(), this.getScore(), this.getId()];
   }
 

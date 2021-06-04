@@ -7,7 +7,8 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
-import 'package:study_space/summary/view/one_session.dart';
+import 'package:study_space/Summary/view/one_session.dart';
+import 'package:study_space/global.dart';
 
 class SummaryAllSessionsView extends StatefulWidget {
   const SummaryAllSessionsView({Key key}) : super(key: key);
@@ -24,18 +25,25 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   int _numView = 5;
   int _sortedBy = 0;
   List<String> _numViewValue = ['1', '2', '5', '10', '25', '99'];
-  List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
+  List<String> _sortSelection = [
+    'Score (H)',
+    'Score (L)',
+    'Name (A-Z)',
+    'Name (Z-A)',
+    'Time (H)',
+    'Time (L)'
+  ];
 
   ///User arguments
-  String _username = "Gwen";
-  int _userid = 13;
-  int _progress = 75;
   final User user = auth.currentUser;
+  String _username = "Unknown"; //temporary name when the user is null
+  int _userid = user_id;
 
   @override
   Widget build(BuildContext context) {
     //Retrieve data from the database through SessionController.
-    futureSession = SessionController().getAllSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]), _numView);
+    futureSession = SessionController().getAllSessions(_userid,
+        SessionController().setFilter(_sortSelection[_sortedBy]), _numView);
     return Scaffold(
       drawer: SideMenu(),
       body: SafeArea(
@@ -52,12 +60,13 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
     );
   }
 
-  Widget _topView(BuildContext context){
+  Widget _topView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
+          padding:
+              const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
           child: Row(
             children: [
               Column(
@@ -65,23 +74,20 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   MenuButton(),
                   TextButton(
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.black),
                     ),
                     onPressed: () {},
                     child: Icon(Icons.refresh, color: Colors.black, size: 24.0),
                   ),
                 ],
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05
-              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               CircleAvatar(
                 radius: 50.0,
                 backgroundImage: AssetImage('assets/img/portrait.png'),
               ),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05
-              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -93,11 +99,13 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   ),
                   SizedBox(height: kDefaultPadding * 0.2),
                   Text(
-                    "$_progress% study goal\ncompleted",
+                    "100% study goal\ncompleted",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontWeight: FontWeight.normal, fontSize: 13, color: Colors.black38),
+                        fontWeight: FontWeight.normal,
+                        fontSize: 13,
+                        color: Colors.black38),
                   )
                 ],
               )
@@ -108,75 +116,79 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
     );
   }
 
-  Widget _sortView(BuildContext context){
+  Widget _sortView(BuildContext context) {
     return Container(
-      color: Colors.black,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _whiteText('Your last study sessions:'),
-            SizedBox(height: kDefaultPadding * 0.5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _whiteText('Show'),
-                _dropDownNumView(context),
-                _whiteText('Sorted by:'),
-                _dropDownSort(context),
-              ],
-            ),
-          ],
-        ),
-      )
-    );
+        color: Colors.black,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _whiteText('Your last study sessions:'),
+              SizedBox(height: kDefaultPadding * 0.5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _whiteText('Show'),
+                  _dropDownNumView(context),
+                  _whiteText('Sorted by:'),
+                  _dropDownSort(context),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 
-  Widget _listView(BuildContext context){
+  Widget _listView(BuildContext context) {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-          child: FutureBuilder(future: futureSession, builder: (context, snapshot){
-            if (snapshot.hasData){
-              var numDisplay = snapshot.data.length > _numView ? _numView : snapshot.data.length;
-              List<Widget> widLst = [];
-              for(int i = 0; i < numDisplay; i++){
-                print(snapshot.data[i].displaySession());
-                widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
-              }
-              return Column(
-                children: widLst,
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            return Text('Loading...');
-          }),
+          child: FutureBuilder(
+              future: futureSession,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var numDisplay = snapshot.data.length > _numView
+                      ? _numView
+                      : snapshot.data.length;
+                  if (snapshot.data.length == 0){
+                    return Text("No session.");
+                  }
+                  List<Widget> widLst = [];
+                  for (int i = 0; i < numDisplay; i++) {
+                    print(snapshot.data[i].displaySession());
+                    widLst
+                        .add(_scheduleTile(snapshot.data[i].displaySession()));
+                  }
+                  return Column(
+                    children: widLst,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return Text('Loading...\nIf you have just finished a session, it may take a while to process.');
+              }),
         ),
       ),
     );
   }
 
-  Widget _whiteText(String text){
+  Widget _whiteText(String text) {
     return Text(
       text,
       textAlign: TextAlign.start,
       style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 16,
-          color: Colors.white),
+          fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
     );
   }
 
-  Widget _dropDownNumView(BuildContext context){
+  Widget _dropDownNumView(BuildContext context) {
     return Container(
       decoration: new BoxDecoration(
           color: Colors.white, //new Color.fromRGBO(255, 0, 0, 0.0),
-          borderRadius: new BorderRadius.all(Radius.circular(6.0))
-      ),
+          borderRadius: new BorderRadius.all(Radius.circular(6.0))),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 5.0),
         child: DropdownButton(
@@ -197,7 +209,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               _numView = int.parse(newValue);
             });
           },
-          items: _numViewValue.map<DropdownMenuItem<String>>((String value){
+          items: _numViewValue.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -208,12 +220,11 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
     );
   }
 
-  Widget _dropDownSort(BuildContext context){
+  Widget _dropDownSort(BuildContext context) {
     return Container(
       decoration: new BoxDecoration(
           color: Colors.white, //new Color.fromRGBO(255, 0, 0, 0.0),
-          borderRadius: new BorderRadius.all(Radius.circular(6.0))
-      ),
+          borderRadius: new BorderRadius.all(Radius.circular(6.0))),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 5.0),
         child: DropdownButton(
@@ -234,7 +245,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               _sortedBy = _sortSelection.indexOf(newValue);
             });
           },
-          items: _sortSelection.map<DropdownMenuItem<String>>((String value){
+          items: _sortSelection.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -245,7 +256,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
     );
   }
 
-  Widget _scheduleTile(List<String> oneScheduleList){
+  Widget _scheduleTile(List<String> oneScheduleList) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
@@ -280,13 +291,15 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    //Display Time
                     Text(
                       oneScheduleList[0],
                       style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
                       ),
                     ),
+                    //Display Subject title
                     Text(
                       oneScheduleList[1],
                       style: TextStyle(
@@ -294,14 +307,13 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                         fontSize: 20,
                       ),
                     ),
-                    Text(
-                      oneScheduleList[2],
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                        color: Colors.black54,
-                      )
-                    )
+                    //Display Date
+                    Text(oneScheduleList[2],
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                          color: Colors.black54,
+                        ))
                   ],
                 ),
                 _circleScore(oneScheduleList[3])
@@ -314,38 +326,32 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-99') ? 'NA' : score;
+    String scoreText = (score == '-1') ? 'NA' : score;
     return Container(
-                alignment: Alignment.center,
-                width: 100.0,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: _circleColor(int.parse(score)),
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  scoreText,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  )
-                )
-              );
+        alignment: Alignment.center,
+        width: 100.0,
+        height: 100.0,
+        decoration: BoxDecoration(
+          color: _circleColor(int.parse(score)),
+          shape: BoxShape.circle,
+        ),
+        child: Text(scoreText,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: Colors.white,
+            )));
   }
 
-  Color _circleColor(int score){
-    if (score == 100.0){
+  Color _circleColor(int score) {
+    if (score >= 90.0) {
       return Colors.greenAccent;
-    }
-    else if (score >= 70.0){
+    } else if (score >= 70.0) {
       return Colors.orangeAccent;
-    }
-    else if (score > 0){
+    } else if (score > 0) {
       return Colors.redAccent;
     } else {
       return Colors.grey;
     }
   }
-
 }
