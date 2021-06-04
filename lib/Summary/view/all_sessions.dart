@@ -8,6 +8,7 @@ import 'package:study_space/constants.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/Summary/view/one_session.dart';
+import 'package:study_space/global.dart';
 
 class SummaryAllSessionsView extends StatefulWidget {
   const SummaryAllSessionsView({Key key}) : super(key: key);
@@ -35,9 +36,8 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
 
   ///User arguments
   final User user = auth.currentUser;
-  String _username = "Gwen";
-  int _userid = 13;
-  int _progress = 75;
+  String _username = "Unknown"; //temporary name when the user is null
+  int _userid = user_id;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   ),
                   SizedBox(height: kDefaultPadding * 0.2),
                   Text(
-                    "$_progress% study goal\ncompleted",
+                    "100% study goal\ncompleted",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -153,6 +153,9 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   var numDisplay = snapshot.data.length > _numView
                       ? _numView
                       : snapshot.data.length;
+                  if (snapshot.data.length == 0){
+                    return Text("No session.");
+                  }
                   List<Widget> widLst = [];
                   for (int i = 0; i < numDisplay; i++) {
                     print(snapshot.data[i].displaySession());
@@ -288,6 +291,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    //Display Time
                     Text(
                       oneScheduleList[0],
                       style: TextStyle(
@@ -295,6 +299,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                         fontSize: 14,
                       ),
                     ),
+                    //Display Subject title
                     Text(
                       oneScheduleList[1],
                       style: TextStyle(
@@ -302,6 +307,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                         fontSize: 20,
                       ),
                     ),
+                    //Display Date
                     Text(oneScheduleList[2],
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
