@@ -118,36 +118,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ),
     );
 
-    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
-              if (snapshot.hasData){
-
-                if (snapshot.data.length > 0) {
-                return ListBody(
-                children: [
-                  SessionsScatter(snapshot.data),
-                for (final session in snapshot.data)
-                  ListBody(
-                      children: [
-                        divider,
-                        SessionButton(session)
-      ]
-                ),
-                  SessionsPie(snapshot.data),
-                ],
-                );
-                }
-                else {
-                  return NoSchedule;
-                }
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return Text('Loading...');
-            });
-
     final AddButton =  TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.orange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero, // <-- Radius
           ),
@@ -157,7 +130,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           MaterialPageRoute(builder: (context) => AddSessionScreen()),
         ),
         child:   Container(
-          padding: EdgeInsets.all(14),
+          padding: EdgeInsets.all(12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -166,18 +139,46 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               ),
               Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
-                size: 22.0,
+                size: 20.0,
               ),
             ],
           ),
         ));
+
+    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
+      if (snapshot.hasData){
+
+        if (snapshot.data.length > 0) {
+          return ListBody(
+            children: [
+              SessionsScatter(snapshot.data),
+              AddButton,
+              for (final session in snapshot.data)
+                ListBody(
+                    children: [
+                      SessionButton(session),
+                      divider
+                    ]
+                ),
+              SessionsPie(snapshot.data),
+            ],
+          );
+        }
+        else {
+          return NoSchedule;
+        }
+      } else if (snapshot.hasError) {
+        return Text("${snapshot.error}");
+      }
+      return Text('Loading...');
+    });
 
     return Scaffold(
       drawer: SideMenu(),
@@ -221,7 +222,7 @@ class SessionsPie extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return Container(
-        height: 400,
+        height: 320,
         color: Color.fromRGBO(0, 0, 0, 0.06),
         child: PieChart(
           PieChartData(
@@ -358,21 +359,21 @@ class SessionButton extends StatelessWidget {
         ),
       child: Container(
         alignment: Alignment.topLeft,
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("$title", style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 32,
+              fontSize: 20,
               color: Colors.black)),
           Text("$date", style: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 20,
+              fontSize: 16,
               color: Colors.black)),
           Text("From $startTime to $endTime", style: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 18,
+              fontSize: 16,
               color: Colors.black)),
         ],
       )
