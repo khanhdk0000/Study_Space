@@ -19,7 +19,6 @@ class LightController extends Controller {
         adaAPIKey: adaPassword1,
         adaUserName: adaUserName1,
         state: lightState);
-
     manager.initializeMQTTClient();
   }
 

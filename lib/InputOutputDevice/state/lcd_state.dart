@@ -12,11 +12,11 @@ class LCDState with ChangeNotifier {
 
   void setReceivedText(String text) async {
     var info = json.decode(text);
-    _valueFromServer = info['data'];
+    _valueFromServer = info['data'].toString();
     print("From server");
     print(_valueFromServer);
     final f = DateFormat('dd-MM hh:mm');
-    _receivedText = info['data'] + ' ' + f.format(DateTime.now());
+    _receivedText = _valueFromServer + ' ' + f.format(DateTime.now());
     _historyText = _historyText + '\n' + _receivedText;
     notifyListeners();
   }
