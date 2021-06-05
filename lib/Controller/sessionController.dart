@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
 import 'package:study_space/Model/session.dart';
-import 'package:study_space/Model/sensor.dart';
 import 'package:study_space/Controller/userController.dart';
 import 'sensorController.dart';
 
@@ -143,6 +142,7 @@ class SessionController {
           'user_id': user_id.toString(),
         }));
     print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 201) {
       print("Success");
       print(response.body);
@@ -213,8 +213,8 @@ class SessionController {
       int score = 100 +
           await this.getPenaltyLight(s) +
           await this.getPenaltySound(s) +
-          await this.getPenaltySound(s);
-      print(score);
+          await this.getPenaltyTemp(s);
+      print("[SESSION SCORE CALCULATED] $score");
       if (score < 0) {
         return "-1";
       } else
@@ -225,57 +225,54 @@ class SessionController {
   }
 
   Future<int> getPenaltyLight(Session s) async {
-    List<Sensor> lightSensorData =
-        await SensorController().getSensorData(sess_id: s.getId(), type: 'L');
-    if (lightSensorData.length == 0) {
+    double average =
+        await SensorController().getDirectAverage(sess_id: s.getId(), type: 'L');
+    if (average == null) {
       return -100;
     }
-    double average = SensorController().getAverage(lightSensorData);
     print('[LIGHT] $average');
     // Light score:
     // >= 400: no penalty
     // < 400: deduct 1 for each 10's less
-    // Eg: Light = 320 => (400-320)/10 = 8 (deduct)
+    // Eg: Light = 320 => (400-320)/5 = 5 (deduct)
     if (average < 400) {
-      return (average - 400) ~/ 10;
+      return (average - 400) ~/ 5;
     } else
       return 0;
   }
 
   Future<int> getPenaltyTemp(Session s) async {
-    List<Sensor> tempSensorData =
-        await SensorController().getSensorData(sess_id: s.getId(), type: 'TH');
-    if (tempSensorData.length == 0) {
+    double average =
+    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'TH');
+    if (average == null) {
       return -100;
     }
-    double average = SensorController().getAverage(tempSensorData);
     print('[TEMPERATURE] $average');
     // Temperature score:
     // In range (24-28): no penalty
-    // Out of range: -5 for each difference
-    // Eg: Temperature = 29 => (29-28)*5 = 5 (deduct)
+    // Out of range: -8 for each difference
+    // Eg: Temperature = 29 => (29-28)*8 = 8 (deduct)
     if (average < 24) {
-      return ((average - 24) * 5).toInt();
+      return ((average - 24) * 8).toInt();
     } else if (average > 28) {
-      return ((28 - average) * 5).toInt();
+      return ((28 - average) * 8).toInt();
     } else
       return 0;
   }
 
   Future<int> getPenaltySound(Session s) async {
-    List<Sensor> soundSensorData =
-        await SensorController().getSensorData(sess_id: s.getId(), type: 'S');
-    if (soundSensorData.length == 0) {
+    double average =
+    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'S');
+    if (average == null) {
       return -100;
     }
-    double average = SensorController().getAverage(soundSensorData);
     print('[SOUND] $average');
     // Sound score:
     // Less than 400: no penalty
-    // Greater than 400: -1 for each 10's difference
-    // Eg: Sound = 500 => (500-400)/10 = 10 (deduct)
-    if (average > 90) {
-      return (400 - average) ~/ 10;
+    // Greater than 400: -1 for each 5's difference
+    // Eg: Sound = 500 => (500-400)/5 = 5 (deduct)
+    if (average > 400) {
+      return (400 - average) ~/ 5;
     } else
       return 0;
   }
