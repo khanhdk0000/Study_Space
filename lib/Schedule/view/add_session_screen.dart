@@ -8,9 +8,7 @@ import 'package:study_space/Controller/schedController.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-String _username = "Gwen";
 int _userid = user_id;
-int _progress = 75;
 final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 20.0);
@@ -29,7 +27,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
   var startDate = "06/09/2069";
   var startTime = "00:00:00";
   var endTime = "00:00:00";
-  int repeat = 0;
+  int repeat = 1;
   int period = 1;
 
   final divider = Container(height: 1.0, color: Colors.black26);
@@ -75,7 +73,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             }
             break;
           }
-          
+
           final controller = TextEditingController(text: text);
           return AlertDialog(
             title: Text('$type'),
@@ -145,22 +143,23 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     ]);
 
     final SubjectField = Container(
-      padding: EdgeInsets.all(20),
-      color: Color.fromRGBO(0, 0, 0, 0.06),
+        padding: EdgeInsets.all(20),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
-      child:TextButton(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-        ),
-        onPressed: ()  => _displayDialog(context, "Event Name"),
-        child:   Text(
-          "Event name : $subject",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontWeight: FontWeight.w100,
-              fontSize: 30,
-              color: Colors.black),
-        ))
+        child:TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            onPressed: ()  => _displayDialog(context, "Event Name"),
+            child:   Text(
+              "Event name : $subject",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 30,
+                  color: Colors.black),
+            )
+        )
     );
 
     final DateField = Container(
@@ -255,7 +254,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           //schedule.addSession(subject, timeframe);
           Navigator.pop(context);
         },
-        child:   Container(
+        child: Container(
           padding: EdgeInsets.only(left: 22, top: 12, bottom: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,

@@ -9,7 +9,6 @@ import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-String _username = "Gwen";
 int _userid = user_id;
 final User user = auth.currentUser;
 
@@ -19,7 +18,7 @@ final divider = Container(height: 1.0, color: Colors.black26);
 class SessionScreen extends StatefulWidget {
   Session session;
 
-  SessionScreen(Session session){
+  SessionScreen(Session session) {
     this.session = session;
   }
 
@@ -36,7 +35,7 @@ class _SessionScreenState extends State<SessionScreen> {
   String startTime;
   String endTime;
 
-  _SessionScreenState(Session session){
+  _SessionScreenState(Session session) {
     this.session = session;
     this.title = session.getTitle();
     this.date = session.getDate();
@@ -48,92 +47,88 @@ class _SessionScreenState extends State<SessionScreen> {
     final today = new DateTime(now.year, now.month, now.day);
     final dateDate = DateFormat('MM/dd/yyyy').parse(date);
     final difference = dateDate.difference(today).inDays;
-    if (difference == 0){
+    if (difference == 0) {
       upcoming = "Scheduled for today";
-    }
-    else if (difference < 0) {
+    } else if (difference < 0) {
       upcoming = "You missed this event";
-    }
-    else {
+    } else {
       upcoming = "Scheduled for ${difference} days from now";
     }
   }
 
-  final bodyText = TextStyle(
-    fontWeight: FontWeight.normal,
-    fontSize: 17
-  );
+  final bodyText = TextStyle(fontWeight: FontWeight.normal, fontSize: 17);
 
   @override
-
   Widget build(BuildContext context) {
-
-    var Navigation = Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ReturnButton(),
-          Text("Session", style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.black),
-          )
-        ],
-      ),
-    ]);
-
-    final DeleteButton =  TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero, // <-- Radius
-          ),
+    var Navigation = Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ReturnButton(),
+            Text(
+              "Session",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
+            ),
+          ],
         ),
-        onPressed: () {
-          SessionController().removeSession(date, startTime, endTime, title, _userid);
-          Navigator.pop(context);
-        },
-        child:   Container(
-          padding: EdgeInsets.all(14),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Remove event  ",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontWeight: FontWeight.w100,
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
+      ],
+    );
+
+    final DeleteButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        SessionController()
+            .removeSession(date, startTime, endTime, title, _userid);
+        Navigator.pop(context);
+      },
+      child: Container(
+        padding: EdgeInsets.all(14),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Remove event  ",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontWeight: FontWeight.w100,
+                fontSize: 20,
+                color: Colors.white,
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
 
     var Body = Container(
-      padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(22),
         child: ListBody(
-            children: [
-              Text(title, style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.bold
-              )),
-              spacer,
-              Text("$upcoming - $date", style: bodyText),
-              Text("About $duration minutes - From $startTime to $endTime", style: bodyText),
-
-            ],
-          ));
-
+          children: [
+            Text(title,
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+            spacer,
+            Text("$upcoming - $date", style: bodyText),
+            Text("About $duration minutes - From $startTime to $endTime",
+                style: bodyText),
+          ],
+        ));
 
     return Scaffold(
-      drawer: SideMenu(),
-      body: SafeArea(
-      child:ListView(
+        drawer: SideMenu(),
+        body: SafeArea(
+          child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
               children: [Navigation, Body, DeleteButton]),
-    ));
+        ));
   }
 }

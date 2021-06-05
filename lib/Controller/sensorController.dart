@@ -89,25 +89,25 @@ class SensorController {
 
   SensorEvaluation getEvaluation(double value, String type){
     if (type == 'Light') {
-      if (value >= 200){
+      if (value >= 400){
         return SensorEvaluation.normal;
-      } else if (value >= 100) {
+      } else if (value >= 300) {
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
       }
     } else if (type == 'Sound') {
-      if (value <= 50) {
+      if (value <= 400) {
         return SensorEvaluation.normal;
-      } else if (value <= 70) {
+      } else if (value <= 500) {
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
       }
     } else if (type == 'Temperature') {
-      if (value <= 30 && value >= 25){
+      if (value <= 28 && value >= 24){
         return SensorEvaluation.normal;
-      } else if (value <= 33 && value >= 20){
+      } else if (value <= 30 && value >= 22){
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
