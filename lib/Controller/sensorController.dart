@@ -2,8 +2,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Model/sensor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+final User user = auth.currentUser;
 
 class SensorController {
   SensorController() {
@@ -16,7 +21,9 @@ class SensorController {
       String timestamp,
       String sess_id,
       String data}) async {
-    print('in func');
+    var session_id = await SessionController().getCurrentSession(user.displayName);
+    print('[USERNAME] ${user.displayName}');
+    print('[SESSION ID] $session_id');
     var response = await http.post(Uri.https(webhost, 'add_sensor.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -26,15 +33,15 @@ class SensorController {
           'unit': unit,
           'type': type,
           'timestamp': timestamp,
-          'sess_id': sess_id,
+          'sess_id': session_id,
           'data': data
         }));
     print(response.statusCode);
 
     if (response.statusCode == 201) {
-      print('hell yea');
+      print('[CONTROLLER] Success');
     } else {
-      print('fucking failed');
+      print('[CONTROLLER] Fail to connect');
       return null;
     }
   }
@@ -82,25 +89,25 @@ class SensorController {
 
   SensorEvaluation getEvaluation(double value, String type){
     if (type == 'Light') {
-      if (value >= 200){
+      if (value >= 400){
         return SensorEvaluation.normal;
-      } else if (value >= 100) {
+      } else if (value >= 300) {
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
       }
     } else if (type == 'Sound') {
-      if (value <= 50) {
+      if (value <= 400) {
         return SensorEvaluation.normal;
-      } else if (value <= 70) {
+      } else if (value <= 500) {
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
       }
     } else if (type == 'Temperature') {
-      if (value <= 30 && value >= 25){
+      if (value <= 28 && value >= 24){
         return SensorEvaluation.normal;
-      } else if (value <= 33 && value >= 20){
+      } else if (value <= 30 && value >= 22){
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;

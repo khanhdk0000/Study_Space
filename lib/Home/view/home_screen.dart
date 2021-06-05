@@ -3,6 +3,7 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/global.dart';
 
 const divider = SizedBox(height: 32.0);
 final FirebaseAuth auth = FirebaseAuth.instance;

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -10,15 +9,14 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/Schedule/view/session_screen.dart';
 import 'package:study_space/Schedule/view/add_session_screen.dart';
-
+import 'package:study_space/global.dart';
 
 ///User arguments
-String _username = "Gwen";
-int _userid = 2;
+int _userid = user_id;
 final User user = auth.currentUser;
 
 
-const spacer = SizedBox(height: 20.0);
+const spacer = SizedBox(height: 16.0);
 final divider = Container(height: 1.0, color: Colors.black26);
 const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 
@@ -64,7 +62,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     final maxDate = DateTime.now().add(Duration(days: dateRange));
     String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
 
-    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),formattedDate , 30);
+    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),
+        formattedDate, 30, user.displayName);
 
     var Navigation = Column(children: [
       Row(
@@ -72,82 +71,55 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         children: [
           MenuButton(),
           Text("Schedule", style: TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
-        color: Colors.black),
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black),
           )
         ],
       ),
     ]);
 
     var Filterer = Container (
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (final filter in filters)
-        TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: filterMode == filter ? Colors.black: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, // <-- Radius
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            for (final filter in filters)
+              TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: filterMode == filter ? Colors.black: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero, // <-- Radius
+                    ),
+                  ),
+                  onPressed: (){setState((){filterMode = filter;});},
+                  child: Text(
+                      filter, style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 13,
+                      color: filterMode == filter ? Colors.white: Colors.black)
+                  )
               ),
-            ),
-          onPressed: (){setState((){filterMode = filter;});},
-          child: Text(
-            filter, style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 13,
-              color: filterMode == filter ? Colors.white: Colors.black)
-          )
-        ),
-      ],
-    ));
+          ],
+        ));
 
     var NoSchedule = Container(
-    padding: EdgeInsets.all(36),
-    color: Color.fromRGBO(0, 0, 0, 0.06),
-    width: double.infinity,
-          child: Text(
-              "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
-              textAlign: TextAlign.left,
-            style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 48,
-                color: Colors.black)
-            ),
+      padding: EdgeInsets.all(36),
+      color: Color.fromRGBO(0, 0, 0, 0.06),
+      width: double.infinity,
+      child: Text(
+          "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 48,
+              color: Colors.black)
+      ),
     );
-
-    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
-              if (snapshot.hasData){
-
-                if (snapshot.data.length > 0) {
-                return ListBody(
-                children: [
-                  SessionsScatter(snapshot.data),
-                for (final session in snapshot.data)
-                  ListBody(
-                      children: [
-                        divider,
-                        SessionButton(session)
-      ]
-                ),
-                  SessionsPie(snapshot.data),
-                ],
-                );
-                }
-                else {
-                  return NoSchedule;
-                }
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return Text('Loading...');
-            });
 
     final AddButton =  TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.orange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero, // <-- Radius
           ),
@@ -157,27 +129,55 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           MaterialPageRoute(builder: (context) => AddSessionScreen()),
         ),
         child:   Container(
-          padding: EdgeInsets.all(14),
+          padding: EdgeInsets.all(12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "Add session  ",
+                "Add event  ",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               ),
               Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
-                size: 22.0,
+                size: 20.0,
               ),
             ],
           ),
         ));
+
+    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
+      if (snapshot.hasData){
+
+        if (snapshot.data.length > 0) {
+          return ListBody(
+            children: [
+              SessionsScatter(snapshot.data),
+              AddButton,
+              for (final session in snapshot.data)
+                ListBody(
+                    children: [
+                      SessionButton(session),
+                      divider
+                    ]
+                ),
+              SessionsPie(snapshot.data),
+            ],
+          );
+        }
+        else {
+          return NoSchedule;
+        }
+      } else if (snapshot.hasError) {
+        return Text("${snapshot.error}");
+      }
+      return Text('Loading...');
+    });
 
     return Scaffold(
       drawer: SideMenu(),
@@ -204,7 +204,7 @@ class SessionsPie extends StatelessWidget{
       var totalMinutes = 0.0;
       for (final session in sessions) {
         if (session.getTitle() == titles.elementAt(i)) {
-            totalMinutes += session.getDuration();
+          totalMinutes += session.getDuration();
         }
       }
       pieData.add(PieChartSectionData(
@@ -221,7 +221,7 @@ class SessionsPie extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return Container(
-        height: 400,
+        height: 320,
         color: Color.fromRGBO(0, 0, 0, 0.06),
         child: PieChart(
           PieChartData(
@@ -255,7 +255,7 @@ class SessionsScatter extends StatelessWidget{
           final startTime = DateFormat('hh:mm:ss').parse(session.getStartTime());
           final startMinute = startTime.hour + startTime.minute.toDouble()/100;
           sessionSpots.add(ScatterSpot(i.toDouble(), startMinute,
-            color: colors[titles.indexOf(session.getTitle())]
+              color: colors[titles.indexOf(session.getTitle())]
           ));
         }
       }
@@ -274,13 +274,13 @@ class SessionsScatter extends StatelessWidget{
             child: Row(
                 children: [
                   Container(
-                    width: 14, height: 14,
+                      width: 14, height: 14,
                       decoration: BoxDecoration(
                           color: colors[titles.indexOf(title)],
                           shape: BoxShape.circle
                       )),
                   Text("  "+title, style: TextStyle(
-                    fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold
                   ))
                 ]
             ),
@@ -292,35 +292,35 @@ class SessionsScatter extends StatelessWidget{
       height: 480,
       color: Color.fromRGBO(0, 0, 0, 0.06),
       child: ListView(
-          // This next line does the trick.
+        // This next line does the trick.
           scrollDirection: Axis.horizontal,
           children: [Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-              height: 440,
-              width: 500,
-              padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
-              child: ScatterChart(
-                ScatterChartData(
-                  scatterSpots: sessionSpots,
-                  minX: 1,
-                  maxX: 7,
-                  minY: 0,
-                  maxY: 24.toDouble(),
-                  gridData: FlGridData(
-                    show: true,
-                    drawHorizontalLine: true,
-                    checkToShowHorizontalLine: (value) => true,
-                    getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
-                    drawVerticalLine: true,
-                    checkToShowVerticalLine: (value) => true,
-                    getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
-                  ),
-                ),
-                swapAnimationDuration: Duration(milliseconds: 150), // Optional
-                swapAnimationCurve: Curves.linear, // Optional
-              )),
+                  height: 440,
+                  width: 500,
+                  padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
+                  child: ScatterChart(
+                    ScatterChartData(
+                      scatterSpots: sessionSpots,
+                      minX: 1,
+                      maxX: 7,
+                      minY: 0,
+                      maxY: 24.toDouble(),
+                      gridData: FlGridData(
+                        show: true,
+                        drawHorizontalLine: true,
+                        checkToShowHorizontalLine: (value) => true,
+                        getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
+                        drawVerticalLine: true,
+                        checkToShowVerticalLine: (value) => true,
+                        getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
+                      ),
+                    ),
+                    swapAnimationDuration: Duration(milliseconds: 150), // Optional
+                    swapAnimationCurve: Curves.linear, // Optional
+                  )),
               legend
             ],
           )]),
@@ -338,8 +338,8 @@ class SessionButton extends StatelessWidget {
     this.session = session;
     title = session.getTitle();
     date = session.getDate();
-   startTime = session.getStartTime().substring(0,5);
-   endTime = session.getEndTime().substring(0,5);
+    startTime = session.getStartTime().substring(0,5);
+    endTime = session.getEndTime().substring(0,5);
   }
 
   @override
@@ -356,26 +356,26 @@ class SessionButton extends StatelessWidget {
             borderRadius: BorderRadius.zero, // <-- Radius
           ),
         ),
-      child: Container(
-        alignment: Alignment.topLeft,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("$title", style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-              color: Colors.black)),
-          Text("$date", style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 20,
-              color: Colors.black)),
-          Text("From $startTime to $endTime", style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 18,
-              color: Colors.black)),
-        ],
-      )
-    ));
+        child: Container(
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("$title", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black)),
+                Text("$date", style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.black)),
+                Text("From $startTime to $endTime", style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.black)),
+              ],
+            )
+        ));
   }
 }

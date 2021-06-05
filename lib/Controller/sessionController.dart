@@ -10,8 +10,13 @@ import 'sensorController.dart';
 class SessionController {
   SessionController();
 
-  Future<List<Session>> getAllSessions(int uid, String filter, int limit) async {
+  Future<List<Session>> getAllSessions(int uid, String filter, int limit, String username) async {
+    if(uid == null){
+      uid = await userController().getUserId(username);
+    }
     print("[CONTROLLER] Getting all sessions.");
+    var now = DateTime.now();
+    String date = DateFormat('MM/dd/yyyy').format(now);
     var folder = "get_finished_session.php";
     var response = await http.post(Uri.https(webhost, 'get_finished_session.php'),
         headers: <String, String>{
@@ -21,13 +26,13 @@ class SessionController {
           'uid': uid.toString(),
           'filter': filter,
           'limit': limit.toString(),
+          'date': date,
         }));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = jsonDecode(response.body);
       print(data.toString());
-      print("Going down");
       List<Session> sessionLst = (data as List).map((s) => Session.fromJson(s)).toList();
       for(int i = 0; i < sessionLst.length; i++){
         print(sessionLst[i].getScore());
@@ -47,13 +52,16 @@ class SessionController {
     }
   }
 
-  Future<List<Session>> getUnfinishedSessions(int userId, String filter, String maxDate, int limit) async {
+  Future<List<Session>> getUnfinishedSessions(int uid, String filter, String maxDate, int limit, String username) async {
+    if(uid == null){
+      uid = await userController().getUserId(username);
+    }
     var response = await http.post(Uri.https(webhost, 'get_unfinished_sessions.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'user_id': userId.toString(),
+          'user_id': uid.toString(),
           'filter': filter,
           'limit': limit.toString(),
           'max_date': maxDate,
@@ -90,9 +98,13 @@ class SessionController {
     }
     }
 
-    void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id) async {
+    void addSessions (int repeat , int period , String date, String start_time, String end_time, String title, int user_id, {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final startDate = dateFormat.parse(date);
+    if(user_id == null){
+      user_id = await userController().getUserId(username);
+    }
+    print('[USER ID] $user_id, $username');
 
     for(var i = 0; i <= repeat; i++){
     final repeatDate = startDate.add(Duration(days: period * i));
@@ -149,16 +161,16 @@ class SessionController {
     print(response.body);
     }
     else {
-      print('failed');
+      print('Failed');
     }
   }
 
-    Future<int> getCurrentSession(String username) async{
+    Future<String> getCurrentSession(String username) async {
     var con = new userController();
     var curUser = await con.getUser(username);
     var curId = curUser.getId();
     var now = DateTime.now();
-    String date = DateFormat('dd/MM/yyyy').format(now);
+    String date = DateFormat('MM/dd/yyyy').format(now);
     String time = DateFormat('kk:mm:ss').format(now);
     print(date);
     print(time);
@@ -179,11 +191,11 @@ class SessionController {
     print("Success");
     var id = response.body.toString();
     print(id);
-    return int.parse(id);
+    return id;
     }
     else {
     print('failed');
-    return -1;
+    return '-1';
     }
     }
 
@@ -236,18 +248,18 @@ class SessionController {
     }
 
     Future<int> getPenaltySound(Session s) async {
-    List<Sensor> soundSensorData = await SensorController().getSensorData(sess_id: s.getId(), type: 'TH');
+    List<Sensor> soundSensorData = await SensorController().getSensorData(sess_id: s.getId(), type: 'S');
     if (soundSensorData.length == 0) {
     return -100;
     }
     double average = SensorController().getAverage(soundSensorData);
     print('[SOUND] $average');
     // Sound score:
-    // Less than 90: no penalty
-    // Greater than 90: -2 for each difference
-    // Eg: Sound = 100 => (100-90)*2 = 20 (deduct)
+    // Less than 400: no penalty
+    // Greater than 400: -1 for each 10's difference
+    // Eg: Sound = 500 => (500-400)/10 = 10 (deduct)
     if (average > 90){
-    return ((90 - average) * 2).toInt();
+    return (400 - average) ~/ 10;
     } else return 0;
     }
 

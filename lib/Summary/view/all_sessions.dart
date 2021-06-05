@@ -43,7 +43,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   Widget build(BuildContext context) {
     //Retrieve data from the database through SessionController.
     futureSession = SessionController().getAllSessions(_userid,
-        SessionController().setFilter(_sortSelection[_sortedBy]), _numView);
+        SessionController().setFilter(_sortSelection[_sortedBy]), _numView, user.displayName);
     return Scaffold(
       drawer: SideMenu(),
       body: SafeArea(
