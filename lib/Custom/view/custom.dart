@@ -59,7 +59,6 @@ class _CustomViewState extends State<CustomView> {
   bool _lightStatus = false;
   bool _overThreshold = false;
   bool _sensorTest = false;
-  bool _infraredStatus = false;
   double _currentSliderValue = 0;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -362,8 +361,8 @@ class _CustomViewState extends State<CustomView> {
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/bbc-led',
         identifier: _random.nextInt(10).toString(),
-        adaAPIKey: adaPassword,
-        adaUserName: adaUserName,
+        adaAPIKey: khanhuser,
+        adaUserName: khanhApi,
         state: currentAppState);
     manager.initializeMQTTClient();
     manager.connect();
@@ -476,13 +475,31 @@ class _CustomViewState extends State<CustomView> {
     infraredManager = MQTTManager(
         host: 'io.adafruit.com',
         topic: 'khanhdk0000/feeds/infrared-sensor-1',
-        adaAPIKey: adaPassword,
-        adaUserName: adaUserName,
+        adaAPIKey: khanhApi,
+        adaUserName: khanhuser,
         identifier: _random.nextInt(10).toString(),
         state: infraredCurrentAppState);
 
     infraredManager.initializeMQTTClient();
     infraredManager.connect();
+
+    _getLatestData().then((value) {
+      setState(() {
+        if (value['data'] == '0') {
+          // _publishMessage();
+        }
+      });
+    });
+    print("You goes here");
+  }
+
+  _getLatestData3() async {
+    var req = await http.get(
+        Uri.https('io.adafruit.com', 'api/v2/khanhdk0000/feeds/bbc-led/data'));
+    var infos = json.decode(req.body);
+    var temp = infos[0]['value'];
+    var temp2 = json.decode(temp);
+    return temp2;
   }
 
   void _disconnect3() {

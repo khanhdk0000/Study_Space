@@ -1,12 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:study_space/Notification/view/setting_switch.dart';
 import 'package:study_space/Notification/scheduleController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:study_space/MQTTServer/state/MQTTInfraredState.dart';
-// import 'package:study_space/MQTTServer/MQTTManager.dart';
-// import 'package:provider/provider.dart';
+import 'package:study_space/InputOutputDevice/state/infrared_state.dart';
+import 'package:study_space/InputOutputDevice/controller/infrared_controller.dart';
+import 'package:study_space/MQTTServer/MQTTManager.dart';
+import 'package:provider/provider.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'dart:math';
+
+final _random = new Random();
+final FirebaseAuth auth = FirebaseAuth.instance;
+final User user = auth.currentUser;
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -14,6 +24,10 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class MyScreen extends State<NotificationScreen> {
+  InfraredController infraredController;
+  InfraredState infraredAppState;
+  MQTTManager infraredManager;
+
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   initState() {
@@ -37,6 +51,15 @@ class MyScreen extends State<NotificationScreen> {
     priority: Priority.high,
   );
 
+  var noSound = new AndroidNotificationDetails(
+    'id',
+    'name',
+    'description',
+    playSound: false,
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+
   ///////////////////////////////////////////////
   // GET STUDY-TIME AND END-TIME FROM DATABASE //
   ///////////////////////////////////////////////
@@ -45,8 +68,8 @@ class MyScreen extends State<NotificationScreen> {
   Future updateSchedule() async {
     var c = new scheduleController();
     clearSchedule();
-    scheduledStudyList = await c.getStarttime();
-    scheduledEndtimeList = await c.getEndtime();
+    scheduledStudyList = await c.getStarttime(user.displayName);
+    scheduledEndtimeList = await c.getEndtime(user.displayName);
   }
 
   void clearSchedule() {
@@ -118,6 +141,23 @@ class MyScreen extends State<NotificationScreen> {
     }
   }
 
+  ////////////////////////////////////
+  // PRESENCE DETECT NOTIFICATION //
+  ////////////////////////////////////
+  Future _showPresenceNotification() async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    var scheduledTime = DateTime.now();
+    await flutterLocalNotificationsPlugin.schedule(
+      1,
+      'Vắng mặt',
+      'Tới giờ rồi mà chưa vô vậy bro',
+      scheduledTime,
+      platformChannelSpecifics,
+      // payload: 'Ra chơi 15 phút',
+    );
+  }
+
   /////////////////////////////
   // CANCEL ALL NOTIFICATION //
   /////////////////////////////
@@ -130,14 +170,16 @@ class MyScreen extends State<NotificationScreen> {
   ////////////
   bool switchControl = false;
   bool breakSwitchControl = false;
+  bool soundSwitchControl = false;
 
   void onchange(bool value) {
     if (switchControl == false) {
       setState(() {
         switchControl = true;
         breakSwitchControl = true;
+        soundSwitchControl = true;
         _cancelAllNotifications();
-        _showStudyNotification(scheduledStudyList, true);
+        _showStudyNotification(scheduledStudyList, breakSwitchControl);
         _showEndtimeNotification(scheduledEndtimeList);
       });
     } else {
@@ -157,21 +199,40 @@ class MyScreen extends State<NotificationScreen> {
       setState(() {
         breakSwitchControl = false;
         _cancelAllNotifications();
-        _showStudyNotification(scheduledStudyList, false);
+        _showStudyNotification(scheduledStudyList, breakSwitchControl);
         _showEndtimeNotification(scheduledEndtimeList);
       });
     }
   }
 
   bool presenceSwitchControl = false;
-  void onchangePresence(bool value) {
+  void onchangePresence(bool value, MQTTAppConnectionState state,
+      Function connect, Function disconnect) {
     if (presenceSwitchControl == false) {
       setState(() {
         presenceSwitchControl = true;
+        connect();
       });
     } else {
       setState(() {
         presenceSwitchControl = false;
+        disconnect();
+      });
+    }
+  }
+
+  void onchangeSound(bool value) {
+    if (soundSwitchControl == false) {
+      setState(() {
+        soundSwitchControl = true;
+      });
+    } else {
+      setState(() {
+        soundSwitchControl = false;
+        _cancelAllNotifications();
+        androidPlatformChannelSpecifics = noSound;
+        _showStudyNotification(scheduledStudyList, breakSwitchControl);
+        _showEndtimeNotification(scheduledEndtimeList);
       });
     }
   }
@@ -181,6 +242,18 @@ class MyScreen extends State<NotificationScreen> {
   ////////////////////
   @override
   Widget build(BuildContext context) {
+    final InfraredState infraredState = Provider.of<InfraredState>(context);
+    infraredAppState = infraredState;
+
+    String infraredText = infraredState.getReceivedText;
+    if (infraredText != "") {
+      var nmessage = jsonDecode(infraredText);
+      String ndata = nmessage['data'].toString();
+      if (ndata == "0") {
+        _showPresenceNotification();
+      }
+    }
+
     return MaterialApp(
       home: Scaffold(
         drawer: SideMenu(),
@@ -192,18 +265,35 @@ class MyScreen extends State<NotificationScreen> {
             'Settings',
             style: TextStyle(
               color: kContentColorLightTheme,
-              fontSize: 20,
+              fontSize: 25,
             ),
             textAlign: TextAlign.center,
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(20),
           children: [
+            Text('Notification Settings',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                )),
             StudySwitch(onchange, switchControl),
-            PresenceSwitch(onchangePresence, presenceSwitchControl),
+            PresenceSwitch(
+                onchangePresence,
+                presenceSwitchControl,
+                infraredAppState.getAppConnectionState,
+                _configureAndConnect3,
+                _disconnect3),
             BreakSwitch(onchangeBreak, breakSwitchControl),
+            SoundSwitch(onchangeSound, soundSwitchControl),
             SnackBarPage(updateSchedule, clearSchedule),
+            _buildScrollableTextWith(infraredAppState.getHistoryText),
+            SizedBox(
+              height: 10.0,
+            ),
+            // _connectionStateDisplay(_prepareStateMessageFrom(
+            //     infraredAppState.getAppConnectionState)),
           ],
         ),
       ),
@@ -221,93 +311,42 @@ class MyScreen extends State<NotificationScreen> {
       },
     );
   }
-}
 
-class StudySwitch extends StatelessWidget {
-  final Function onchange;
-  final bool switchControl;
-  StudySwitch(this.onchange, this.switchControl);
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Study Notification"),
-        Switch(
-          value: switchControl,
-          onChanged: (bool value) => onchange(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
-    );
+  void _configureAndConnect3() {
+    infraredManager = MQTTManager(
+        host: 'io.adafruit.com',
+        // topic: 'khanhdk0000/feeds/infrared-sensor-1',
+        topic: 'CSE_BBC1/feeds/bk-iot-infrared',
+        adaAPIKey: adaPassword1,
+        adaUserName: adaUserName1,
+        identifier: _random.nextInt(10).toString(),
+        state: infraredAppState);
+
+    infraredManager.initializeMQTTClient();
+    infraredManager.connect();
   }
-}
 
-class PresenceSwitch extends StatelessWidget {
-  final Function onchangePresence;
-  final bool presenceSwitchControl;
-  PresenceSwitch(this.onchangePresence, this.presenceSwitchControl);
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Presence Notification"),
-        Switch(
-          value: presenceSwitchControl,
-          onChanged: (bool value) => onchangePresence(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
-    );
+  _getLatestData3() async {
+    var req = await http.get(Uri.https(
+        'io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
+    var infos = json.decode(req.body);
+    var temp = infos[0]['value'];
+    var temp2 = json.decode(temp);
+    return temp2;
   }
-}
 
-class BreakSwitch extends StatelessWidget {
-  final Function onchangeBreak;
-  final bool breakSwitchControl;
-  BreakSwitch(this.onchangeBreak, this.breakSwitchControl);
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Break Notification"),
-        Switch(
-          value: breakSwitchControl,
-          onChanged: (bool value) => onchangeBreak(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
-    );
+  void _disconnect3() {
+    infraredManager.disconnect();
   }
-}
 
-class SnackBarPage extends StatelessWidget {
-  final Function updateSchedule;
-  final Function clearSchedule;
-  SnackBarPage(this.updateSchedule, this.clearSchedule);
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          await updateSchedule();
-          final snackBar = SnackBar(
-            content: Text('Updated Successfully!'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                clearSchedule();
-              },
-            ),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        },
-        child: Text('Update schedule',
-            style: TextStyle(color: kContentColorLightTheme)),
-        style: ElevatedButton.styleFrom(
-          primary: kPrimaryColor,
+  Widget _buildScrollableTextWith(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Container(
+        width: 400,
+        height: 200,
+        child: SingleChildScrollView(
+          child: Text(text),
         ),
       ),
     );

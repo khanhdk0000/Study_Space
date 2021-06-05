@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:study_space/constants.dart';
 
-class MQTTInfraredState with ChangeNotifier {
+class InfraredState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState =
       MQTTAppConnectionState.disconnected;
   String _receivedText = "";
@@ -11,8 +11,11 @@ class MQTTInfraredState with ChangeNotifier {
     _receivedText = text;
     String inputData = _receivedText.substring(37, 38);
     if (inputData == '0') {
-      _historyText =
-          'Input data = ' + inputData + ': Vắng mặt\n' + _historyText;
+      _historyText = DateTime.now().toString().substring(0, 19) +
+          '\nInput data = ' +
+          inputData +
+          ': Vắng mặt\n' +
+          _historyText;
     } else if (inputData == '1') {
       _historyText = 'Input data = ' + inputData + ': Có mặt\n' + _historyText;
     } else {
