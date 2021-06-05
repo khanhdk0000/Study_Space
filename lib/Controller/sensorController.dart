@@ -66,6 +66,26 @@ class SensorController {
     }
   }
 
+  Future<double> getDirectAverage({String sess_id, String type}) async{
+    var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'session': sess_id,
+          'type' : "'" + type + "'",
+        }));
+    print('[GET DIRECT AVERAGE] ${response.statusCode}');
+    print(response.body);
+    if (response.statusCode == 201) {
+      print("Success");
+      return double.parse(response.body);
+    } else {
+      print('Failed');
+      return null;
+    }
+  }
+
   //Return the average of list of sessions
   double getAverage(List<Sensor> sensorList){
     double sum = 0;

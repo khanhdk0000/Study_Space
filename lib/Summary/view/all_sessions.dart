@@ -23,7 +23,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
 
   ///Sorting arguments and selections
   int _numView = 5;
-  int _sortedBy = 0;
+  int _sortedBy = 4;
   List<String> _numViewValue = ['1', '2', '5', '10', '25', '99'];
   List<String> _sortSelection = [
     'Score (H)',
