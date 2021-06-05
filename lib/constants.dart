@@ -27,6 +27,7 @@ String adaTopicLight = adaTopic1 + 'bk-iot-light';
 String adaTopicSound = adaTopic1 + 'bk-iot-sound';
 String adaTopicBuzzer = adaTopic + 'bk-iot-speaker';
 String adaTopicLCD = adaTopic + 'bk-iot-lcd';
+String adaTopicInfrared = adaTopic1 + 'bk-iot-infrared';
 
 String khanhuser = 'khanhdk0000';
 String khanhApi = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
@@ -35,7 +36,6 @@ String cseBBC1 = 'CSE_BBC1';
 
 String bbcAPIKey = 'aio_mLkY63WrLLbDcOPzEG3M9jg74h2A';
 String bbc1APIKey = 'aio_nBRm5342rpwjKkzbzrFF8uNGMF3Q';
-
 
 enum MQTTAppConnectionState { connected, disconnected, connecting }
 enum SensorEvaluation { normal, warning, bad }
