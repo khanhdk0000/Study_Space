@@ -82,6 +82,7 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
   TempState tempState;
   SoundState soundState;
   LCDState lcdState;
+  bool firstTime = true;
 
   @override
   void initState() {
@@ -170,16 +171,19 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    lightState = Provider.of<LightState>(context);
-    buzzerState = Provider.of<BuzzerState>(context);
-    tempState = Provider.of<TempState>(context);
-    soundState = Provider.of<SoundState>(context);
-    lcdState = Provider.of<LCDState>(context);
-    lightController = LightController(lightState);
-    buzzerController = BuzzerController(buzzerState);
-    tempController = TempController(tempState);
-    soundController = SoundController(soundState);
-    lcdController = LCDController(lcdState);
+    if (firstTime) {
+      firstTime = false;
+      lightState = Provider.of<LightState>(context);
+      buzzerState = Provider.of<BuzzerState>(context);
+      tempState = Provider.of<TempState>(context);
+      soundState = Provider.of<SoundState>(context);
+      lcdState = Provider.of<LCDState>(context);
+      lightController = LightController(lightState);
+      buzzerController = BuzzerController(buzzerState);
+      tempController = TempController(tempState);
+      soundController = SoundController(soundState);
+      lcdController = LCDController(lcdState);
+    }
 
     if (lightState.getOverThreshold ||
         tempState.getOverThreshold ||
@@ -196,8 +200,8 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         tempState.setBoolThreshold(false);
       }
       if (soundState.getOverThreshold) {
-        soundState.setBoolThreshold(false);
         notifyDevice(lcdState, 'LCD', 'Sound alert');
+        soundState.setBoolThreshold(false);
       }
     }
   }
