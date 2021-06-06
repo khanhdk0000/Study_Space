@@ -8,7 +8,7 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 
-const divider = SizedBox(height: 32.0);
+const spacer = SizedBox(height: 32.0);
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 ///User arguments
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.vertical,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                children: [topSummary, divider, HomeSchedule()],
+                children: [topSummary, spacer, HomeSchedule()],
               ),
             ),
     );
@@ -76,6 +76,33 @@ class HomeSchedule extends StatelessWidget {
   Widget build(BuildContext context) {
     sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
         0, 30, _user.displayName);
+
+    final scheduleButton = TextButton(
+      style: ButtonStyle(
+        foregroundColor:
+        MaterialStateProperty.all<Color>(Colors.black),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScheduleScreen()),
+        );
+      },
+      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Text(
+          "Show my schedule  ",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black),
+        ),
+        Icon(
+          Icons.arrow_forward,
+          color: Colors.black,
+          size: 22.0,
+        ),
+      ]),
+    );
 
     return FutureBuilder(future: sessions, builder: (context, snapshot){
       if (snapshot.hasData){
@@ -143,32 +170,7 @@ class HomeSchedule extends StatelessWidget {
                             ]),
                       ),
                     SizedBox(height: 26),
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ScheduleScreen()),
-                        );
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                        Text(
-                          "Show my schedule  ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black),
-                        ),
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Colors.black,
-                          size: 22.0,
-                        ),
-                      ]),
-                    )
+                    scheduleButton
                   ])),
             ],
           );
@@ -177,10 +179,16 @@ class HomeSchedule extends StatelessWidget {
           return Container(
               padding: EdgeInsets.all(26),
               color: Color.fromRGBO(0, 0, 0, 0.06),
-              child: Text("You don't have any upcoming study event for today", style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black))
+              child: Column(
+                children: [
+                  Text("You don't have any upcoming study event for today", style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black)),
+                  SizedBox(height: 26),
+                  scheduleButton
+                ],
+              )
           );
         }
       } else if (snapshot.hasError) {

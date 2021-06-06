@@ -12,7 +12,6 @@ import 'package:study_space/global.dart';
 final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 20.0);
-final divider = Container(height: 1.0, color: Colors.black26);
 
 class SessionScreen extends StatefulWidget {
   Session session;
