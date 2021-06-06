@@ -186,7 +186,7 @@ class HomeSchedule extends StatelessWidget {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return Text('Loading...');
+      return CircularProgressIndicator();
     });
   }
 }
