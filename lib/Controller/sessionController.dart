@@ -156,7 +156,11 @@ class SessionController {
   }
 
   void removeSession(String date, String start_time, String end_time,
-      String title, int user_id) async {
+      String title, int user_id, String username) async {
+    if (user_id == null) {
+      user_id = await userController().getUserId(username);
+    }
+
     var response = await http.post(Uri.https(webhost, 'remove_session.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

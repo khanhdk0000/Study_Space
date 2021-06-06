@@ -40,3 +40,5 @@ class ReturnButton extends StatelessWidget {
     );
   }
 }
+
+const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];

@@ -9,7 +9,6 @@ import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-int _userid = user_id;
 final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 20.0);
@@ -87,7 +86,7 @@ class _SessionScreenState extends State<SessionScreen> {
       ),
       onPressed: () {
         SessionController()
-            .removeSession(date, startTime, endTime, title, _userid);
+            .removeSession(date, startTime, endTime, title, user_id, user.displayName);
         Navigator.pop(context);
       },
       child: Container(
