@@ -35,7 +35,7 @@ String cseBBC = 'CSE_BBC';
 String cseBBC1 = 'CSE_BBC1';
 
 String bbcAPIKey = 'aio_mLkY63WrLLbDcOPzEG3M9jg74h2A';
-String bbc1APIKey = 'aio_nBRm5342rpwjKkzbzrFF8uNGMF3Q';
+String bbc1APIKey = 'aio_VhCE38mvogdpc353vHMQl684Emfs';
 
 enum MQTTAppConnectionState { connected, disconnected, connecting }
 enum SensorEvaluation { normal, warning, bad }
