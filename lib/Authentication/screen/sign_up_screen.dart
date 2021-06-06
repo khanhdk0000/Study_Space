@@ -6,6 +6,8 @@ import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/global.dart';
+import 'package:study_space/Controller/userController.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -113,6 +115,9 @@ class _RegisterFormState extends State<RegisterForm> {
 
         _userEmail = user.email;
         _username = user.displayName;
+        var c = new userController();
+        await c.addUser(user.displayName);
+        user_id = await c.getUserId(user.displayName);
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //     content: Text(
         //         'Successfully signed up ' + _userEmail + ' ' + _username)));
