@@ -12,7 +12,6 @@ import 'package:study_space/Schedule/view/add_session_screen.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-int _userid = user_id;
 final User user = auth.currentUser;
 
 
@@ -62,7 +61,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     final maxDate = DateTime.now().add(Duration(days: dateRange));
     String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
 
-    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),
+    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter(_sortSelection[_sortedBy]),
         formattedDate, 30, user.displayName);
 
     var Navigation = Column(children: [
