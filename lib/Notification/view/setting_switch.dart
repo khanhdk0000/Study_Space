@@ -25,10 +25,11 @@ class PresenceSwitch extends StatelessWidget {
   final Function onchangePresence;
   final bool presenceSwitchControl;
   final MQTTAppConnectionState state;
-  final Function connect;
-  final Function disconnect;
+  final String receivedText;
+  // final Function connect;
+  // final Function disconnect;
   PresenceSwitch(this.onchangePresence, this.presenceSwitchControl, this.state,
-      this.connect, this.disconnect);
+      this.receivedText);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,7 +39,8 @@ class PresenceSwitch extends StatelessWidget {
         Switch(
           value: presenceSwitchControl,
           onChanged: (bool value) =>
-              onchangePresence(value, state, connect, disconnect),
+              // onchangePresence(value, state, connect, disconnect),
+              onchangePresence(value, state, receivedText.substring(37, 38)),
           activeColor: kPrimaryColor,
         ),
       ],
@@ -93,25 +95,37 @@ class SnackBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          await updateSchedule();
-          final snackBar = SnackBar(
-            content: Text('Updated Successfully!'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                clearSchedule();
-              },
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              await updateSchedule();
+              final snackBar = SnackBar(
+                content: Text('Updated Successfully!'),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    clearSchedule();
+                  },
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            child: Text('Update schedule',
+                style: TextStyle(color: kContentColorLightTheme)),
+            style: ElevatedButton.styleFrom(
+              primary: kPrimaryColor,
             ),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        },
-        child: Text('Update schedule',
-            style: TextStyle(color: kContentColorLightTheme)),
-        style: ElevatedButton.styleFrom(
-          primary: kPrimaryColor,
-        ),
+          ),
+          // ElevatedButton(
+          //   onPressed: connect(),
+          //   child: Text('Current presence',
+          //       style: TextStyle(color: kContentColorLightTheme)),
+          //   style: ElevatedButton.styleFrom(
+          //     primary: kPrimaryColor,
+          //   ),
+          // ),
+        ],
       ),
     );
   }
