@@ -55,10 +55,14 @@ class SessionController {
   }
 
   Future<List<Session>> getUnfinishedSessions(int uid, String filter,
-      String maxDate, int limit, String username) async {
+      int daysFromNow, int limit, String username) async {
     if (uid == null) {
       uid = await userController().getUserId(username);
     }
+
+    final maxDate = DateTime.now().add(Duration(days: daysFromNow));
+    String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
+
     var response =
         await http.post(Uri.https(webhost, 'get_unfinished_sessions.php'),
             headers: <String, String>{
@@ -68,7 +72,7 @@ class SessionController {
               'user_id': uid.toString(),
               'filter': filter,
               'limit': limit.toString(),
-              'max_date': maxDate,
+              'max_date': formattedDate,
             }));
     print(response.statusCode);
     if (response.statusCode == 200) {

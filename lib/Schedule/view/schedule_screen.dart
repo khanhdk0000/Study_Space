@@ -59,11 +59,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
       break;
     }
-    final maxDate = DateTime.now().add(Duration(days: dateRange));
-    String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
 
     sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),
-        formattedDate, 30, user.displayName);
+        dateRange, 30, user.displayName);
 
     var Navigation = Column(children: [
       Row(
