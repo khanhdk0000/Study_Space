@@ -24,7 +24,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
 
   var schedule = schedController();
   var subject = "_";
-  var startDate = "06/09/2069";
+  var startDate = "06/09/2021";
   var startTime = "00:00:00";
   var endTime = "00:00:00";
   int repeat = 1;

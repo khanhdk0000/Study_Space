@@ -86,7 +86,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       borderRadius: BorderRadius.zero, // <-- Radius
                     ),
                   ),
-                  onPressed: (){setState((){filterMode = filter;});},
+                  onPressed: (){setState((){
+                    filterMode = filter;
+                  });},
                   child: Text(
                       filter, style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -170,7 +172,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return Text('Loading...');
+      return CircularProgressIndicator();
     });
 
     return Scaffold(
