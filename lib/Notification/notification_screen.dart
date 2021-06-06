@@ -83,7 +83,7 @@ class MyScreen extends State<NotificationScreen> {
   Future _showBreakNotification(String time, var i) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    var scheduledTime = DateTime.parse(time).add(Duration(seconds: 10));
+    var scheduledTime = DateTime.parse(time).add(Duration(seconds: 15));
     await flutterLocalNotificationsPlugin.schedule(
       i,
       'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
@@ -101,12 +101,10 @@ class MyScreen extends State<NotificationScreen> {
       List<String> scheduledStudyList, bool useBreak) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    var priority = 0;
     for (var i = 0; i < scheduledStudyList.length; i++) {
       if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
-        priority++;
         await flutterLocalNotificationsPlugin.schedule(
-          priority,
+          i,
           'Đi họccccccccccccccccccccc',
           'Êi bạn êi, vô học bạn êi!!',
           DateTime.parse(scheduledStudyList[i]),
@@ -114,8 +112,8 @@ class MyScreen extends State<NotificationScreen> {
           payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
         );
         if (useBreak) {
-          priority++;
-          _showBreakNotification(scheduledStudyList[i], priority);
+          _showBreakNotification(
+              scheduledStudyList[i], i + scheduledStudyList.length * 2);
         }
       }
     }
@@ -130,7 +128,7 @@ class MyScreen extends State<NotificationScreen> {
     for (var i = 0; i < scheduledEndtimeList.length; i++) {
       if (DateTime.parse(scheduledEndtimeList[i]).isAfter(DateTime.now())) {
         await flutterLocalNotificationsPlugin.schedule(
-          i + scheduledEndtimeList.length * 2,
+          i + scheduledEndtimeList.length * 3,
           'Hết giờ !!!!!!!!!!!!!!!!',
           'Nghỉ đi tan rồi, cố quá là quá cố',
           DateTime.parse(scheduledEndtimeList[i]),
@@ -147,21 +145,24 @@ class MyScreen extends State<NotificationScreen> {
   Future _showPresenceNotification() async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
-    var scheduledTime = DateTime.now();
-    await flutterLocalNotificationsPlugin.schedule(
-      1,
-      'Vắng mặt',
-      'Tới giờ rồi mà chưa vô vậy bro',
-      scheduledTime,
-      platformChannelSpecifics,
-      // payload: 'Ra chơi 15 phút',
-    );
+    for (var i = 0; i < scheduledStudyList.length; i++) {
+      if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
+        await flutterLocalNotificationsPlugin.schedule(
+          i + scheduledEndtimeList.length,
+          'Vắng mặt',
+          'Tới giờ rồi mà chưa vô vậy bro',
+          DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 10)),
+          platformChannelSpecifics,
+          // payload: 'Ra chơi 15 phút',
+        );
+      }
+    }
   }
 
   /////////////////////////////
   // CANCEL ALL NOTIFICATION //
   /////////////////////////////
-  Future _cancelAllNotifications() async {
+  _cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
@@ -206,17 +207,20 @@ class MyScreen extends State<NotificationScreen> {
   }
 
   bool presenceSwitchControl = false;
-  void onchangePresence(bool value, MQTTAppConnectionState state,
-      Function connect, Function disconnect) {
+  void onchangePresence(
+      bool value, MQTTAppConnectionState state, String receivedText) {
     if (presenceSwitchControl == false) {
       setState(() {
         presenceSwitchControl = true;
-        connect();
+        if (receivedText == '0') {
+          _showPresenceNotification();
+        }
+        // connect();
       });
     } else {
       setState(() {
         presenceSwitchControl = false;
-        disconnect();
+        // disconnect();
       });
     }
   }
@@ -244,15 +248,6 @@ class MyScreen extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     final InfraredState infraredState = Provider.of<InfraredState>(context);
     infraredAppState = infraredState;
-
-    String infraredText = infraredState.getReceivedText;
-    if (infraredText != "") {
-      var nmessage = jsonDecode(infraredText);
-      String ndata = nmessage['data'].toString();
-      if (ndata == "0") {
-        _showPresenceNotification();
-      }
-    }
 
     return MaterialApp(
       home: Scaffold(
@@ -283,17 +278,14 @@ class MyScreen extends State<NotificationScreen> {
                 onchangePresence,
                 presenceSwitchControl,
                 infraredAppState.getAppConnectionState,
-                _configureAndConnect3,
-                _disconnect3),
+                infraredAppState.getReceivedText),
             BreakSwitch(onchangeBreak, breakSwitchControl),
             SoundSwitch(onchangeSound, soundSwitchControl),
             SnackBarPage(updateSchedule, clearSchedule),
             _buildScrollableTextWith(infraredAppState.getHistoryText),
             SizedBox(
-              height: 10.0,
+              height: 7.0,
             ),
-            // _connectionStateDisplay(_prepareStateMessageFrom(
-            //     infraredAppState.getAppConnectionState)),
           ],
         ),
       ),
@@ -326,13 +318,13 @@ class MyScreen extends State<NotificationScreen> {
     infraredManager.connect();
   }
 
-  _getLatestData3() async {
+  Future<String> _getLatestData3() async {
     var req = await http.get(Uri.https(
-        'io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
+        'io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
     var infos = json.decode(req.body);
     var temp = infos[0]['value'];
-    var temp2 = json.decode(temp);
-    return temp2;
+    var temp2 = json.decode(temp)['data'];
+    return temp2.toString();
   }
 
   void _disconnect3() {
