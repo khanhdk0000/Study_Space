@@ -16,7 +16,6 @@ final User user = auth.currentUser;
 
 
 const spacer = SizedBox(height: 16.0);
-final divider = Container(height: 1.0, color: Colors.black26);
 
 class ScheduleScreen extends StatefulWidget {
 

@@ -42,3 +42,4 @@ class ReturnButton extends StatelessWidget {
 }
 
 const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
+final divider = Container(height: 1.0, color: Colors.black26);
