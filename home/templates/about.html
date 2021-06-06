@@ -1,0 +1,50 @@
+{% extends "layout.html" %} {% block content %}
+<!-- <div class="flex-center">
+<div>
+<p>{{ var}}</p>
+<div class="row">
+    <div class="col-md-1 p-3 mb-2 bg-primary text-white"></div>
+    <div class="col-md-15 p-3 mb-2 bg-secondary text-white">.bg-secondary</div>
+    <div class="col-md-15 p-3 mb-2 bg-success text-white">.bg-success</div>
+</div>
+
+<div class="row">
+    <div class="col-md-15 p-3 mb-2 bg-danger text-white">.bg-danger</div>
+    <div class="col-md-15 p-3 mb-2 bg-warning text-dark">.bg-warning</div>
+    <div class="col-md-15 p-3 mb-2 bg-info text-white">.bg-info</div>
+</div>
+
+<div class="row">
+    <div class="col-md-15 p-3 mb-2 bg-light text-dark">.bg-light</div>
+    <div class="col-md-15 p-3 mb-2 bg-dark text-white">.bg-dark</div>
+    <div class="col-md-15 p-3 mb-2 bg-white text-dark">.bg-white</div>
+</div>
+</div>
+</div> -->
+
+<div class="row m-2">
+    <div class="bg-primary text-white"></div>
+    <div class="bg-secondary text-white">.bg-secondary</div>
+    <div class="bg-success text-white">.bg-success</div>
+</div>
+
+<div class="row m-2">
+    <div class=" text-white" style="background-color:#47464f;">.bg-danger</div>
+    <div class="bg-warning text-dark">.bg-warning</div>
+    <div class="bg-info text-white">.bg-info</div>
+</div>
+<div class="row m-2">
+
+    <div class="bg-light text-dark">.bg-light</div>
+    <div class="bg-dark text-white">.bg-dark</div>
+    <div class="bg-white text-dark">.bg-white</div>
+</div>
+<div class="article">
+    <h3>{{ articles }}</a></h3>
+</div>
+<!-- {% for article in articles %}
+    <div class="article">
+        <h3>{{ article }}</a></h3>
+    </div>
+{% endfor %} -->
+{% endblock content %}
