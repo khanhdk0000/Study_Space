@@ -12,13 +12,11 @@ import 'package:study_space/Schedule/view/add_session_screen.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-int _userid = user_id;
 final User user = auth.currentUser;
 
 
 const spacer = SizedBox(height: 16.0);
 final divider = Container(height: 1.0, color: Colors.black26);
-const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 
 class ScheduleScreen extends StatefulWidget {
 
@@ -29,10 +27,8 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  int _sortedBy = 5;
   final filters = ["Today", "Next Week", "Next Month", "Next Year"];
   String filterMode = "Next Month";
-  List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
   Future<List<Session>> sessions;
 
 
@@ -60,7 +56,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       break;
     }
 
-    sessions = SessionController().getUnfinishedSessions(_userid, SessionController().setFilter(_sortSelection[_sortedBy]),
+    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
         dateRange, 30, user.displayName);
 
     var Navigation = Column(children: [
