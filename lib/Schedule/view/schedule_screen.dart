@@ -16,8 +16,6 @@ final User user = auth.currentUser;
 
 
 const spacer = SizedBox(height: 16.0);
-final divider = Container(height: 1.0, color: Colors.black26);
-const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 
 class ScheduleScreen extends StatefulWidget {
 
@@ -28,10 +26,8 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  int _sortedBy = 5;
   final filters = ["Today", "Next Week", "Next Month", "Next Year"];
   String filterMode = "Next Month";
-  List<String> _sortSelection = ['Score (H)', 'Score (L)', 'Name (A-Z)', 'Name (Z-A)', 'Time (H)', 'Time (L)'];
   Future<List<Session>> sessions;
 
 
@@ -58,11 +54,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
       break;
     }
-    final maxDate = DateTime.now().add(Duration(days: dateRange));
-    String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
 
-    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter(_sortSelection[_sortedBy]),
-        formattedDate, 30, user.displayName);
+    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
+        dateRange, 30, user.displayName);
 
     var Navigation = Column(children: [
       Row(
@@ -91,7 +85,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       borderRadius: BorderRadius.zero, // <-- Radius
                     ),
                   ),
-                  onPressed: (){setState((){filterMode = filter;});},
+                  onPressed: (){setState((){
+                    filterMode = filter;
+                  });},
                   child: Text(
                       filter, style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -175,7 +171,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return Text('Loading...');
+      return CircularProgressIndicator();
     });
 
     return Scaffold(

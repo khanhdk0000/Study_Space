@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_space/Controller/sessionController.dart';
+import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 
-const divider = SizedBox(height: 32.0);
+const spacer = SizedBox(height: 32.0);
 final FirebaseAuth auth = FirebaseAuth.instance;
+
+///User arguments
+final User _user = auth.currentUser;
 
 class HomeScreen extends StatelessWidget {
   // HomeScreen({this.user});
-  final userName = "Gwen";
   final progress = 75;
-  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class HomeScreen extends StatelessWidget {
       ),
       SizedBox(height: 22),
       Text(
-        user == null ? userName : user.displayName,
+        _user == null ? "Anonymous" : _user.displayName,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -52,13 +56,13 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       drawer: SideMenu(),
-      body: user == null
+      body: _user == null
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
               child: ListView(
                 scrollDirection: Axis.vertical,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                children: [topSummary, divider, HomeSchedule()],
+                children: [topSummary, spacer, HomeSchedule()],
               ),
             ),
     );
@@ -66,97 +70,131 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeSchedule extends StatelessWidget {
-  final subjects = [
-    "Calculus",
-    "Physics",
-    "Computer Graphics",
-    "Introduction to AI"
-  ];
-  final startTimes = ["11:00", "12:00", "9:00", "14:00"];
-  final endTimes = ["11:45", "12:45", "9:00", "14:00"];
-  final colors = [Colors.red, Colors.blue, Colors.green, Colors.orange];
-  final eta = 15;
+  Future<List<Session>> sessions;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-            padding: EdgeInsets.all(22),
-            color: Colors.black,
-            width: double.infinity,
-            child: Text(
-              "Your next study session is ${subjects[0]}, starting in $eta minutes",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
-                  color: Colors.white),
-            )),
-        Container(
-            padding: EdgeInsets.all(26),
-            color: Color.fromRGBO(0, 0, 0, 0.06),
-            width: double.infinity,
-            child: Column(children: [
-              for (var i = 0; i < subjects.length; i++)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          Container(
-                            width: 4.0,
-                            height: 4.0,
-                            decoration: BoxDecoration(
-                                color: colors[i], shape: BoxShape.circle),
-                          ),
-                          Text(
-                            "  ${subjects[i]}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.black),
-                          ),
-                        ]),
-                        Text(
-                          "${startTimes[i]} : ${endTimes[i]}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16,
-                              color: Colors.black),
-                        )
-                      ]),
-                ),
-              SizedBox(height: 26),
-              TextButton(
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ScheduleScreen()),
-                  );
-                },
-                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Text(
-                    "Show my schedule  ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black),
-                  ),
-                  Icon(
-                    Icons.arrow_forward,
-                    color: Colors.black,
-                    size: 22.0,
-                  ),
-                ]),
-              )
-            ])),
-      ],
+    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
+        0, 30, _user.displayName);
+
+    final scheduleButton = TextButton(
+      style: ButtonStyle(
+        foregroundColor:
+        MaterialStateProperty.all<Color>(Colors.black),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScheduleScreen()),
+        );
+      },
+      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Text(
+          "Show my schedule  ",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black),
+        ),
+        Icon(
+          Icons.arrow_forward,
+          color: Colors.black,
+          size: 22.0,
+        ),
+      ]),
     );
+
+    return FutureBuilder(future: sessions, builder: (context, snapshot){
+      if (snapshot.hasData){
+        final now = DateTime.now();
+        final dateFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
+        List<Session> todaySessions = snapshot.data;
+        todaySessions = todaySessions.where((a) => dateFormat.parse(a.getDate() + " " + a.getStartTime()).isAfter(now)).toList();
+
+        if (todaySessions.length > 0) {
+          todaySessions.sort((a, b) =>
+                dateFormat.parse(a.getDate() + " " + a.getStartTime())
+                    .compareTo(
+                    dateFormat.parse(b.getDate() + " " + b.getStartTime())));
+
+          final nextSession = todaySessions[0];
+          final eta = dateFormat.parse(nextSession.getDate() + " " + nextSession.getStartTime()).difference(now).inMinutes;
+
+          return       Column(
+            children: [
+              Container(
+                  padding: EdgeInsets.all(22),
+                  color: Colors.black,
+                  width: double.infinity,
+                  child: Text(
+                    "Your next study event is ${nextSession.getTitle()}, starting in ${eta} minutes",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        color: Colors.white),
+                  )),
+              Container(
+                  padding: EdgeInsets.all(26),
+                  color: Color.fromRGBO(0, 0, 0, 0.06),
+                  width: double.infinity,
+                  child: Column(children: [
+                    for (var i = 0; i < todaySessions.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: [
+                                Container(
+                                  width: 4.0,
+                                  height: 4.0,
+                                  decoration: BoxDecoration(
+                                      color: colors[i], shape: BoxShape.circle),
+                                ),
+                                Text(
+                                  "  ${todaySessions[i].getTitle()}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black),
+                                ),
+                              ]),
+                              Text(
+                                "${todaySessions[i].getStartTime()} : ${todaySessions[i].getEndTime()}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Colors.black),
+                              )
+                            ]),
+                      ),
+                    SizedBox(height: 26),
+                    scheduleButton
+                  ])),
+            ],
+          );
+        }
+        else {
+          return Container(
+              padding: EdgeInsets.all(26),
+              color: Color.fromRGBO(0, 0, 0, 0.06),
+              child: Column(
+                children: [
+                  Text("You don't have any upcoming study event for today", style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black)),
+                  SizedBox(height: 26),
+                  scheduleButton
+                ],
+              )
+          );
+        }
+      } else if (snapshot.hasError) {
+        return Text("${snapshot.error}");
+      }
+      return CircularProgressIndicator();
+    });
   }
 }

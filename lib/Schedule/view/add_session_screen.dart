@@ -23,7 +23,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
 
   var schedule = schedController();
   var subject = "_";
-  var startDate = "06/09/2069";
+  var startDate = "06/09/2021";
   var startTime = "00:00:00";
   var endTime = "00:00:00";
   int repeat = 1;
@@ -36,44 +36,12 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
       fontSize: 20,
       color: Colors.black);
 
-  _displayDialog(BuildContext context, String type) async {
+  _displayDialog(BuildContext context, String type, String intialValue) async {
     return showDialog(
         context: context,
         builder: (context) {
-          var text = "";
-          switch(type) {
-            case "Event Name": {
-              text = subject;
-            }
-            break;
 
-            case "Start Date": {
-              text = startDate;
-            }
-            break;
-
-            case "Start Time": {
-              text = startTime;
-            }
-            break;
-
-            case "End Time": {
-              text = endTime;
-            }
-            break;
-
-            case "Period": {
-              text = period.toString();
-            }
-            break;
-
-            case "Repeat": {
-              text = repeat.toString();
-            }
-            break;
-          }
-
-          final controller = TextEditingController(text: text);
+          final controller = TextEditingController(text: intialValue);
           return AlertDialog(
             title: Text('$type'),
             content: TextField(
@@ -91,7 +59,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                       }
                       break;
 
-                      case "Start Date": {
+                      case "Begin Date": {
                         startDate = controller.text;
                       }
                       break;
@@ -149,7 +117,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Event Name"),
+            onPressed: ()  => _displayDialog(context, "Event Name", subject),
             child:   Text(
               "Event name : $subject",
               textAlign: TextAlign.left,
@@ -169,7 +137,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Start Date"),
+            onPressed: ()  => _displayDialog(context, "Begin Date", startDate),
             child:   Text(
               "Begins on: $startDate",
               textAlign: TextAlign.left,
@@ -185,9 +153,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Start Time"),
+            onPressed: ()  => _displayDialog(context, "Start Time", startTime),
             child:   Text(
-              "Start Time: $startTime",
+              "Start time: $startTime",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
@@ -201,9 +169,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "End Time"),
+            onPressed: ()  => _displayDialog(context, "End Time", endTime),
             child:   Text(
-              "End Time: $endTime",
+              "End time: $endTime",
               textAlign: TextAlign.left,
               style: bodyText,
             ))
@@ -217,7 +185,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Repeat"),
+            onPressed: ()  => _displayDialog(context, "Repeat", repeat.toString()),
             child:   Text(
               "Repeat: $repeat times",
               textAlign: TextAlign.left,
@@ -233,7 +201,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: ()  => _displayDialog(context, "Period"),
+            onPressed: ()  => _displayDialog(context, "Period", period.toString()),
             child:   Text(
               "Repeat every: $period days",
               textAlign: TextAlign.left,
