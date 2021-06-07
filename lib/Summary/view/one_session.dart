@@ -42,6 +42,29 @@ class _OneSessionViewState extends State<OneSessionView> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('How performance score is calculated?'),
+            content: Column(
+              children: [
+                Image(image: AssetImage('assets/img/calculator.png')),
+                Text(SensorController().howEvaluatedText()),
+              ],
+            ),
+            scrollable: true,
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: Text('OK'),
+              ),
+            ],
+          )
+        ),
+        child: const Icon(Icons.contact_support_outlined, color: Colors.white),
+        backgroundColor: Colors.deepPurpleAccent,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -185,24 +208,28 @@ class _OneSessionViewState extends State<OneSessionView> {
     double value;
     bool visible;
     Future future;
+    String image_asset;
     if (type == 'Light') {
       unit = 'Lux';
       visible = lightVisible;
       future = lightSensorData;
+      image_asset = 'assets/img/lightbulb1.png';
     } else if (type == 'Sound') {
       unit = 'dB';
       visible = soundVisible;
       future = soundSensorData;
+      image_asset = 'assets/img/stereo.png';
     } else if (type == 'Temperature') {
       unit = 'degC';
       visible = tempVisible;
       future = tempSensorData;
+      image_asset = 'assets/img/thermometer.png';
     }
     return FutureBuilder(future: future, builder: (context, snapshot){
       if (snapshot.hasData){
         value = SensorController().getAverage(snapshot.data);
         text = value.toString() + ' ' + unit;
-        return _displaySensorTile(type, visible, text, value, snapshot.data);
+        return _displaySensorTile(type, visible, text, value, snapshot.data, image_asset);
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
@@ -210,7 +237,7 @@ class _OneSessionViewState extends State<OneSessionView> {
     });
   }
 
-  Widget _displaySensorTile(String type, bool visible, String text, double value, List<Sensor> sensorList) {
+  Widget _displaySensorTile(String type, bool visible, String text, double value, List<Sensor> sensorList, String image_asset) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
@@ -230,7 +257,7 @@ class _OneSessionViewState extends State<OneSessionView> {
         },
         child: Container(
           width: double.infinity,
-          height: visible ? 400.0 : 90.0,
+          // height: visible ? 400.0 : 90.0,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20.0),
@@ -250,27 +277,33 @@ class _OneSessionViewState extends State<OneSessionView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          type,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                            sensorList.length == 0 ? 'No record' : 'Average: $text',
+                    Image(
+                      image: AssetImage(image_asset),
+                      height: 65.0,
+                    ),
+                    SizedBox(width: 15.0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            type,
                             style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14,
-                              color: Colors.black54,
-                            )
-                        )
-                      ],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(
+                              sensorList.length == 0 ? 'No record' : 'Average: $text',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                                color: Colors.black54,
+                              )
+                          )
+                        ],
+                      ),
                     ),
                     Transform.rotate(
                       angle: visible ? -math.pi / 2 : math.pi / 2,
@@ -280,16 +313,17 @@ class _OneSessionViewState extends State<OneSessionView> {
                 ),
                 Visibility(
                   visible: visible,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 250.0,
-                        child: ChartView(sensorList: sensorList, type: type),
-                      ),
-                      _reviewView(value, type),
-                    ],
+                  child: Container(
+                    height: 250.0,
+                    child: ChartView(sensorList: sensorList, type: type),
                   ),
                 ),
+                Visibility(visible: visible, child: SizedBox(height: kDefaultPadding * 0.5)),
+                Visibility(
+                  visible: visible,
+                  child: _reviewView(value, type),
+                ),
+                Visibility(visible: visible, child: SizedBox(height: kDefaultPadding * 0.5)),
               ],
             ),
           ),
@@ -299,23 +333,41 @@ class _OneSessionViewState extends State<OneSessionView> {
   }
 
   Widget _reviewView(double value, String type){
+    SensorController s = SensorController();
+    SensorEvaluation eval = s.getEvaluation(value, type);
+    String reviewText = s.getReviewText(eval, type);
+    String imageAsset = s.getImage(eval);
     return Padding(
-      padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Row(
         children: [
-          Text(
-            SensorController().getReviewText(SensorController().getEvaluation(value, type), type),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
-            ),
+          Image(
+            image: AssetImage(imageAsset),
+            height: 50.0,
           ),
-          Text(
-            SensorController().getRandomComment(type),
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 14.0,
+          SizedBox(width: 15.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  reviewText,
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0,
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Text(
+                  SensorController().getRandomComment(type),
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14.0,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

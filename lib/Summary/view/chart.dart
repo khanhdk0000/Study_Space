@@ -16,13 +16,12 @@ class ChartView extends StatefulWidget {
 class _ChartViewState extends State<ChartView> {
   List<charts.Series<Sensor, int>> _seriesLineData;
   _generateData() {
-    int minId = int.parse(widget.sensorList[0].id);
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(chartColor(widget.type)),
         id: 'Lux',
         data: widget.sensorList,
-        domainFn: (Sensor sensors, _) => int.parse(sensors.id) - minId,
+        domainFn: (Sensor sensors, _) => sensors.count,
         measureFn: (Sensor sensors, _) => sensors.data.round(),
       ),
     );
@@ -42,11 +41,8 @@ class _ChartViewState extends State<ChartView> {
       child: charts.LineChart(
         _seriesLineData,
         defaultRenderer: new charts.LineRendererConfig(
-          includePoints: true,
           includeArea: true,
         ),
-        animate: true,
-        animationDuration: Duration(seconds: 1),
         behaviors: [
           // new charts.ChartTitle(
           //   'Time (minutes)',
