@@ -108,7 +108,7 @@ class _LogInFormState extends State<LogInForm> {
       if (user != null) {
         print('success');
         var c = new userController();
-        await c.addUser(user.displayName);
+        // await c.addUser(user.displayName);
         user_id = await c.getUserId(user.displayName);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
