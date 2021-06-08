@@ -76,7 +76,6 @@ class SessionController {
             }));
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = jsonDecode(response.body);
@@ -286,7 +285,7 @@ class SessionController {
   }
 
   Future<void> setStatus(String id, String status) async {
-    print("[CONTROLLER] Getting all sessions.");
+    print("[CONTROLLER] Setting status.");
     var folder = "get_finished_session.php";
     var response = await http.post(Uri.https(webhost, 'set_status.php'),
         headers: <String, String>{

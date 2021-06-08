@@ -8,7 +8,6 @@ import 'package:study_space/Controller/schedController.dart';
 import 'package:study_space/global.dart';
 
 ///User arguments
-int _userid = user_id;
 final User user = auth.currentUser;
 
 const spacer = SizedBox(height: 20.0);
@@ -218,7 +217,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () {
-          SessionController().addSessions(repeat, period, startDate, startTime, endTime, subject, _userid, username: user.displayName);
+          SessionController().addSessions(repeat, period, startDate, startTime, endTime, subject, user_id, username: user.displayName);
           //schedule.addSession(subject, timeframe);
           Navigator.pop(context);
         },
