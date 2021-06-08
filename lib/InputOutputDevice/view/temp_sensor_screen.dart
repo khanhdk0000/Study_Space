@@ -8,26 +8,20 @@ import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class TempSensorScreen extends StatelessWidget {
-  const TempSensorScreen({Key key, @required this.controller})
-      : super(key: key);
-
-  final Controller controller;
+  const TempSensorScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
-      body: Body(
-        controller: controller,
-      ),
+      body: Body(),
     );
   }
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key, @required this.controller}) : super(key: key);
+  const Body({Key key}) : super(key: key);
 
-  final Controller controller;
   @override
   Widget build(BuildContext context) {
     TempState tempState = Provider.of<TempState>(context);
@@ -54,10 +48,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: tempState.getAppConnectionState ==
-                                MQTTAppConnectionState.disconnected
-                            ? controller.connectAdaServer
-                            : null,
+                        onPressed: () {
+                          if (tempState.getAppConnectionState ==
+                              MQTTAppConnectionState.disconnected) {
+                            tempState.setAppConnectionState(
+                                MQTTAppConnectionState.connected);
+                          }
+                        },
                         icon: Icon(
                           Icons.power_settings_new_rounded,
                           color: Colors.indigo,
@@ -83,10 +80,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: tempState.getAppConnectionState ==
-                                MQTTAppConnectionState.connected
-                            ? controller.disconnectAdaServer
-                            : null,
+                        onPressed: () {
+                          if (tempState.getAppConnectionState ==
+                              MQTTAppConnectionState.connected) {
+                            tempState.setAppConnectionState(
+                                MQTTAppConnectionState.disconnected);
+                          }
+                        },
                         icon: Icon(
                           Icons.close,
                           color: Colors.white,
@@ -123,7 +123,7 @@ class CircleGauge extends StatefulWidget {
 class _CircleGaugeState extends State<CircleGauge> {
   @override
   Widget build(BuildContext context) {
-    double value = Provider.of<TempState>(context).getValueFromServer;
+    double value = Provider.of<TempState>(context).getTemperature;
 
     return Container(
       child: Center(

@@ -22,7 +22,8 @@ class SensorController {
       String timestamp,
       String sess_id,
       String data}) async {
-    var session_id = await SessionController().getCurrentSession(user.displayName);
+    var session_id =
+        await SessionController().getCurrentSession(user.displayName);
     print('[USERNAME] ${user.displayName}');
     print('[SESSION ID] $session_id');
     var response = await http.post(Uri.https(webhost, 'add_sensor.php'),
@@ -54,7 +55,7 @@ class SensorController {
         },
         body: jsonEncode(<String, String>{
           'session': sess_id,
-          'type' : "'" + type + "'",
+          'type': "'" + type + "'",
         }));
     print(response.statusCode);
     if (response.statusCode == 200) {
@@ -71,22 +72,43 @@ class SensorController {
     }
   }
 
-  Future<double> getDirectAverage({String sess_id, String type}) async{
-    var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'session': sess_id,
-          'type' : "'" + type + "'",
-        }));
+  // Future<double> getDirectAverage({String sess_id, String type}) async{
+  //   var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json; charset=UTF-8',
+  //       },
+  //       body: jsonEncode(<String, String>{
+  //         'session': sess_id,
+  //         'type' : "'" + type + "'",
+  //       }));
+  //   print('[GET DIRECT AVERAGE] ${response.statusCode}');
+  //   print(response.body);
+  //   if (response.statusCode == 201) {
+  //     print("Success");
+  //     if (response.body == ''){
+  //       return -1;
+  //     }
+  //     return double.parse(response.body);
+  //   } else {
+  //     print('Failed');
+  //     return null;
+  //   }
+  // }
+
+  Future<double> getDirectAverage({String sess_id, String type}) async {
+    var response =
+        await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+              'session': sess_id,
+              'type': "'" + type + "'",
+            }));
     print('[GET DIRECT AVERAGE] ${response.statusCode}');
     print(response.body);
     if (response.statusCode == 201) {
       print("Success");
-      if (response.body == ''){
-        return -1;
-      }
       return double.parse(response.body);
     } else {
       print('Failed');
@@ -95,23 +117,26 @@ class SensorController {
   }
 
   //Return the average of list of sessions
-  double getAverage(List<Sensor> sensorList){
+  double getAverage(List<Sensor> sensorList) {
     double sum = 0;
-    for(int i = 0; i < sensorList.length; i++){
+    for (int i = 0; i < sensorList.length; i++) {
       sum += sensorList[i].data;
     }
     return (sum / sensorList.length);
   }
 
-  String getReviewText(SensorEvaluation eval, String type){
+  String getReviewText(SensorEvaluation eval, String type) {
     String comment;
-    if (eval == SensorEvaluation.normal)  comment = "good";
-    else if (eval == SensorEvaluation.warning) comment = "not so good";
-    else comment = "bad";
+    if (eval == SensorEvaluation.normal)
+      comment = "good";
+    else if (eval == SensorEvaluation.warning)
+      comment = "not so good";
+    else
+      comment = "bad";
     return "The ${type.toLowerCase()} of your study space is $comment";
   }
 
-  String getRandomComment(String type){
+  String getRandomComment(String type) {
     List<String> lightComments = [
       "If the study space is too dark, it will be harmful to your eyes.",
       "Focus learning is good, but don't forget to blink every 5 minutes.",
@@ -128,18 +153,18 @@ class SensorController {
       "The temperature might not the most weighted factor, but it somehow affect your performance."
     ];
     int rand = Random().nextInt(3);
-    if (type == 'Light'){
+    if (type == 'Light') {
       return lightComments[rand];
-    } else if (type == 'Sound'){
+    } else if (type == 'Sound') {
       return soundComments[rand];
-    } else if (type == 'Temperature'){
+    } else if (type == 'Temperature') {
       return tempComments[rand];
     }
   }
 
-  SensorEvaluation getEvaluation(double value, String type){
+  SensorEvaluation getEvaluation(double value, String type) {
     if (type == 'Light') {
-      if (value >= 400){
+      if (value >= 400) {
         return SensorEvaluation.normal;
       } else if (value >= 300) {
         return SensorEvaluation.warning;
@@ -155,9 +180,9 @@ class SensorController {
         return SensorEvaluation.bad;
       }
     } else if (type == 'Temperature') {
-      if (value <= 28 && value >= 24){
+      if (value <= 28 && value >= 24) {
         return SensorEvaluation.normal;
-      } else if (value <= 30 && value >= 22){
+      } else if (value <= 30 && value >= 22) {
         return SensorEvaluation.warning;
       } else {
         return SensorEvaluation.bad;
@@ -165,17 +190,17 @@ class SensorController {
     }
   }
 
-  String getImage(SensorEvaluation eval){
-    if (eval == SensorEvaluation.normal){
+  String getImage(SensorEvaluation eval) {
+    if (eval == SensorEvaluation.normal) {
       return 'assets/img/haha.png';
-    } else if (eval == SensorEvaluation.warning){
+    } else if (eval == SensorEvaluation.warning) {
       return 'assets/img/sad.png';
     } else {
       return 'assets/img/angry.png';
     }
   }
 
-  String howEvaluatedText(){
+  String howEvaluatedText() {
     return """
 In this version, the performance score is calculated as below:
 

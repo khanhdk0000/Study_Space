@@ -47,6 +47,7 @@ dependencies:
   syncfusion_flutter_gauges: ^19.1.66
   fab_circular_menu: ^1.0.2
   circular_menu: ^1.2.2
+  web_socket_channel: ^2.1.0
 
 
 dev_dependencies:

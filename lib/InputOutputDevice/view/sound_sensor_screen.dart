@@ -9,30 +9,19 @@ import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class SoundSensorScreen extends StatelessWidget {
-  const SoundSensorScreen({Key key, @required this.controller})
-      : super(key: key);
-
-  final Controller controller;
-
+  const SoundSensorScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
-
-      body: Body(
-        controller: controller,
-      ),
-
+      body: Body(),
     );
   }
 }
 
 class Body extends StatelessWidget {
-
-  const Body({Key key, @required this.controller}) : super(key: key);
-
-  final Controller controller;
+  const Body({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +43,6 @@ class Body extends StatelessWidget {
                     SizedBox(
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
-
                           backgroundColor: soundState.getAppConnectionState ==
                                   MQTTAppConnectionState.disconnected
                               ? Colors.greenAccent
@@ -62,11 +50,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: soundState.getAppConnectionState ==
-                                MQTTAppConnectionState.disconnected
-                            ? controller.connectAdaServer
-                            : null,
-
+                        onPressed: () {
+                          if (soundState.getAppConnectionState ==
+                              MQTTAppConnectionState.disconnected) {
+                            soundState.setAppConnectionState(
+                                MQTTAppConnectionState.connected);
+                          }
+                        },
                         icon: Icon(
                           Icons.power_settings_new_rounded,
                           color: Colors.indigo,
@@ -85,7 +75,6 @@ class Body extends StatelessWidget {
                     SizedBox(
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
-
                           backgroundColor: soundState.getAppConnectionState ==
                                   MQTTAppConnectionState.connected
                               ? Colors.redAccent
@@ -93,11 +82,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: soundState.getAppConnectionState ==
-                                MQTTAppConnectionState.connected
-                            ? controller.disconnectAdaServer
-                            : null,
-
+                        onPressed: () {
+                          if (soundState.getAppConnectionState ==
+                              MQTTAppConnectionState.connected) {
+                            soundState.setAppConnectionState(
+                                MQTTAppConnectionState.disconnected);
+                          }
+                        },
                         icon: Icon(
                           Icons.close,
                           color: Colors.white,
@@ -132,7 +123,6 @@ class CircleGauge extends StatefulWidget {
 }
 
 class _CircleGaugeState extends State<CircleGauge> {
-
   @override
   Widget build(BuildContext context) {
     double value = Provider.of<SoundState>(context).getValueFromServer;
@@ -202,9 +192,7 @@ class _CircleGaugeState extends State<CircleGauge> {
                         padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
                         child: Container(
                           child: Text(
-
                             '${value.toStringAsFixed(0)}',
-
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 25),
                           ),
