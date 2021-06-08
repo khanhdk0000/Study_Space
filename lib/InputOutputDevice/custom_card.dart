@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
 
 class CustomCard extends StatefulWidget {
-  const CustomCard(
-      {Key key,
-      this.slidingCardController,
-      @required this.onTapped,
-      @required this.device,
-      @required this.state,
-      @required this.message,
-      @required this.connect,
-      @required this.disconnect,
-      @required this.imgPath,
-      @required this.controller})
-      : super(key: key);
+  const CustomCard({
+    Key key,
+    this.slidingCardController,
+    @required this.onTapped,
+    @required this.device,
+    @required this.state,
+    @required this.message,
+    @required this.connect,
+    @required this.disconnect,
+    @required this.imgPath,
+  }) : super(key: key);
 
   final SlidingCardController slidingCardController;
   final Function onTapped;
@@ -26,7 +25,6 @@ class CustomCard extends StatefulWidget {
   final Function connect;
   final Function disconnect;
   final String imgPath;
-  final Controller controller;
 
   @override
   _CustomCardState createState() => _CustomCardState();
@@ -51,7 +49,6 @@ class _CustomCardState extends State<CustomCard> {
         connect: widget.connect,
         disconnect: widget.disconnect,
         imgPath: widget.imgPath,
-        controller: widget.controller,
         onInfoTapped: () {
           print('info pressed');
           widget.slidingCardController.expandCard();
@@ -75,7 +72,6 @@ class CustomFrontCard extends StatefulWidget {
   final Function onInfoTapped;
   final Function onCloseButtonTapped;
   final String imgPath;
-  final Controller controller;
 
   const CustomFrontCard({
     Key key,
@@ -87,7 +83,6 @@ class CustomFrontCard extends StatefulWidget {
     @required this.connect,
     @required this.disconnect,
     @required this.imgPath,
-    @required this.controller,
   }) : super(key: key);
   @override
   _CustomFrontCardState createState() => _CustomFrontCardState();
@@ -267,9 +262,11 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                                                 5.5,
                                         color: Colors.black87),
                                   ),
-                                  onPressed: widget.state == 'Disconnected'
-                                      ? widget.controller.connectAdaServer
-                                      : null,
+                                  onPressed: () {
+                                    if (widget.state == 'Disconnected') {
+                                      // TODO
+                                    }
+                                  },
                                 ),
                               ),
                             ),
@@ -296,9 +293,11 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                                           DeviceSize.safeBlockHorizontal * 5,
                                     ),
                                   ),
-                                  onPressed: widget.state == 'Connected'
-                                      ? widget.controller.disconnectAdaServer
-                                      : null,
+                                  onPressed: () {
+                                    if (widget.state == 'Connected') {
+                                      // TODO
+                                    }
+                                  },
                                 ),
                               ),
                             ),

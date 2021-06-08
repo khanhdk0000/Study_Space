@@ -12,7 +12,6 @@ class SensorCard extends StatelessWidget {
     @required this.deviceName,
     @required this.imgUrl,
     this.imgPadding = 2,
-    @required this.controller,
     @required this.state,
     @required this.value,
   }) : super(key: key);
@@ -20,8 +19,7 @@ class SensorCard extends StatelessWidget {
   final String deviceName;
   final String imgUrl;
   final double imgPadding;
-  final Controller controller;
-  final double value;
+  final String value;
 
   final MQTTAppConnectionState state;
 
@@ -48,17 +46,11 @@ class SensorCard extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) {
             if (deviceName == "Light") {
-              return LightSensorScreen(
-                controller: controller,
-              );
+              return LightSensorScreen();
             } else if (deviceName == "Temperature") {
-              return TempSensorScreen(
-                controller: controller,
-              );
+              return TempSensorScreen();
             } else
-              return SoundSensorScreen(
-                controller: controller,
-              );
+              return SoundSensorScreen();
           },
         ),
       ),
@@ -100,7 +92,6 @@ class SensorCard extends StatelessWidget {
                 Container(
                   width: 20,
                   height: 20,
-                  // color: color,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: color,
@@ -124,7 +115,7 @@ class SensorCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  '${value.toStringAsFixed(0)}',
+                  '${value}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30),
                 ),

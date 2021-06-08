@@ -2,33 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:study_space/InputOutputDevice/controller/controller.dart';
-import 'package:study_space/InputOutputDevice/controller/light_controller.dart';
 import 'package:study_space/InputOutputDevice/state/light_state.dart';
 import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class LightSensorScreen extends StatelessWidget {
-  const LightSensorScreen({Key key, @required this.controller})
-      : super(key: key);
-
-  final Controller controller;
+  const LightSensorScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
-      body: Body(
-        controller: controller,
-      ),
+      body: Body(),
     );
   }
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key, @required this.controller}) : super(key: key);
-
-  final Controller controller;
+  const Body({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +48,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: lightState.getAppConnectionState ==
-                                MQTTAppConnectionState.disconnected
-                            ? controller.connectAdaServer
-                            : null,
+                        onPressed: () {
+                          if (lightState.getAppConnectionState ==
+                              MQTTAppConnectionState.disconnected) {
+                            lightState.setAppConnectionState(
+                                MQTTAppConnectionState.connected);
+                          }
+                        },
                         icon: Icon(
                           Icons.power_settings_new_rounded,
                           color: Colors.indigo,
@@ -86,10 +80,13 @@ class Body extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                        onPressed: lightState.getAppConnectionState ==
-                                MQTTAppConnectionState.connected
-                            ? controller.disconnectAdaServer
-                            : null,
+                        onPressed: () {
+                          if (lightState.getAppConnectionState ==
+                              MQTTAppConnectionState.connected) {
+                            lightState.setAppConnectionState(
+                                MQTTAppConnectionState.disconnected);
+                          }
+                        },
                         icon: Icon(
                           Icons.close,
                           color: Colors.white,

@@ -31,21 +31,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<MQTTAppState>(create: (_) => MQTTAppState()),
-        // ChangeNotifierProvider<MQTTLightState>(create: (_) => MQTTLightState()),
-
-        ChangeNotifierProvider<MQTTBuzzerState>(
-            create: (_) => MQTTBuzzerState()),
-        ChangeNotifierProxyProvider<MQTTBuzzerState, MQTTLightState>(
-          create: (_) => MQTTLightState(),
-          update: (_, myModel, myNotifier) =>
-              myNotifier..setBuzzerState(myModel),
+        ChangeNotifierProvider<LightState>(
+          create: (_) => LightState(),
+          lazy: false,
         ),
-        ChangeNotifierProvider<LightState>(create: (_) => LightState()),
-        ChangeNotifierProvider<TempState>(create: (_) => TempState()),
-        ChangeNotifierProvider<SoundState>(create: (_) => SoundState()),
-        ChangeNotifierProvider<BuzzerState>(create: (_) => BuzzerState()),
-        ChangeNotifierProvider<LCDState>(create: (_) => LCDState()),
+        ChangeNotifierProvider<TempState>(
+          create: (_) => TempState(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider<SoundState>(
+          create: (_) => SoundState(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider<BuzzerState>(
+          create: (_) => BuzzerState(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider<LCDState>(
+          create: (_) => LCDState(),
+          lazy: false,
+        ),
         ChangeNotifierProvider<InfraredState>(create: (_) => InfraredState()),
       ],
       child: MaterialApp(

@@ -2,22 +2,30 @@ import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
 import 'package:study_space/constants.dart';
 import 'dart:convert';
+import 'package:web_socket_channel/io.dart';
 
 class LCDState with ChangeNotifier {
-  MQTTAppConnectionState _appConnectionState =
-      MQTTAppConnectionState.disconnected;
-  String _receivedText = "";
+  MQTTAppConnectionState _appConnectionState;
   String _historyText = "";
-  String _valueFromServer = '';
 
-  void setReceivedText(String text) async {
-    var info = json.decode(text);
-    _valueFromServer = info['data'].toString();
-    print("From server");
-    print(_valueFromServer);
+  IOWebSocketChannel _subscriptionB;
+
+  LCDState() {
+    print('LCD state get call');
+    _appConnectionState = MQTTAppConnectionState.connected;
+    _subscriptionB =
+        IOWebSocketChannel.connect(Uri.parse('ws://10.0.2.2:5000/lcd'));
+    _subscriptionB.stream.listen((event) async {
+      print(event);
+      var temp = json.decode(event);
+      setHistoryText(temp['data']);
+    });
+  }
+
+  void setHistoryText(String text) async {
     final f = DateFormat('dd-MM hh:mm');
-    _receivedText = _valueFromServer + ' ' + f.format(DateTime.now());
-    _historyText = _historyText + '\n' + _receivedText;
+    _historyText =
+        _historyText + '\n' + text + ' at ' + f.format(DateTime.now());
     notifyListeners();
   }
 
@@ -26,13 +34,11 @@ class LCDState with ChangeNotifier {
     notifyListeners();
   }
 
-  String get getReceivedText => _receivedText;
   String get getHistoryText => _historyText;
-  String get getValueFromServer => _valueFromServer;
 
   MQTTAppConnectionState get getAppConnectionState => _appConnectionState;
 
-  // void valueFromServer(double d) {
-  //   _valueFromServer = d;
-  // }
+  void disposeStream() {
+    _subscriptionB.sink.close();
+  }
 }
