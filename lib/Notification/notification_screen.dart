@@ -70,6 +70,8 @@ class MyScreen extends State<NotificationScreen> {
     clearSchedule();
     scheduledStudyList = await c.getStarttime(user.displayName);
     scheduledEndtimeList = await c.getEndtime(user.displayName);
+    print(scheduledStudyList);
+    print(scheduledEndtimeList);
   }
 
   void clearSchedule() {
@@ -140,8 +142,8 @@ class MyScreen extends State<NotificationScreen> {
   }
 
   ////////////////////////////////////
-  // PRESENCE DETECT NOTIFICATION //
-  ////////////////////////////////////
+  // PRESENCE DETECT NOTIFICATION ///
+  ///////////////////////////////////
   Future _showPresenceNotification() async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
