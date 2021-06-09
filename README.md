@@ -2,6 +2,11 @@
 
 A new Flutter application.
 
+## How to run
+clone the MQTT-WebSocket: https://github.com/khanhdk0000/Mqtt-Web-Socket
+Run the server like instruction on that page and then run the app.
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
