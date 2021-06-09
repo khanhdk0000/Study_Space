@@ -67,6 +67,11 @@ class userController {
   Future<int> getUserId(String username) async {
       print('get user id');
       var u = await getUser(username);
-      return u.getId();
+      if (u != null)
+        return u.getId();
+      else {
+        print("User error");
+        return -1;
+      }
   }
 }
