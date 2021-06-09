@@ -171,7 +171,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return CircularProgressIndicator();
+      return loadingIndicator;
     });
 
     return Scaffold(
