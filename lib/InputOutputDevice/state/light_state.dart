@@ -26,7 +26,7 @@ class LightState with ChangeNotifier {
     print('Light state get call');
     _appConnectionState = MQTTAppConnectionState.connected;
     _subscriptionB =
-        IOWebSocketChannel.connect(Uri.parse('ws://10.0.2.2:5000/light'));
+        IOWebSocketChannel.connect(Uri.parse('ws://' + host + '/light'));
 
     _subscriptionB.stream.listen((event) async {
       print(event);
@@ -38,7 +38,7 @@ class LightState with ChangeNotifier {
       if (_valueFromServer > 500) {
         print('reeee');
         var response = await http.post(
-          Uri.parse('http://10.0.2.2:5000/postlcd'),
+          Uri.parse('http://' + host + '/postlcd'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -47,7 +47,7 @@ class LightState with ChangeNotifier {
           }),
         );
         var response2 = await http.post(
-          Uri.parse('http://10.0.2.2:5000/postbuzzer'),
+          Uri.parse('http://' + host + '/postbuzzer'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

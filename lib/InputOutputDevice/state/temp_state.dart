@@ -21,7 +21,7 @@ class TempState with ChangeNotifier {
     print('Temp state get call');
     _appConnectionState = MQTTAppConnectionState.connected;
     _subscriptionB =
-        IOWebSocketChannel.connect(Uri.parse('ws://10.0.2.2:5000/temp'));
+        IOWebSocketChannel.connect(Uri.parse('ws://' + host + '/temp'));
     _subscriptionB.stream.listen((event) async {
       print(event);
       var temp = json.decode(event);
@@ -34,7 +34,7 @@ class TempState with ChangeNotifier {
       if (_temperature > 30) {
         print('reeee');
         var response = await http.post(
-          Uri.parse('http://10.0.2.2:5000/postlcd'),
+          Uri.parse('http://' + host + '/postlcd'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -43,7 +43,7 @@ class TempState with ChangeNotifier {
           }),
         );
         var response2 = await http.post(
-          Uri.parse('http://10.0.2.2:5000/postbuzzer'),
+          Uri.parse('http://' + host + '/postbuzzer'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

@@ -14,7 +14,7 @@ class LCDState with ChangeNotifier {
     print('LCD state get call');
     _appConnectionState = MQTTAppConnectionState.connected;
     _subscriptionB =
-        IOWebSocketChannel.connect(Uri.parse('ws://10.0.2.2:5000/lcd'));
+        IOWebSocketChannel.connect(Uri.parse('ws://' + host + '/lcd'));
     _subscriptionB.stream.listen((event) async {
       print(event);
       var temp = json.decode(event);
