@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
+import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
@@ -33,8 +34,13 @@ class HomeScreen extends StatelessWidget {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: () {},
-            child: Icon(Icons.refresh, color: Colors.black, size: 24.0),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
+            child: Icon(Icons.tune, color: Colors.black, size: 24.0),
           )
         ],
       ),
