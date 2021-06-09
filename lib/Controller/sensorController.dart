@@ -101,7 +101,7 @@ class SensorController {
     for (int i = 0; i < sensorList.length; i++) {
       sum += sensorList[i].data;
     }
-    return (sum / sensorList.length);
+    return double.parse((sum / sensorList.length).toStringAsFixed(1));
   }
 
   String getReviewText(SensorEvaluation eval, String type) {
