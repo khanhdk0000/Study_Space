@@ -41,7 +41,7 @@ class ReturnButton extends StatelessWidget {
   }
 }
 
-final loadingIndicator = Container(
+final LoadingIndicator = Container(
   color: Color.fromRGBO(0, 0, 0, 0.06),
   padding: EdgeInsets.all(30),
     child: Icon(
