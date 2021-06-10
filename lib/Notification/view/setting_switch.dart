@@ -24,12 +24,9 @@ class StudySwitch extends StatelessWidget {
 class PresenceSwitch extends StatelessWidget {
   final Function onchangePresence;
   final bool presenceSwitchControl;
-  final MQTTAppConnectionState state;
-  final String receivedText;
   // final Function connect;
   // final Function disconnect;
-  PresenceSwitch(this.onchangePresence, this.presenceSwitchControl, this.state,
-      this.receivedText);
+  PresenceSwitch(this.onchangePresence, this.presenceSwitchControl);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,9 +35,7 @@ class PresenceSwitch extends StatelessWidget {
         Text("Allow Presence Notification"),
         Switch(
           value: presenceSwitchControl,
-          onChanged: (bool value) =>
-              // onchangePresence(value, state, connect, disconnect),
-              onchangePresence(value, state, receivedText.substring(37, 38)),
+          onChanged: (bool value) async => onchangePresence(value),
           activeColor: kPrimaryColor,
         ),
       ],
@@ -88,45 +83,45 @@ class SoundSwitch extends StatelessWidget {
   }
 }
 
-class SnackBarPage extends StatelessWidget {
-  final Function updateSchedule;
-  final Function clearSchedule;
-  SnackBarPage(this.updateSchedule, this.clearSchedule);
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              await updateSchedule();
-              final snackBar = SnackBar(
-                content: Text('Updated Successfully!'),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    clearSchedule();
-                  },
-                ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            child: Text('Update schedule',
-                style: TextStyle(color: kContentColorLightTheme)),
-            style: ElevatedButton.styleFrom(
-              primary: kPrimaryColor,
-            ),
-          ),
-          // ElevatedButton(
-          //   onPressed: connect(),
-          //   child: Text('Current presence',
-          //       style: TextStyle(color: kContentColorLightTheme)),
-          //   style: ElevatedButton.styleFrom(
-          //     primary: kPrimaryColor,
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-}
+// class SnackBarPage extends StatelessWidget {
+//   final Function updateSchedule;
+//   final Function clearSchedule;
+//   SnackBarPage(this.updateSchedule, this.clearSchedule);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Row(
+//         children: [
+//           ElevatedButton(
+//             onPressed: () async {
+//               await updateSchedule();
+//               final snackBar = SnackBar(
+//                 content: Text('Updated Successfully!'),
+//                 action: SnackBarAction(
+//                   label: 'Undo',
+//                   onPressed: () {
+//                     clearSchedule();
+//                   },
+//                 ),
+//               );
+//               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+//             },
+//             child: Text('Update schedule',
+//                 style: TextStyle(color: kContentColorLightTheme)),
+//             style: ElevatedButton.styleFrom(
+//               primary: kPrimaryColor,
+//             ),
+//           ),
+//           // ElevatedButton(
+//           //   onPressed: connect(),
+//           //   child: Text('Current presence',
+//           //       style: TextStyle(color: kContentColorLightTheme)),
+//           //   style: ElevatedButton.styleFrom(
+//           //     primary: kPrimaryColor,
+//           //   ),
+//           // ),
+//         ],
+//       ),
+//     );
+//   }
+// }
