@@ -4,6 +4,8 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/Notification/notification_screen.dart';
+import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
+import 'package:study_space/Summary/view/all_sessions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
@@ -60,29 +62,6 @@ class HomeScreen extends StatelessWidget {
       )
     ]);
 
-    return Scaffold(
-      drawer: SideMenu(),
-      body: _user == null
-          ? Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                children: [topSummary, spacer, HomeSchedule()],
-              ),
-            ),
-    );
-  }
-}
-
-class HomeSchedule extends StatelessWidget {
-  Future<List<Session>> sessions;
-
-  @override
-  Widget build(BuildContext context) {
-    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
-        0, 30, _user.displayName);
-
     final scheduleButton = TextButton(
       style: TextButton.styleFrom(
         backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
@@ -97,10 +76,15 @@ class HomeSchedule extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(14),
-        child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+            Icons.calendar_view_week,
+            color: Colors.black,
+            size: 22.0,
+          ),
           Text(
-            "Show my schedule  ",
+            "   Show my schedule  ",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -114,6 +98,103 @@ class HomeSchedule extends StatelessWidget {
         ]),
       ),
     );
+
+    final sessionButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SummaryAllSessionsView()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+            Icons.insights,
+            color: Colors.black,
+            size: 22.0,
+          ),
+          Text(
+            "   Show my study summary  ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black),
+          ),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.black,
+            size: 22.0,
+          ),
+        ]),
+      ),
+    );
+
+    final deviceButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InputOutputScreen()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+          Icons.device_hub,
+          color: Colors.black,
+          size: 22.0,
+        ),
+          Text(
+            "   Show my device status  ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black),
+          ),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.black,
+            size: 22.0,
+          ),
+        ]),
+      ),
+    );
+
+    return Scaffold(
+      drawer: SideMenu(),
+      body: _user == null
+          ? Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                children: [topSummary, spacer, HomeSchedule(), scheduleButton, divider, sessionButton, divider, deviceButton],
+              ),
+            ),
+    );
+  }
+}
+
+class HomeSchedule extends StatelessWidget {
+  Future<List<Session>> sessions;
+
+  @override
+  Widget build(BuildContext context) {
+    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
+        0, 30, _user.displayName);
 
     return FutureBuilder(future: sessions, builder: (context, snapshot){
       if (snapshot.hasData){
@@ -185,7 +266,6 @@ class HomeSchedule extends StatelessWidget {
                             ),
                         ]),
                       ),
-                      scheduleButton
                     ],
                   )),
             ],
@@ -203,7 +283,6 @@ class HomeSchedule extends StatelessWidget {
                         fontSize: 18,
                         color: Colors.white)),
                   ),
-                  scheduleButton
                 ],
               )
           );
