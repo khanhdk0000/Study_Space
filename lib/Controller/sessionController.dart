@@ -11,9 +11,9 @@ class SessionController {
 
   Future<List<Session>> getAllSessions(
       int uid, String filter, int limit, String username) async {
-    if (uid == null) {
-      uid = await userController().getUserId(username);
-    }
+    // if (uid == null) {
+    //   uid = await userController().getUserId(username,context);
+    // }
     print("[CONTROLLER] Getting all sessions.");
     var now = DateTime.now();
     String date = DateFormat('MM/dd/yyyy').format(now);
@@ -56,9 +56,9 @@ class SessionController {
 
   Future<List<Session>> getUnfinishedSessions(int uid, String filter,
       int daysFromNow, int limit, String username) async {
-    if (uid == null) {
-      uid = await userController().getUserId(username);
-    }
+    // if (uid == null) {
+    //   uid = await userController().getUserId(username);
+    // }
 
     final maxDate = DateTime.now().add(Duration(days: daysFromNow));
     String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
@@ -116,9 +116,9 @@ class SessionController {
       {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final startDate = dateFormat.parse(date);
-    if (user_id == null) {
-      user_id = await userController().getUserId(username);
-    }
+    // if (user_id == null) {
+    //   user_id = await userController().getUserId(username);
+    // }
     print('[USER ID] $user_id, $username');
 
     for (var i = 0; i <= repeat; i++) {
@@ -156,9 +156,9 @@ class SessionController {
 
   void removeSession(String date, String start_time, String end_time,
       String title, int user_id, String username) async {
-    if (user_id == null) {
-      user_id = await userController().getUserId(username);
-    }
+    // if (user_id == null) {
+    //   user_id = await userController().getUserId(username);
+    // }
 
     var response = await http.post(Uri.https(webhost, 'remove_session.php'),
         headers: <String, String>{

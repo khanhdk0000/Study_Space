@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
@@ -9,6 +10,7 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 import 'package:study_space/Controller/schedController.dart';
+
 
 User user = FirebaseAuth.instance.currentUser;
 
@@ -49,8 +51,9 @@ class _SessionsViewState extends State<SessionsView> {
         child: Column(
           children: [
             _topView(context),
-            ElevatedButton(onPressed: addSes, child: Text("add session")),
+            ElevatedButton(onPressed: popup, child: Text("pop up")),
             ElevatedButton(onPressed: getId, child: Text("get user id")),
+            ElevatedButton(onPressed: reroute, child: Text("logout")),
             Text("data"),
           ],
         ),
@@ -122,4 +125,40 @@ class _SessionsViewState extends State<SessionsView> {
   void getId() {
     print(user_id);
   }
+
+  void popup() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => _buildPopupDialog(context),
+    );
+  }
+
+
+  void reroute() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+    );
+  }
+}
+
+Widget _buildPopupDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text('Popup example'),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Hello"),
+      ],
+    ),
+    actions: <Widget>[
+      new TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Close'),
+      ),
+    ],
+  );
 }

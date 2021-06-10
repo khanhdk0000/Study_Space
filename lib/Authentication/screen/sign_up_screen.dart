@@ -117,7 +117,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _username = user.displayName;
         var c = new userController();
         await c.addUser(user.displayName);
-        user_id = await c.getUserId(user.displayName);
+        user_id = await c.getUserId(user.displayName,context);
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //     content: Text(
         //         'Successfully signed up ' + _userEmail + ' ' + _username)));
