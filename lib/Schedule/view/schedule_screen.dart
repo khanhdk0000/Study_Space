@@ -30,8 +30,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   String filterMode = "Next Month";
   Future<List<Session>> sessions;
 
-
-  Widget build(BuildContext context) {
+  void loadSessions(){
+    setState(() {
     int dateRange;
     switch(filterMode) {
       case "Today": {
@@ -57,6 +57,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
         dateRange, 30, user.displayName);
+    });
+  }
+
+  Widget build(BuildContext context) {
+    loadSessions();
 
     var Navigation = Column(children: [
       Row(
@@ -107,7 +112,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AddSessionScreen()),
+          MaterialPageRoute(builder: (context) => AddSessionScreen(loadSessions)),
         ),
         child:   Container(
           padding: EdgeInsets.all(12),
@@ -161,7 +166,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               for (final session in snapshot.data)
                 ListBody(
                     children: [
-                      SessionButton(session),
+                      SessionButton(session, loadSessions),
                       divider
                     ]
                 ),
@@ -330,12 +335,14 @@ class SessionsScatter extends StatelessWidget{
 }
 
 class SessionButton extends StatelessWidget {
+  void Function() reloadParent;
   Session session;
   String title;
   String date;
   String startTime;
   String endTime;
-  SessionButton(Session session){
+  SessionButton(Session session, void Function() reloadParent){
+    this.reloadParent = reloadParent;
     this.session = session;
     title = session.getTitle();
     date = session.getDate();
@@ -349,7 +356,7 @@ class SessionButton extends StatelessWidget {
     return TextButton(
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SessionScreen(session)),
+          MaterialPageRoute(builder: (context) => SessionScreen(session, reloadParent)),
         ),
         style: TextButton.styleFrom(
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),

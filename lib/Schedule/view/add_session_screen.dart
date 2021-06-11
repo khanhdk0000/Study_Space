@@ -17,19 +17,25 @@ final User user = auth.currentUser;
 const spacer = SizedBox(height: 20.0);
 
 class AddSessionScreen extends StatefulWidget {
+  final void Function() loadSchedule;
+  AddSessionScreen(this.loadSchedule);
+
   @override
-  _AddSessionScreenState createState() => _AddSessionScreenState();
+  _AddSessionScreenState createState() => _AddSessionScreenState(loadSchedule);
 }
 
 class _AddSessionScreenState extends State<AddSessionScreen> {
-  @override
-  var schedule = schedController();
+  final void Function() reloadParent;
   var subject = "";
   var startDate = "06/11/2021";
   var startTime = "00:00:00";
   var endTime = "00:00:00";
   int repeat = 0;
   int period = 0;
+
+  @override
+
+  _AddSessionScreenState(this.reloadParent);
 
   final divider = Container(height: 1.0, color: Colors.black26);
 
@@ -219,6 +225,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           await SessionController().addSessions(
               repeat, period, startDate, startTime, endTime, subject, user_id,
               username: user.displayName);
+          reloadParent();
 
           //schedule.addSession(subject, timeframe);
           Navigator.pop(context);

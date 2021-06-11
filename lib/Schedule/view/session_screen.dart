@@ -7,6 +7,7 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
+import 'dart:io';
 
 ///User arguments
 final User user = auth.currentUser;
@@ -15,16 +16,16 @@ const spacer = SizedBox(height: 20.0);
 
 class SessionScreen extends StatefulWidget {
   Session session;
+  final void Function() reloadParent;
 
-  SessionScreen(Session session) {
-    this.session = session;
-  }
+  SessionScreen(this.session, this.reloadParent);
 
   @override
-  _SessionScreenState createState() => _SessionScreenState(session);
+  _SessionScreenState createState() => _SessionScreenState(session, reloadParent);
 }
 
 class _SessionScreenState extends State<SessionScreen> {
+  void Function() reloadParent;
   Session session;
   String title;
   String date;
@@ -33,7 +34,8 @@ class _SessionScreenState extends State<SessionScreen> {
   String startTime;
   String endTime;
 
-  _SessionScreenState(Session session) {
+  _SessionScreenState(Session session, void Function() reloadParent) {
+    this.reloadParent = reloadParent;
     this.session = session;
     this.title = session.getTitle();
     this.date = session.getDate();
@@ -84,8 +86,10 @@ class _SessionScreenState extends State<SessionScreen> {
         ),
       ),
       onPressed: () {
-        SessionController()
+         SessionController()
             .removeSession(date, startTime, endTime, title, user_id, user.displayName);
+         sleep(Duration(milliseconds: 500));
+        reloadParent();
         Navigator.pop(context);
       },
       child: Container(
