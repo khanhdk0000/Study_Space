@@ -13,40 +13,15 @@ class NotificationScreen extends StatefulWidget {
 
   @override
   MyScreen createState() => MyScreen();
-  void printSample() {
-    // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-    // var c = new scheduleController();
-    // List<String> scheduledStudyList = await c.getStarttime();
-    // List<String> scheduledEndtimeList = await c.getEndtime();
-    // var androidPlatformChannelSpecifics =
-    //     myAppState.androidPlatformChannelSpecifics;
-    // var platformChannelSpecifics =
-    //     new NotificationDetails(android: androidPlatformChannelSpecifics);
-    // print(scheduledStudyList);
-    // print(scheduledEndtimeList);
-    // for (var i = 0; i < scheduledStudyList.length; i++) {
-    //   if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
-    //     await flutterLocalNotificationsPlugin.schedule(
-    //       i,
-    //       'Đi họccccccccccccccccccccc',
-    //       'Êi bạn êi, vô học bạn êi!!',
-    //       DateTime.parse(scheduledStudyList[i]),
-    //       platformChannelSpecifics,
-    //       payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
-    //     );
-    //     // if (true) {
-    //     //   myAppState._showBreakNotification(
-    //     //       scheduledStudyList[i], i + scheduledStudyList.length * 2);
-    //     // }
-    //     // if (true) {
-    //     //   myAppState._showPresenceNotification(
-    //     //       scheduledStudyList[i], i + scheduledEndtimeList.length);
-    //     // }
-    //   }
-    // }
-    // myAppState._showStudyNotification(true, false);
-    // myAppState._showEndtimeNotification();
-    myAppState.getNew();
+  void pushNoti() {
+    myAppState.initState();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+    var androidPlatformChannelSpecifics =
+        myAppState.androidPlatformChannelSpecifics;
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    myAppState._cancelAllNotifications();
+    myAppState._showStudyNotification(true, false);
   }
 }
 
@@ -100,7 +75,9 @@ class MyScreen extends State<NotificationScreen> {
     // _showStudyNotification(false, false);
     // _showEndtimeNotification();
     var c = new scheduleController();
+    List<String> scheduledStartList = await c.getStarttime();
     List<String> scheduledEndtimeList = await c.getEndtime();
+    print(scheduledStartList);
     print(scheduledEndtimeList);
   }
 
@@ -125,6 +102,9 @@ class MyScreen extends State<NotificationScreen> {
   //////////////////////////////////////
   Future _showStudyNotification(bool useBreak, bool usePresence) async {
     scheduledStudyList = await c.getStarttime();
+    scheduledEndtimeList = await c.getEndtime();
+    print(scheduledStudyList);
+    print(scheduledEndtimeList);
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     for (var i = 0; i < scheduledStudyList.length; i++) {
@@ -136,6 +116,14 @@ class MyScreen extends State<NotificationScreen> {
           DateTime.parse(scheduledStudyList[i]),
           platformChannelSpecifics,
           payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
+        );
+        await flutterLocalNotificationsPlugin.schedule(
+          i + scheduledEndtimeList.length * 3,
+          'Hết giờ !!!!!!!!!!!!!!!!',
+          'Nghỉ đi tan rồi, cố quá là quá cố',
+          DateTime.parse(scheduledEndtimeList[i]),
+          platformChannelSpecifics,
+          payload: 'Một cái nội dung gì đó về việc tới giờ nghỉ học',
         );
         if (useBreak) {
           _showBreakNotification(
@@ -151,28 +139,6 @@ class MyScreen extends State<NotificationScreen> {
               DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 10));
           Timer(time.difference(DateTime.now()), showPresence);
         }
-      }
-    }
-  }
-
-  ////////////////////////////////////
-  // END STUDY SESSION NOTIFICATION //
-  ////////////////////////////////////
-  Future _showEndtimeNotification() async {
-    scheduledEndtimeList = await c.getEndtime();
-    print(scheduledEndtimeList);
-    var platformChannelSpecifics =
-        new NotificationDetails(android: androidPlatformChannelSpecifics);
-    for (var i = 0; i < scheduledEndtimeList.length; i++) {
-      if (DateTime.parse(scheduledEndtimeList[i]).isAfter(DateTime.now())) {
-        await flutterLocalNotificationsPlugin.schedule(
-          i + scheduledEndtimeList.length * 3,
-          'Hết giờ !!!!!!!!!!!!!!!!',
-          'Nghỉ đi tan rồi, cố quá là quá cố',
-          DateTime.parse(scheduledEndtimeList[i]),
-          platformChannelSpecifics,
-          payload: 'Một cái nội dung gì đó về việc tới giờ nghỉ học',
-        );
       }
     }
   }
@@ -220,7 +186,6 @@ class MyScreen extends State<NotificationScreen> {
         soundSwitchControl = true;
         _cancelAllNotifications();
         _showStudyNotification(breakSwitchControl, presenceSwitchControl);
-        _showEndtimeNotification();
       });
     } else {
       setState(() {

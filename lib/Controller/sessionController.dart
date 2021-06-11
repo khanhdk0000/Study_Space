@@ -111,7 +111,7 @@ class SessionController {
     }
   }
 
-  void addSessions(int repeat, int period, String date, String start_time,
+  Future addSessions(int repeat, int period, String date, String start_time,
       String end_time, String title, int user_id,
       {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
@@ -126,12 +126,12 @@ class SessionController {
 
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      addSession(dateString, start_time, end_time, title, user_id);
+      await addSession(dateString, start_time, end_time, title, user_id);
     }
   }
 
-  void addSession(String date, String start_time, String end_time, String title,
-      int user_id) async {
+  Future addSession(String date, String start_time, String end_time,
+      String title, int user_id) async {
     var response = await http.post(Uri.https(webhost, 'add_session.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -232,8 +232,8 @@ class SessionController {
   }
 
   Future<int> getPenaltyLight(Session s) async {
-    double average =
-        await SensorController().getDirectAverage(sess_id: s.getId(), type: 'L');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'L');
     if (average == null) {
       return -100;
     }
@@ -249,8 +249,8 @@ class SessionController {
   }
 
   Future<int> getPenaltyTemp(Session s) async {
-    double average =
-    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'TH');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'TH');
     if (average == null) {
       return -100;
     }
@@ -268,8 +268,8 @@ class SessionController {
   }
 
   Future<int> getPenaltySound(Session s) async {
-    double average =
-    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'S');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'S');
     if (average == null) {
       return -100;
     }
