@@ -2,8 +2,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Model/user.dart';
+import 'package:flutter/material.dart';
 
 class userController {
   userController() {
@@ -19,7 +21,7 @@ class userController {
   }
 
   Future<User> addUser(
-      String username, {String fname, String lname, String dob}) async {
+      String username, {String fname = '', String lname = '', String dob = ''}) async {
     print('add user');
     var response = await http.post(Uri.https(webhost, 'add_user.php'),
         headers: <String, String>{
@@ -64,14 +66,55 @@ class userController {
     }
   }
   
-  Future<int> getUserId(String username) async {
+  Future<int> getUserId(String username, BuildContext context) async {
       print('get user id');
       var u = await getUser(username);
       if (u != null)
         return u.getId();
       else {
         print("User error");
+        popup(context);
+        reroute(context);
         return -1;
       }
   }
+  void popup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => _buildPopupDialog(context),
+    );
+  }
+
+
+  void reroute(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+    );
+  }
+
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Oops'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Something went wrong.\nPlease login again."),
+        ],
+      ),
+      actions: <Widget>[
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            // reroute(context);
+          },
+          child: const Text('Ok'),
+        ),
+      ],
+    );
+  }
 }
+
+

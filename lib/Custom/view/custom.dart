@@ -494,8 +494,8 @@ class _CustomViewState extends State<CustomView> {
   }
 
   _getLatestData3() async {
-    var req = await http.get(
-        Uri.https('io.adafruit.com', 'api/v2/khanhdk0000/feeds/bbc-led/data'));
+    var req = await http.get(Uri.https(
+        'io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
     var infos = json.decode(req.body);
     var temp = infos[0]['value'];
     var temp2 = json.decode(temp);

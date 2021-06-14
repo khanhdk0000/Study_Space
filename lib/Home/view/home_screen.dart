@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
+import 'package:study_space/Notification/notification_screen.dart';
+import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
+import 'package:study_space/Summary/view/all_sessions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
@@ -33,8 +36,13 @@ class HomeScreen extends StatelessWidget {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: () {},
-            child: Icon(Icons.refresh, color: Colors.black, size: 24.0),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
+            child: Icon(Icons.tune, color: Colors.black, size: 24.0),
           )
         ],
       ),
@@ -54,6 +62,117 @@ class HomeScreen extends StatelessWidget {
       )
     ]);
 
+    final scheduleButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScheduleScreen()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+            Icons.calendar_view_week,
+            color: Colors.black,
+            size: 22.0,
+          ),
+          Text(
+            "   Show my schedule  ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black),
+          ),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.black,
+            size: 22.0,
+          ),
+        ]),
+      ),
+    );
+
+    final sessionButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SummaryAllSessionsView()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+            Icons.insights,
+            color: Colors.black,
+            size: 22.0,
+          ),
+          Text(
+            "   Show my study summary  ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black),
+          ),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.black,
+            size: 22.0,
+          ),
+        ]),
+      ),
+    );
+
+    final deviceButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero, // <-- Radius
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InputOutputScreen()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Icon(
+          Icons.device_hub,
+          color: Colors.black,
+          size: 22.0,
+        ),
+          Text(
+            "   Show my device status  ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black),
+          ),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.black,
+            size: 22.0,
+          ),
+        ]),
+      ),
+    );
+
     return Scaffold(
       drawer: SideMenu(),
       body: _user == null
@@ -62,7 +181,7 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.vertical,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                children: [topSummary, spacer, HomeSchedule()],
+                children: [topSummary, spacer, HomeSchedule(), scheduleButton, divider, sessionButton, divider, deviceButton],
               ),
             ),
     );
@@ -76,33 +195,6 @@ class HomeSchedule extends StatelessWidget {
   Widget build(BuildContext context) {
     sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
         0, 30, _user.displayName);
-
-    final scheduleButton = TextButton(
-      style: ButtonStyle(
-        foregroundColor:
-        MaterialStateProperty.all<Color>(Colors.black),
-      ),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ScheduleScreen()),
-        );
-      },
-      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Text(
-          "Show my schedule  ",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black),
-        ),
-        Icon(
-          Icons.arrow_forward,
-          color: Colors.black,
-          size: 22.0,
-        ),
-      ]),
-    );
 
     return FutureBuilder(future: sessions, builder: (context, snapshot){
       if (snapshot.hasData){
@@ -135,58 +227,62 @@ class HomeSchedule extends StatelessWidget {
                         color: Colors.white),
                   )),
               Container(
-                  padding: EdgeInsets.all(26),
-                  color: Color.fromRGBO(0, 0, 0, 0.06),
                   width: double.infinity,
-                  child: Column(children: [
-                    for (var i = 0; i < todaySessions.length; i++)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(children: [
-                                Container(
-                                  width: 4.0,
-                                  height: 4.0,
-                                  decoration: BoxDecoration(
-                                      color: colors[i], shape: BoxShape.circle),
-                                ),
-                                Text(
-                                  "  ${todaySessions[i].getTitle()}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.black),
-                                ),
-                              ]),
-                              Text(
-                                "${todaySessions[i].getStartTime()} : ${todaySessions[i].getEndTime()}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                    color: Colors.black),
-                              )
-                            ]),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(26),
+                        color: Color.fromRGBO(0, 0, 0, 0.06),
+                        child: Column(children: [
+                          for (var i = 0; i < todaySessions.length; i++)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Container(
+                                        width: 4.0,
+                                        height: 4.0,
+                                        decoration: BoxDecoration(
+                                            color: colors[i], shape: BoxShape.circle),
+                                      ),
+                                      Text(
+                                        "  ${todaySessions[i].getTitle()}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                      ),
+                                    ]),
+                                    Text(
+                                      "${todaySessions[i].getStartTime()} : ${todaySessions[i].getEndTime()}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                          color: Colors.black),
+                                    )
+                                  ]),
+                            ),
+                        ]),
                       ),
-                    SizedBox(height: 26),
-                    scheduleButton
-                  ])),
+                    ],
+                  )),
             ],
           );
         }
         else {
           return Container(
-              padding: EdgeInsets.all(26),
-              color: Color.fromRGBO(0, 0, 0, 0.06),
               child: Column(
                 children: [
-                  Text("You don't have any upcoming study event for today", style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black)),
-                  SizedBox(height: 26),
-                  scheduleButton
+                  Container(
+                    padding: EdgeInsets.all(26),
+                    color: Colors.black,
+                    child: Text("You don't have any upcoming study event for today", style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white)),
+                  ),
                 ],
               )
           );
@@ -194,7 +290,7 @@ class HomeSchedule extends StatelessWidget {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return CircularProgressIndicator();
+      return LoadingIndicator;
     });
   }
 }

@@ -41,5 +41,15 @@ class ReturnButton extends StatelessWidget {
   }
 }
 
+final LoadingIndicator = Container(
+  color: Color.fromRGBO(0, 0, 0, 0.06),
+  padding: EdgeInsets.all(30),
+    child: Icon(
+  Icons.hourglass_bottom,
+  color: Colors.black,
+  size: 24.0,
+  semanticLabel: 'Text to announce in accessibility modes',
+));
+
 const colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 final divider = Container(height: 1.0, color: Colors.black26);

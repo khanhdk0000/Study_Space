@@ -14,7 +14,7 @@ class BuzzerState with ChangeNotifier {
     print('Buzzer state get call');
     _appConnectionState = MQTTAppConnectionState.connected;
     _subscriptionB =
-        IOWebSocketChannel.connect(Uri.parse('ws://10.0.2.2:5000/buzzer'));
+        IOWebSocketChannel.connect(Uri.parse('ws://' + host + '/buzzer'));
     _subscriptionB.stream.listen((event) async {
       print(event);
       var temp = json.decode(event);

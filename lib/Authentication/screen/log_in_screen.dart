@@ -109,17 +109,24 @@ class _LogInFormState extends State<LogInForm> {
         print('success');
         var c = new userController();
         // await c.addUser(user.displayName);
-        user_id = await c.getUserId(user.displayName);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Successfully signed in ' + user.displayName),
-          ),
-        );
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-          ),
-        );
+        user_id = await c.getUserId(user.displayName,context);
+
+
+        if (user_id == -1) {
+          await c.addUser(user.displayName);
+          c.popup(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Successfully signed in ' + user.displayName),
+            ),
+          );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Invalid email or password')));

@@ -30,8 +30,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   String filterMode = "Next Month";
   Future<List<Session>> sessions;
 
-
-  Widget build(BuildContext context) {
+  void loadSessions(){
+    setState(() {
     int dateRange;
     switch(filterMode) {
       case "Today": {
@@ -57,6 +57,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
         dateRange, 30, user.displayName);
+    });
+  }
+
+  Widget build(BuildContext context) {
+    loadSessions();
 
     var Navigation = Column(children: [
       Row(
@@ -98,20 +103,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ],
         ));
 
-    var NoSchedule = Container(
-      padding: EdgeInsets.all(36),
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-      width: double.infinity,
-      child: Text(
-          "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 48,
-              color: Colors.black)
-      ),
-    );
-
     final AddButton =  TextButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.orange,
@@ -121,7 +112,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AddSessionScreen()),
+          MaterialPageRoute(builder: (context) => AddSessionScreen(loadSessions)),
         ),
         child:   Container(
           padding: EdgeInsets.all(12),
@@ -146,6 +137,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
         ));
 
+    var NoSchedule = Column(
+        children: [Container(
+      padding: EdgeInsets.all(36),
+      color: Color.fromRGBO(0, 0, 0, 0.06),
+      width: double.infinity,
+      child: Text(
+          "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 48,
+              color: Colors.black)
+      ),
+    ),
+          AddButton
+        ]
+    );
+
     var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
       if (snapshot.hasData){
 
@@ -157,7 +166,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               for (final session in snapshot.data)
                 ListBody(
                     children: [
-                      SessionButton(session),
+                      SessionButton(session, loadSessions),
                       divider
                     ]
                 ),
@@ -171,7 +180,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       } else if (snapshot.hasError) {
         return Text("${snapshot.error}");
       }
-      return CircularProgressIndicator();
+      return LoadingIndicator;
     });
 
     return Scaffold(
@@ -180,30 +189,32 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, Filterer, Body, AddButton])),
+              children: [Navigation, spacer, Filterer, Body])),
     );
   }
 }
 
 class SessionsPie extends StatelessWidget{
   List<PieChartSectionData> pieData = [];
-  final colors = [Colors.blue, Colors.amber, Colors.green, Colors.lime, Colors.orange, Colors.purple, Colors.red];
 
   SessionsPie(List<Session> sessions){
-    Set<String> titles = {};
+    List<String> titles = [];
     for (final session in sessions) {
-      titles.add(session.getTitle());
+      final title = session.getTitle();
+      if (!titles.contains(title)){
+        titles.add(title);
+      }
     }
 
     for (var i = 0 ; i < titles.length; i++) {
       var totalMinutes = 0.0;
       for (final session in sessions) {
-        if (session.getTitle() == titles.elementAt(i)) {
+        if (session.getTitle() == titles[i]) {
           totalMinutes += session.getDuration();
         }
       }
       pieData.add(PieChartSectionData(
-        title: titles.elementAt(i),
+        title: titles[i],
         value: totalMinutes,
         color:colors[i],
         radius: 140,
@@ -324,12 +335,14 @@ class SessionsScatter extends StatelessWidget{
 }
 
 class SessionButton extends StatelessWidget {
+  void Function() reloadParent;
   Session session;
   String title;
   String date;
   String startTime;
   String endTime;
-  SessionButton(Session session){
+  SessionButton(Session session, void Function() reloadParent){
+    this.reloadParent = reloadParent;
     this.session = session;
     title = session.getTitle();
     date = session.getDate();
@@ -343,7 +356,7 @@ class SessionButton extends StatelessWidget {
     return TextButton(
         onPressed: ()  => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SessionScreen(session)),
+          MaterialPageRoute(builder: (context) => SessionScreen(session, reloadParent)),
         ),
         style: TextButton.styleFrom(
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
