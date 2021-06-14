@@ -194,7 +194,8 @@ class _OneSessionViewState extends State<OneSessionView> {
               SizedBox(height: kDefaultPadding * 0.5),
               _sensorTile('Sound'),
               SizedBox(height: kDefaultPadding * 0.5),
-              _sensorTile('Temperature')
+              _sensorTile('Temperature'),
+              SizedBox(height: kDefaultPadding * 2),
             ],
           )
         ),

@@ -72,43 +72,22 @@ class SensorController {
     }
   }
 
-  // Future<double> getDirectAverage({String sess_id, String type}) async{
-  //   var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
-  //       headers: <String, String>{
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //       },
-  //       body: jsonEncode(<String, String>{
-  //         'session': sess_id,
-  //         'type' : "'" + type + "'",
-  //       }));
-  //   print('[GET DIRECT AVERAGE] ${response.statusCode}');
-  //   print(response.body);
-  //   if (response.statusCode == 201) {
-  //     print("Success");
-  //     if (response.body == ''){
-  //       return -1;
-  //     }
-  //     return double.parse(response.body);
-  //   } else {
-  //     print('Failed');
-  //     return null;
-  //   }
-  // }
-
-  Future<double> getDirectAverage({String sess_id, String type}) async {
-    var response =
-        await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, String>{
-              'session': sess_id,
-              'type': "'" + type + "'",
-            }));
+  Future<double> getDirectAverage({String sess_id, String type}) async{
+    var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'session': sess_id,
+          'type' : "'" + type + "'",
+        }));
     print('[GET DIRECT AVERAGE] ${response.statusCode}');
     print(response.body);
     if (response.statusCode == 201) {
       print("Success");
+      if (response.body == ''){
+        return -1;
+      }
       return double.parse(response.body);
     } else {
       print('Failed');
@@ -122,7 +101,7 @@ class SensorController {
     for (int i = 0; i < sensorList.length; i++) {
       sum += sensorList[i].data;
     }
-    return (sum / sensorList.length);
+    return double.parse((sum / sensorList.length).toStringAsFixed(1));
   }
 
   String getReviewText(SensorEvaluation eval, String type) {
