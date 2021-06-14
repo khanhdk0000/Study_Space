@@ -58,28 +58,29 @@ class LightState with ChangeNotifier {
         print('Status: ' + response.statusCode.toString());
         print('Status 2: ' + response2.statusCode.toString());
       }
+      pushToDatabase();
     });
   }
 
   final f = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   void pushToDatabase() async {
-    // String sessid = await getSessionId();
+    String sessid = await getSessionId();
     await sensorController.addSensorField(
         name: 'LIGHT',
         unit: 'L1',
         type: 'L',
         timestamp: f.format(DateTime.now()),
-        sess_id: '1',
+        sess_id: sessid,
         data: _valueFromServer.toString());
   }
 
-  // Future<String> getSessionId() async {
-  //   SessionController sessionController = SessionController();
-  //   Session session =
-  //       await sessionController.getCurrentSession(user.displayName);
-  //   return session.getId();
-  // }
+  Future<String> getSessionId() async {
+    SessionController sessionController = SessionController();
+    String session =
+        await sessionController.getCurrentSession(user.displayName);
+    return session;
+  }
 
   void setAppConnectionState(MQTTAppConnectionState state) {
     _appConnectionState = state;

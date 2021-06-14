@@ -203,12 +203,12 @@ class SessionController {
             }));
     print(response.statusCode);
     if (response.statusCode == 201) {
-      print("Success");
+      print("get session id Success");
       var id = response.body.toString();
       print(id);
       return id;
     } else {
-      print('failed');
+      print('get session id failed');
       return '-1';
     }
   }
