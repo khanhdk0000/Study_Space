@@ -203,12 +203,12 @@ class SessionController {
             }));
     print(response.statusCode);
     if (response.statusCode == 201) {
-      print("Success");
+      print("get session id Success");
       var id = response.body.toString();
       print(id);
       return id;
     } else {
-      print('failed');
+      print('get session id failed');
       return '-1';
     }
   }
@@ -232,8 +232,8 @@ class SessionController {
   }
 
   Future<int> getPenaltyLight(Session s) async {
-    double average =
-        await SensorController().getDirectAverage(sess_id: s.getId(), type: 'L');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'L');
     if (average == null) {
       return -100;
     }
@@ -249,8 +249,8 @@ class SessionController {
   }
 
   Future<int> getPenaltyTemp(Session s) async {
-    double average =
-    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'TH');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'TH');
     if (average == null) {
       return -100;
     }
@@ -268,8 +268,8 @@ class SessionController {
   }
 
   Future<int> getPenaltySound(Session s) async {
-    double average =
-    await SensorController().getDirectAverage(sess_id: s.getId(), type: 'S');
+    double average = await SensorController()
+        .getDirectAverage(sess_id: s.getId(), type: 'S');
     if (average == null) {
       return -100;
     }
