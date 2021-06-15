@@ -26,8 +26,8 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
 
-  final filters = ["Today", "Next Week", "Next Month", "Next Year"];
-  String filterMode = "Next Month";
+  final filters = ["Today", "This Week", "This Month", "This Year"];
+  String filterMode = "Today";
   Future<List<Session>> sessions;
 
   void loadSessions(){
@@ -39,17 +39,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
       break;
 
-      case "Next Week": {
+      case "This Week": {
         dateRange = 7;
       }
       break;
 
-      case "Next Month": {
+      case "This Month": {
         dateRange = 30;
       }
       break;
 
-      case "Next Year": {
+      case "This Year": {
         dateRange = 365;
       }
       break;
@@ -161,7 +161,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         if (snapshot.data.length > 0) {
           return ListBody(
             children: [
-              SessionsScatter(snapshot.data),
+              SessionsCalendar(snapshot.data, filterMode),
               AddButton,
               for (final session in snapshot.data)
                 ListBody(
@@ -194,11 +194,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 }
 
 
-class SessionsScatter extends StatelessWidget{
+class SessionsCalendar extends StatelessWidget{
   List<Appointment> appointments = [];
   List<String> titles = [];  // Ordered list of unique titles
+  CalendarController _controller = CalendarController();
+  SfCalendar calendarView;
 
-  SessionsScatter(List<Session> sessions){
+  SessionsCalendar(List<Session> sessions, String displayMode){
     final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
     final timeFormat2 = DateFormat('hh:mm:ss');
     print(timeFormat.parse(sessions[0].getDate() + " " + sessions[0].getStartTime()));
@@ -208,74 +210,49 @@ class SessionsScatter extends StatelessWidget{
     for (final session in sessions){
       final title = session.getTitle();
       if (!titles.contains(title)){
-        appointments.add(Appointment(
-          startTime: timeFormat.parse(session.getDate() + " " + session.getStartTime()),
-            endTime: timeFormat.parse(session.getDate() + " " + session.getEndTime()),
-          subject: session.getTitle(),
-          color: Colors.blue
-        ));
+        titles.add(title);
       }
     }
 
     for (final session in sessions){
+      final title = session.getTitle();
         appointments.add(Appointment(
             startTime: timeFormat.parse(session.getDate() + " " + session.getStartTime()),
             endTime: timeFormat.parse(session.getDate() + " " + session.getEndTime()),
-            subject: session.getTitle()
+            subject: title,
+          color: colors[titles.indexOf(title)]
         ));
     }
 
+    switch(displayMode) {
+      case "Today": {
+        _controller.view = CalendarView.day;
+      }
+      break;
+
+      case "This Week": {
+        _controller.view = CalendarView.week;
+      }
+      break;
+
+      default: {
+        _controller.view = CalendarView.month;
+      }
+      break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var legend = Row(
-      children: [
-        for (final title in titles)
-          Container(
-            padding: EdgeInsets.only(left: 24),
-            child: Row(
-                children: [
-                  Container(
-                      width: 14, height: 14,
-                      decoration: BoxDecoration(
-                          color: colors[titles.indexOf(title)],
-                          shape: BoxShape.circle
-                      )),
-                  Text("  "+title, style: TextStyle(
-                      fontWeight: FontWeight.bold
-                  ))
-                ]
-            ),
-          )
-      ],
-    );
 
     return Container(
-      height: 480,
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-      child: ListView(
-        // This next line does the trick.
-          scrollDirection: Axis.horizontal,
-          children: [Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  height: 440,
-                  width: 500,
-                  padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
-                  child: SfCalendar(
-                    view: CalendarView.week,
-                    timeSlotViewSettings: TimeSlotViewSettings(
-                        startHour: 9,
-                        endHour: 16,
-                        nonWorkingDays: <int>[DateTime.friday, DateTime.saturday]),
+      height: 500,
+      padding: EdgeInsets.only(top: 4),
+      child: SfCalendar(
+                    view: _controller.view,
+                    controller: _controller,
                     dataSource: SessionDataSource(appointments),
-                  )),
-              legend
-            ],
-          )]),
-    );
+                  ));
   }
 }
 
