@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
@@ -170,7 +170,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       divider
                     ]
                 ),
-              SessionsPie(snapshot.data),
             ],
           );
         }
@@ -194,84 +193,42 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 }
 
-class SessionsPie extends StatelessWidget{
-  List<PieChartSectionData> pieData = [];
-
-  SessionsPie(List<Session> sessions){
-    List<String> titles = [];
-    for (final session in sessions) {
-      final title = session.getTitle();
-      if (!titles.contains(title)){
-        titles.add(title);
-      }
-    }
-
-    for (var i = 0 ; i < titles.length; i++) {
-      var totalMinutes = 0.0;
-      for (final session in sessions) {
-        if (session.getTitle() == titles[i]) {
-          totalMinutes += session.getDuration();
-        }
-      }
-      pieData.add(PieChartSectionData(
-        title: titles[i],
-        value: totalMinutes,
-        color:colors[i],
-        radius: 140,
-      ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-        height: 320,
-        color: Color.fromRGBO(0, 0, 0, 0.06),
-        child: PieChart(
-          PieChartData(
-            sections: pieData,
-            sectionsSpace: 0,
-            centerSpaceRadius: 0,
-          ),
-          swapAnimationDuration: Duration(milliseconds: 150), // Optional
-          swapAnimationCurve: Curves.linear, // Optional
-        ));
-  }
-}
 
 class SessionsScatter extends StatelessWidget{
-  List<ScatterSpot> sessionSpots = [];
+  List<Appointment> appointments = [];
   List<String> titles = [];  // Ordered list of unique titles
 
   SessionsScatter(List<Session> sessions){
+    final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
+    final timeFormat2 = DateFormat('hh:mm:ss');
+    print(timeFormat.parse(sessions[0].getDate() + " " + sessions[0].getStartTime()));
+    print(timeFormat.parse(sessions[0].getDate() + " " + sessions[0].getEndTime()));
+    print(timeFormat2.parse(sessions[0].getStartTime()));
+
     for (final session in sessions){
       final title = session.getTitle();
       if (!titles.contains(title)){
-        titles.add(title);
+        appointments.add(Appointment(
+          startTime: timeFormat.parse(session.getDate() + " " + session.getStartTime()),
+            endTime: timeFormat.parse(session.getDate() + " " + session.getEndTime()),
+          subject: session.getTitle(),
+          color: Colors.blue
+        ));
       }
     }
 
-    final now = new DateTime.now();
-    var today = new DateTime(now.year, now.month, now.day);
-    for (var i = 1; i <= 7; i++) {
-      for (final session in sessions) {
-        if (DateFormat('MM/dd/yyyy').parse(session.getDate()).isAtSameMomentAs(today)){
-          final startTime = DateFormat('hh:mm:ss').parse(session.getStartTime());
-          final startMinute = startTime.hour + startTime.minute.toDouble()/100;
-          sessionSpots.add(ScatterSpot(i.toDouble(), startMinute,
-              color: colors[titles.indexOf(session.getTitle())]
-          ));
-        }
-      }
-      today = today.add(Duration(days: 1));
+    for (final session in sessions){
+        appointments.add(Appointment(
+            startTime: timeFormat.parse(session.getDate() + " " + session.getStartTime()),
+            endTime: timeFormat.parse(session.getDate() + " " + session.getEndTime()),
+            subject: session.getTitle()
+        ));
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
-
     var legend = Row(
       children: [
         for (final title in titles)
@@ -307,30 +264,24 @@ class SessionsScatter extends StatelessWidget{
                   height: 440,
                   width: 500,
                   padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
-                  child: ScatterChart(
-                    ScatterChartData(
-                      scatterSpots: sessionSpots,
-                      minX: 1,
-                      maxX: 7,
-                      minY: 0,
-                      maxY: 24.toDouble(),
-                      gridData: FlGridData(
-                        show: true,
-                        drawHorizontalLine: true,
-                        checkToShowHorizontalLine: (value) => true,
-                        getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
-                        drawVerticalLine: true,
-                        checkToShowVerticalLine: (value) => true,
-                        getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
-                      ),
-                    ),
-                    swapAnimationDuration: Duration(milliseconds: 150), // Optional
-                    swapAnimationCurve: Curves.linear, // Optional
+                  child: SfCalendar(
+                    view: CalendarView.week,
+                    timeSlotViewSettings: TimeSlotViewSettings(
+                        startHour: 9,
+                        endHour: 16,
+                        nonWorkingDays: <int>[DateTime.friday, DateTime.saturday]),
+                    dataSource: SessionDataSource(appointments),
                   )),
               legend
             ],
           )]),
     );
+  }
+}
+
+class SessionDataSource extends CalendarDataSource {
+  SessionDataSource(List<Appointment> source) {
+    appointments = source;
   }
 }
 
