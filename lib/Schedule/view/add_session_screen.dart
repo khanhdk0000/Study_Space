@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Home/view/home_screen.dart';
@@ -7,9 +8,6 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/schedController.dart';
 import 'package:study_space/global.dart';
 import 'package:study_space/Notification/notification_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:study_space/Notification/scheduleController.dart';
-import 'dart:async';
 
 ///User arguments
 final User user = auth.currentUser;
@@ -18,6 +16,7 @@ const spacer = SizedBox(height: 20.0);
 
 class AddSessionScreen extends StatefulWidget {
   final void Function() loadSchedule;
+
   AddSessionScreen(this.loadSchedule);
 
   @override
@@ -28,13 +27,37 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
   final void Function() reloadParent;
   var subject = "";
   var startDate = "06/11/2021";
-  var startTime = "00:00:00";
-  var endTime = "00:00:00";
+  var startTime = TimeOfDay.now();
+  var endTime = TimeOfDay.now();
   int repeat = 0;
   int period = 0;
 
-  @override
+  String timeToString(TimeOfDay time) {
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
 
+    final converted = "$hour:$minute:00";
+    return converted;
+  }
+
+  void setTime(String field) async {
+    final newTime = await showTimePicker(
+      initialTime: field == "Start Time" ? startTime : endTime,
+      context: context,
+    );
+    if (newTime != null) {
+      setState(() {
+        if (field == "Start Time") {
+          startTime = newTime;
+        } else {
+          endTime = newTime;
+        }
+      });
+    }
+    ;
+  }
+
+  @override
   _AddSessionScreenState(this.reloadParent);
 
   final divider = Container(height: 1.0, color: Colors.black26);
@@ -68,18 +91,6 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                       case "Begin Date":
                         {
                           startDate = controller.text;
-                        }
-                        break;
-
-                      case "Start Time":
-                        {
-                          startTime = controller.text;
-                        }
-                        break;
-
-                      case "End Time":
-                        {
-                          endTime = controller.text;
                         }
                         break;
 
@@ -160,9 +171,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: () => _displayDialog(context, "Start Time", startTime),
+            onPressed: () => setTime("Start Time"),
             child: Text(
-              "Start time: $startTime",
+              "Start time: ${timeToString(startTime)}",
               textAlign: TextAlign.left,
               style: bodyText,
             )));
@@ -175,9 +186,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: () => _displayDialog(context, "End Time", endTime),
+            onPressed: () => setTime("End Time"),
             child: Text(
-              "End time: $endTime",
+              "End time: ${timeToString(endTime)}",
               textAlign: TextAlign.left,
               style: bodyText,
             )));
@@ -222,8 +233,8 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () async {
-          await SessionController().addSessions(
-              repeat, period, startDate, startTime, endTime, subject, user_id,
+          await SessionController().addSessions(repeat, period, startDate,
+              timeToString(startTime), timeToString(endTime), subject, user_id,
               username: user.displayName);
           reloadParent();
 
