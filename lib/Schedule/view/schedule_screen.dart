@@ -171,7 +171,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               return ListBody(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: SessionsCalendar(snapshot.data, filterMode),
                   ),
                   AddButton,

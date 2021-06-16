@@ -26,7 +26,7 @@ class AddSessionScreen extends StatefulWidget {
 class _AddSessionScreenState extends State<AddSessionScreen> {
   final void Function() reloadParent;
   var subject = "";
-  var startDate = "06/11/2021";
+  var startDate = DateTime.now();
   var startTime = TimeOfDay.now();
   var endTime = TimeOfDay.now();
   int repeat = 0;
@@ -37,6 +37,13 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
     final minute = time.minute.toString().padLeft(2, '0');
 
     final converted = "$hour:$minute:00";
+    return converted;
+  }
+
+  String dateToString(DateTime date) {
+    final formatter = DateFormat("MM/dd/yyyy");
+
+    final converted = formatter.format(date);
     return converted;
   }
 
@@ -52,6 +59,21 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         } else {
           endTime = newTime;
         }
+      });
+    }
+    ;
+  }
+
+  void setDate() async {
+    final newDate = await showDatePicker(
+      initialDate: startDate,
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2024),
+    );
+    if (newDate != null) {
+      setState(() {
+        startDate = newDate;
       });
     }
     ;
@@ -85,12 +107,6 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                       case "Event Name":
                         {
                           subject = controller.text;
-                        }
-                        break;
-
-                      case "Begin Date":
-                        {
-                          startDate = controller.text;
                         }
                         break;
 
@@ -156,9 +172,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
             ),
-            onPressed: () => _displayDialog(context, "Begin Date", startDate),
+            onPressed: () => setDate(),
             child: Text(
-              "Begins on: $startDate",
+              "Begins on: ${dateToString(startDate)}",
               textAlign: TextAlign.left,
               style: bodyText,
             )));
@@ -233,7 +249,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () async {
-          await SessionController().addSessions(repeat, period, startDate,
+          await SessionController().addSessions(repeat, period, dateToString(startDate),
               timeToString(startTime), timeToString(endTime), subject, user_id,
               username: user.displayName);
           reloadParent();
