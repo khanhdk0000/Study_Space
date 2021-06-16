@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_space/Custom/view/custom.dart';
 import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
-import 'package:study_space/Sensor/view/sensors_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Timer/view/timer_screen.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:study_space/OutputDevice/output_device_screen.dart';
 import 'package:study_space/Summary/view/all_sessions.dart';
-
 import 'package:study_space/sessions/session_test.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -48,7 +43,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('Home', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -58,7 +53,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.cast_for_education),
-            title: Text('Session'),
+            title: Text('Session', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -68,7 +63,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
-            title: Text('Summary'),
+            title: Text('Summary', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -79,7 +74,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.calendar_today_sharp),
-            title: Text('Schedule'),
+            title: Text('Schedule', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScheduleScreen()),
@@ -87,7 +82,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.timer_outlined),
-            title: Text('Timer'),
+            title: Text('Timer', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => TimerScreen()),
@@ -127,7 +122,7 @@ class SideMenu extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.construction),
-            title: Text('Setting'),
+            title: Text('Setting', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -147,7 +142,7 @@ class SideMenu extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.wb_shade),
-            title: Text('Device'),
+            title: Text('Device', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -157,7 +152,7 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('Sign Out'),
+            title: Text('Sign Out', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () async {
               final User user = _auth.currentUser;
               if (user == null) {

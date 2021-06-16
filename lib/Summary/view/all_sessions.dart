@@ -99,7 +99,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   ),
                   SizedBox(height: kDefaultPadding * 0.2),
                   Text(
-                    "100% study goal\ncompleted",
+                    "Today's spirit:\n$characterNames",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -269,7 +269,6 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
         ),
         child: Container(
           width: double.infinity,
-          height: 90.0,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5.0),
@@ -329,8 +328,8 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
     String scoreText = (score == '-1') ? 'NA' : score;
     return Container(
         alignment: Alignment.center,
-        width: 100.0,
-        height: 100.0,
+        width: 70.0,
+        height: 70.0,
         decoration: BoxDecoration(
           color: _circleColor(int.parse(score)),
           shape: BoxShape.circle,

@@ -6,7 +6,6 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Model/sensor.dart';
 import 'dart:math' as math;
-
 import 'chart.dart';
 
 class OneSessionView extends StatefulWidget {

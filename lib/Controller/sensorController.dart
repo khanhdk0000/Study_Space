@@ -61,7 +61,7 @@ class SensorController {
     if (response.statusCode == 200) {
       print("Success");
       var data = jsonDecode(response.body);
-      int i = 0;
+      int i = -1;
       return (data as List).map((s) {
         i += 1;
         return Sensor.fromJson(s, i);
@@ -166,7 +166,7 @@ class SensorController {
       } else {
         return SensorEvaluation.bad;
       }
-    }
+    } else return SensorEvaluation.bad;
   }
 
   String getImage(SensorEvaluation eval) {

@@ -1,6 +1,7 @@
 // import 'package:mysql1/mysql1.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/constants.dart';
@@ -114,6 +115,17 @@ class userController {
         ),
       ],
     );
+  }
+
+  String getCharacterName(){
+    List<String> characterNames = [
+      "Captain America", "Iron Man", "Thor Odinson",
+      "Hulk", "Black Widow", "Hawkeye", "War Machine",
+      "Vision", "Scarlet Witch", "Falcon", "Spider-Man",
+      "Ant-Man", "Nebula", "Batman"
+    ];
+    int rand = Random().nextInt(characterNames.length);
+    return characterNames[rand];
   }
 }
 

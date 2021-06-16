@@ -11,12 +11,13 @@ class SessionController {
 
   Future<List<Session>> getAllSessions(
       int uid, String filter, int limit, String username) async {
-    // if (uid == null) {
-    //   uid = await userController().getUserId(username,context);
-    // }
+    if (uid == null) {
+      uid = await userController().getUserId(username, null);
+    }
     print("[CONTROLLER] Getting all sessions.");
     var now = DateTime.now();
     String date = DateFormat('MM/dd/yyyy').format(now);
+    String time = DateFormat('kk:mm:ss').format(now);
     var folder = "get_finished_session.php";
     var response =
         await http.post(Uri.https(webhost, 'get_finished_session.php'),
@@ -28,6 +29,7 @@ class SessionController {
               'filter': filter,
               'limit': limit.toString(),
               'date': date,
+              'time': time,
             }));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -56,9 +58,9 @@ class SessionController {
 
   Future<List<Session>> getUnfinishedSessions(int uid, String filter,
       int daysFromNow, int limit, String username) async {
-    // if (uid == null) {
-    //   uid = await userController().getUserId(username);
-    // }
+    if (uid == null) {
+      uid = await userController().getUserId(username, null);
+    }
 
     final maxDate = DateTime.now().add(Duration(days: daysFromNow));
     String formattedDate = DateFormat('MM/dd/yyyy').format(maxDate);
@@ -116,9 +118,9 @@ class SessionController {
       {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final startDate = dateFormat.parse(date);
-    // if (user_id == null) {
-    //   user_id = await userController().getUserId(username);
-    // }
+    if (user_id == null) {
+      user_id = await userController().getUserId(username, null);
+    }
     print('[USER ID] $user_id, $username');
 
     for (var i = 0; i <= repeat; i++) {

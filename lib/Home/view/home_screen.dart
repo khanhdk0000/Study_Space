@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
       ),
       Text(
-        "$progress% study goal completed",
+        "Your sprit today is $characterNames",
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

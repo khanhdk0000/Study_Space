@@ -110,6 +110,7 @@ class _LogInFormState extends State<LogInForm> {
         var c = new userController();
         // await c.addUser(user.displayName);
         user_id = await c.getUserId(user.displayName,context);
+        characterNames = userController().getCharacterName();
 
 
         if (user_id == -1) {
