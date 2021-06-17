@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:study_space/Home/view/side_menu.dart';
@@ -23,7 +24,7 @@ class InputOutputScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(),
-      body: Body(),
+      body: SafeArea(child: Body()),
     );
   }
 }
@@ -31,11 +32,40 @@ class InputOutputScreen extends StatelessWidget {
 class Body extends StatelessWidget {
   // const Body({required Key key}) : super(key: key);
 
+  Widget _topView() {
+    ///The top view include the drawer button and screen name.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          MenuButton(),
+          Row(
+            children: [
+              Text(
+                "Your Devices",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 23.0,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          Icon(Icons.info_outline_rounded),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SensorScreenHeader(),
+        _topView(),
         CustomScrollSensorList(),
       ],
     );
