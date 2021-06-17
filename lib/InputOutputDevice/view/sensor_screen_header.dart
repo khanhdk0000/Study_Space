@@ -86,7 +86,7 @@ class MenuButton extends StatelessWidget {
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
-        child: Icon(Icons.menu, color: Colors.white, size: 24.0),
+        child: Icon(Icons.menu, color: Colors.black87, size: 24.0),
       ),
     );
   }

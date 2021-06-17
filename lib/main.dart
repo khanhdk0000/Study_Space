@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
@@ -22,6 +23,12 @@ User user = FirebaseAuth.instance.currentUser;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent, // status bar color
+  ));
+  // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+
   runApp(App());
 }
 
