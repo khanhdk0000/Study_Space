@@ -5,7 +5,6 @@ import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Controller/schedController.dart';
 import 'package:study_space/global.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 
@@ -249,8 +248,14 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () async {
-          await SessionController().addSessions(repeat, period, dateToString(startDate),
-              timeToString(startTime), timeToString(endTime), subject, user_id,
+          await SessionController().addSessions(
+              repeat,
+              period,
+              dateToString(startDate),
+              timeToString(startTime),
+              timeToString(endTime),
+              subject,
+              user_id,
               username: user.displayName);
           reloadParent();
 

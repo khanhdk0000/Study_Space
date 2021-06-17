@@ -8,6 +8,7 @@ import 'package:study_space/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/global.dart';
 import 'package:study_space/Controller/userController.dart';
+import 'package:study_space/Notification/notification_screen.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -109,9 +110,8 @@ class _LogInFormState extends State<LogInForm> {
         print('success');
         var c = new userController();
         // await c.addUser(user.displayName);
-        user_id = await c.getUserId(user.displayName,context);
+        user_id = await c.getUserId(user.displayName, context);
         characterNames = userController().getCharacterName();
-
 
         if (user_id == -1) {
           await c.addUser(user.displayName);
@@ -127,6 +127,8 @@ class _LogInFormState extends State<LogInForm> {
               builder: (context) => HomeScreen(),
             ),
           );
+          NotificationScreen initNoti = new NotificationScreen();
+          initNoti.pushNoti();
         }
       } else {
         ScaffoldMessenger.of(context)

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Notification/view/setting_switch.dart';
 import 'package:study_space/Notification/scheduleController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,6 +8,11 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+bool switchControl = true;
+bool breakSwitchControl = true;
+bool soundSwitchControl = true;
+bool presenceSwitchControl = false;
 
 class NotificationScreen extends StatefulWidget {
   MyScreen myAppState = new MyScreen();
@@ -20,8 +26,10 @@ class NotificationScreen extends StatefulWidget {
         myAppState.androidPlatformChannelSpecifics;
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
+
     myAppState._cancelAllNotifications();
-    myAppState._showStudyNotification(true, false);
+    myAppState._showStudyNotification(
+        breakSwitchControl, presenceSwitchControl);
   }
 }
 
@@ -69,16 +77,6 @@ class MyScreen extends State<NotificationScreen> {
   void clearSchedule() {
     scheduledStudyList.clear();
     scheduledEndtimeList.clear();
-  }
-
-  Future getNew() async {
-    // _showStudyNotification(false, false);
-    // _showEndtimeNotification();
-    var c = new scheduleController();
-    List<String> scheduledStartList = await c.getStarttime();
-    List<String> scheduledEndtimeList = await c.getEndtime();
-    print(scheduledStartList);
-    print(scheduledEndtimeList);
   }
 
   ////////////////////////
@@ -173,10 +171,6 @@ class MyScreen extends State<NotificationScreen> {
   ////////////
   // SWITCH //
   ////////////
-  bool switchControl = false;
-  bool breakSwitchControl = false;
-  bool soundSwitchControl = false;
-  bool presenceSwitchControl = false;
 
   void onchange(bool value) {
     if (switchControl == false) {
@@ -191,6 +185,7 @@ class MyScreen extends State<NotificationScreen> {
       setState(() {
         switchControl = false;
         _cancelAllNotifications();
+        print('cancel success');
       });
     }
   }
@@ -253,36 +248,14 @@ class MyScreen extends State<NotificationScreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         drawer: SideMenu(),
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: kContentColorLightTheme),
-          title: Text(
-            'Settings',
-            style: TextStyle(
-              color: kContentColorLightTheme,
-              fontSize: 25,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
         body: ListView(
-          padding: const EdgeInsets.all(20),
+          // padding: const EdgeInsets.all(20),
           children: [
-            Text('Notification Settings',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                )),
+            _topView(),
             StudySwitch(onchange, switchControl),
             PresenceSwitch(onchangePresence, presenceSwitchControl),
             BreakSwitch(onchangeBreak, breakSwitchControl),
             SoundSwitch(onchangeSound, soundSwitchControl),
-            // SnackBarPage(updateSchedule, clearSchedule),
-            // _buildScrollableTextWith(infraredAppState.getHistoryText),
-            // SizedBox(
-            //   height: 7.0,
-            // ),
           ],
         ),
       ),
@@ -318,6 +291,31 @@ class MyScreen extends State<NotificationScreen> {
         height: 200,
         child: SingleChildScrollView(
           child: Text(text),
+        ),
+      ),
+    );
+  }
+
+  Widget _topView() {
+    ///The top view include the drawer button and screen name.
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: Center(
+        child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
+          child: Row(
+            children: [
+              MenuButton(),
+              Text(
+                "Notification Settings",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
