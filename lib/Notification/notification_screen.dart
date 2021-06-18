@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 bool switchControl = true;
-bool breakSwitchControl = true;
-bool soundSwitchControl = true;
+bool breakSwitchControl = false;
+// bool soundSwitchControl = true;
 bool presenceSwitchControl = false;
 
 class NotificationScreen extends StatefulWidget {
@@ -22,10 +22,6 @@ class NotificationScreen extends StatefulWidget {
   void pushNoti() {
     myAppState.initState();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-    var androidPlatformChannelSpecifics =
-        myAppState.androidPlatformChannelSpecifics;
-    var platformChannelSpecifics =
-        new NotificationDetails(android: androidPlatformChannelSpecifics);
 
     myAppState._cancelAllNotifications();
     myAppState._showStudyNotification(
@@ -54,15 +50,6 @@ class MyScreen extends State<NotificationScreen> {
     'description',
     sound: RawResourceAndroidNotificationSound('mysound'),
     playSound: true,
-    importance: Importance.max,
-    priority: Priority.high,
-  );
-
-  var noSound = new AndroidNotificationDetails(
-    'id',
-    'name',
-    'description',
-    playSound: false,
     importance: Importance.max,
     priority: Priority.high,
   );
@@ -171,19 +158,18 @@ class MyScreen extends State<NotificationScreen> {
   ////////////
   // SWITCH //
   ////////////
-
   void onchange(bool value) {
     if (switchControl == false) {
       setState(() {
         switchControl = true;
-        breakSwitchControl = true;
-        soundSwitchControl = true;
+        // soundSwitchControl = true;
         _cancelAllNotifications();
         _showStudyNotification(breakSwitchControl, presenceSwitchControl);
       });
     } else {
       setState(() {
         switchControl = false;
+        // soundSwitchControl = true;
         _cancelAllNotifications();
         print('cancel success');
       });
@@ -223,21 +209,19 @@ class MyScreen extends State<NotificationScreen> {
     }
   }
 
-  void onchangeSound(bool value) {
-    if (soundSwitchControl == false) {
-      setState(() {
-        soundSwitchControl = true;
-      });
-    } else {
-      setState(() {
-        soundSwitchControl = false;
-        _cancelAllNotifications();
-        androidPlatformChannelSpecifics = noSound;
-        // _showStudyNotification(breakSwitchControl, presenceSwitchControl);
-        // _showEndtimeNotification();
-      });
-    }
-  }
+  // void onchangeSound(bool value) {
+  //   if (soundSwitchControl == false) {
+  //     setState(() {
+  //       soundSwitchControl = true;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       soundSwitchControl = false;
+  //       _cancelAllNotifications();
+  //       _showStudyNotification(breakSwitchControl, presenceSwitchControl);
+  //     });
+  //   }
+  // }
 
   ////////////////////
   // User Interface //
@@ -255,7 +239,7 @@ class MyScreen extends State<NotificationScreen> {
             StudySwitch(onchange, switchControl),
             PresenceSwitch(onchangePresence, presenceSwitchControl),
             BreakSwitch(onchangeBreak, breakSwitchControl),
-            SoundSwitch(onchangeSound, soundSwitchControl),
+            // SoundSwitch(onchangeSound, soundSwitchControl),
           ],
         ),
       ),

@@ -9,18 +9,23 @@ class StudySwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(
+            Icons.circle_notifications_sharp,
+            color: Colors.black,
+            size: 25.0,
+          ),
           Text(
-            "Allow Study Notification",
+            "     Allow Study Notification",
             style: TextStyle(fontSize: 16),
           ),
+          Spacer(),
           Switch(
             value: switchControl,
             onChanged: (bool value) => onchange(value),
@@ -39,18 +44,23 @@ class PresenceSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(
+            Icons.airline_seat_recline_normal_sharp,
+            color: Colors.black,
+            size: 25.0,
+          ),
           Text(
-            "Allow Presence Notification",
+            "     Allow Presence Notification",
             style: TextStyle(fontSize: 16),
           ),
+          Spacer(),
           Switch(
             value: presenceSwitchControl,
             onChanged: (bool value) async => onchangePresence(value),
@@ -69,18 +79,23 @@ class BreakSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(
+            Icons.videogame_asset_rounded,
+            color: Colors.black,
+            size: 25.0,
+          ),
           Text(
-            "Allow Break Notification",
+            "     Allow Break Notification",
             style: TextStyle(fontSize: 16),
           ),
+          Spacer(),
           Switch(
             value: breakSwitchControl,
             onChanged: (bool value) => onchangeBreak(value),
@@ -99,7 +114,7 @@ class SoundSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(
@@ -108,12 +123,20 @@ class SoundSwitch extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "Allow Sound",
-            style: TextStyle(fontSize: 16),
+          Icon(
+            Icons.volume_off_rounded,
+            color: Colors.black,
+            size: 25.0,
           ),
+          Text(
+            "     Allow Sound",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Spacer(),
           Switch(
             value: soundSwitchControl,
             onChanged: (bool value) => onchangeSound(value),
