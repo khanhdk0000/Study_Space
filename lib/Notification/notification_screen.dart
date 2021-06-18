@@ -307,13 +307,17 @@ class MyScreen extends State<NotificationScreen> {
           child: Row(
             children: [
               MenuButton(),
-              Text(
-                "Notification Settings",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
+              Expanded(
+                child: Text(
+                  "Notification Settings",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
+              SizedBox(width: 40.0),
             ],
           ),
         ),

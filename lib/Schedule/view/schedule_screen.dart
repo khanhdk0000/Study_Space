@@ -73,11 +73,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MenuButton(),
-          Text(
-            "Schedule",
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-          )
+          Expanded(
+            child: Text(
+              "Schedule",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.black),
+            ),
+          ),
+          SizedBox(width: 50.0),
         ],
       ),
     ]);
