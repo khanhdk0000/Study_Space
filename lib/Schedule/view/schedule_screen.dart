@@ -14,7 +14,7 @@ import 'package:study_space/global.dart';
 ///User arguments
 final User user = auth.currentUser;
 
-const spacer = SizedBox(height: 16.0);
+const spacer = SizedBox(height: 10.0);
 
 class ScheduleScreen extends StatefulWidget {
   @override
@@ -64,19 +64,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           dateRange,
           30,
           user.displayName);
+      upcomingSessions = [];
+      missedSessions = [];
     });
   }
 
   void filterSessions(List<Session> sessions) {
-    upcomingSessions = [];
-    missedSessions = [];
     for (final session in sessions) {
       final date = session.getDate();
       final startTime = session.getStartTime();
 
       final now = new DateTime.now();
       final dateDate =
-          DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
+      DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
       if (dateDate.isBefore(now)) {
         missedSessions.add(session);
       } else {
@@ -88,8 +88,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     loadSessions();
 
-    var Navigation = Column(children: [
-      Row(
+    var Navigation = Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MenuButton(),
@@ -105,8 +104,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
           SizedBox(width: 50.0),
         ],
-      ),
-    ]);
+      );
 
     var Filterer = Container(
         color: Color.fromRGBO(0, 0, 0, 0.06),

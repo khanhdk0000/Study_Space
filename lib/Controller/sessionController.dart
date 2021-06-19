@@ -180,6 +180,7 @@ class SessionController {
       print(response.body);
     } else {
       print('Failed');
+      print(response.body);
     }
   }
 
