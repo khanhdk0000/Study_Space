@@ -146,7 +146,7 @@ class SideMenu extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: Icon(Icons.wb_shade),
+            leading: Icon(Icons.devices_other_rounded),
             title: Text('Device'),
             onTap: () {
               Navigator.push(

@@ -4,14 +4,20 @@ import 'package:study_space/constants.dart';
 class SensorNotification extends StatelessWidget {
   const SensorNotification({
     Key key,
+    @required this.state,
+    @required this.device,
   }) : super(key: key);
+
+  final state;
+  final String device;
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: true,
+      visible: state.getOverThreshold,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        margin: EdgeInsets.symmetric(
+            horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
         padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
         width: double.infinity,
         height: 70,
@@ -26,7 +32,7 @@ class SensorNotification extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width - 170,
               child: Text(
-                'Your room light condition is not appropriate, please beware!',
+                'Your $device condition is not appropriate, please beware!',
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),
             ),
@@ -37,11 +43,12 @@ class SensorNotification extends StatelessWidget {
                 backgroundColor: Color(0xFFffcd15),
               ),
               onPressed: () {
+                state.setBoolThreshold(false);
                 print('Dismiss');
               },
               child: Text(
                 'Dismiss',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(color: Colors.black87, fontSize: 12),
               ),
             ),
           ],

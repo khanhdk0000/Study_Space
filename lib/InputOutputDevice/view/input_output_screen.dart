@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/InputOutputDevice/sensor_card.dart';
@@ -48,6 +49,19 @@ class Body extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 23.0,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(2),
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/internet-of-things2.svg',
+                  // color: Color(0xFF3e9ee7),
                 ),
               ),
               SizedBox(
@@ -115,7 +129,12 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
         children: [
           ListView(
             children: [
-              SensorNotification(),
+              SensorNotification(
+                state: lightState,
+                device: "light",
+              ),
+              SensorNotification(state: tempState, device: "temperature"),
+              SensorNotification(state: soundState, device: "sound"),
               buildTitle('Your Sensors'),
               Padding(
                 padding:
@@ -224,6 +243,7 @@ class _CustomScrollSensorListState extends State<CustomScrollSensorList> {
             ],
           ),
           CircularMenu(
+            toggleButtonAnimatedIconData: AnimatedIcons.menu_close,
             startingAngleInRadian: pi + 0.1,
             endingAngleInRadian: pi + 1.2,
             toggleButtonColor: Colors.deepPurpleAccent,

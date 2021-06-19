@@ -12,13 +12,6 @@ class LightSensorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'light',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
       drawer: SideMenu(),
       body: Body(),
     );
@@ -34,7 +27,7 @@ class Body extends StatelessWidget {
 
     return Column(
       children: [
-        // LightSensorScreenHeader(),
+        LightSensorScreenHeader(),
         SingleChildScrollView(
           child: Column(
             children: [

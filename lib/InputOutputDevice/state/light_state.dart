@@ -36,6 +36,7 @@ class LightState with ChangeNotifier {
       }
       _historyText = _historyText + '\n' + temp['data'];
       if (_valueFromServer > 500) {
+        setBoolThreshold(true);
         print('reeee');
         var response = await http.post(
           Uri.parse('http://' + host + '/postlcd'),
@@ -55,6 +56,7 @@ class LightState with ChangeNotifier {
             'data': '300',
           }),
         );
+
         print('Status: ' + response.statusCode.toString());
         print('Status 2: ' + response2.statusCode.toString());
       }
@@ -100,6 +102,7 @@ class LightState with ChangeNotifier {
 
   void setBoolThreshold(bool val) {
     _overThreshold = val;
+    notifyListeners();
   }
 
   void disposeStream() {
