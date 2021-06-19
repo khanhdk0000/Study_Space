@@ -40,7 +40,7 @@ dependencies:
   http: ^0.13.3
   intl: ^0.17.0
   charts_flutter: ^0.10.0
-  fl_chart: ^0.36.1
+  syncfusion_flutter_calendar: ^19.1.67
   flutter_local_notifications: ^6.0.0
   sliding_card: ^0.1.2
   awesome_dialog: ^2.1.0
@@ -81,12 +81,33 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Aeonik
+      fonts:
+        - asset: assets/fonts/Aeonik-Regular.otf
+        - asset: assets/fonts/Aeonik-RegularItalic.otf
+          style: italic
+        - asset: assets/fonts/Aeonik-Bold.otf
+          weight: 700
+    - family: Gotham
+      fonts:
+        - asset: assets/fonts/GothamMedium.ttf
+        - asset: assets/fonts/GothamMediumItalic.ttf
+          style: italic
+        - asset: assets/fonts/GothamBold.ttf
+          weight: 700
+    - family: Opensans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/OpenSans-Bold.ttf
+          weight: 700
+    - family: ProximaNova
+      fonts:
+#        - asset: assets/fonts/Proxima-Nova-Soft-Regular.ttf
+        - asset: assets/fonts/Proxima-Nova-Soft-Semibold.ttf
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -7,16 +7,32 @@ class StudySwitch extends StatelessWidget {
   StudySwitch(this.onchange, this.switchControl);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Study Notification"),
-        Switch(
-          value: switchControl,
-          onChanged: (bool value) => onchange(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.circle_notifications_sharp,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Allow Study Notification",
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer(),
+          Switch(
+            value: switchControl,
+            onChanged: (bool value) => onchange(value),
+            activeColor: kPrimaryColor,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -24,21 +40,34 @@ class StudySwitch extends StatelessWidget {
 class PresenceSwitch extends StatelessWidget {
   final Function onchangePresence;
   final bool presenceSwitchControl;
-  // final Function connect;
-  // final Function disconnect;
   PresenceSwitch(this.onchangePresence, this.presenceSwitchControl);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Presence Notification"),
-        Switch(
-          value: presenceSwitchControl,
-          onChanged: (bool value) async => onchangePresence(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.airline_seat_recline_normal_sharp,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Allow Presence Notification",
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer(),
+          Switch(
+            value: presenceSwitchControl,
+            onChanged: (bool value) async => onchangePresence(value),
+            activeColor: kPrimaryColor,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -49,16 +78,31 @@ class BreakSwitch extends StatelessWidget {
   BreakSwitch(this.onchangeBreak, this.breakSwitchControl);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Break Notification"),
-        Switch(
-          value: breakSwitchControl,
-          onChanged: (bool value) => onchangeBreak(value),
-          activeColor: kPrimaryColor,
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.videogame_asset_rounded,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Allow Break Notification",
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer(),
+          Switch(
+            value: breakSwitchControl,
+            onChanged: (bool value) => onchangeBreak(value),
+            activeColor: kPrimaryColor,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -69,59 +113,37 @@ class SoundSwitch extends StatelessWidget {
   SoundSwitch(this.onchangeSound, this.soundSwitchControl);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Allow Sound"),
-        Switch(
-          value: soundSwitchControl,
-          onChanged: (bool value) => onchangeSound(value),
-          activeColor: kPrimaryColor,
+    return Container(
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(
+          top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+          bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
         ),
-      ],
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.volume_off_rounded,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Allow Sound",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Spacer(),
+          Switch(
+            value: soundSwitchControl,
+            onChanged: (bool value) => onchangeSound(value),
+            activeColor: kPrimaryColor,
+          ),
+        ],
+      ),
     );
   }
 }
-
-// class SnackBarPage extends StatelessWidget {
-//   final Function updateSchedule;
-//   final Function clearSchedule;
-//   SnackBarPage(this.updateSchedule, this.clearSchedule);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Row(
-//         children: [
-//           ElevatedButton(
-//             onPressed: () async {
-//               await updateSchedule();
-//               final snackBar = SnackBar(
-//                 content: Text('Updated Successfully!'),
-//                 action: SnackBarAction(
-//                   label: 'Undo',
-//                   onPressed: () {
-//                     clearSchedule();
-//                   },
-//                 ),
-//               );
-//               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-//             },
-//             child: Text('Update schedule',
-//                 style: TextStyle(color: kContentColorLightTheme)),
-//             style: ElevatedButton.styleFrom(
-//               primary: kPrimaryColor,
-//             ),
-//           ),
-//           // ElevatedButton(
-//           //   onPressed: connect(),
-//           //   child: Text('Current presence',
-//           //       style: TextStyle(color: kContentColorLightTheme)),
-//           //   style: ElevatedButton.styleFrom(
-//           //     primary: kPrimaryColor,
-//           //   ),
-//           // ),
-//         ],
-//       ),
-//     );
-//   }
-// }

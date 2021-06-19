@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/CommonComponents/components.dart';
@@ -14,70 +14,99 @@ import 'package:study_space/global.dart';
 ///User arguments
 final User user = auth.currentUser;
 
-
-const spacer = SizedBox(height: 16.0);
+const spacer = SizedBox(height: 10.0);
 
 class ScheduleScreen extends StatefulWidget {
-
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
+  final filters = ["Today", "This Week", "This Month", "This Year"];
+  String filterMode = "Today";
+  Future<List<Session>> loadedSessions;
+  List<Session> upcomingSessions;
+  List<Session> missedSessions;
 
-  final filters = ["Today", "Next Week", "Next Month", "Next Year"];
-  String filterMode = "Next Month";
-  Future<List<Session>> sessions;
-
-  void loadSessions(){
+  void loadSessions() {
     setState(() {
-    int dateRange;
-    switch(filterMode) {
-      case "Today": {
-        dateRange = 0;
-      }
-      break;
+      int dateRange;
+      switch (filterMode) {
+        case "Today":
+          {
+            dateRange = 0;
+          }
+          break;
 
-      case "Next Week": {
-        dateRange = 7;
-      }
-      break;
+        case "This Week":
+          {
+            dateRange = 7;
+          }
+          break;
 
-      case "Next Month": {
-        dateRange = 30;
-      }
-      break;
+        case "This Month":
+          {
+            dateRange = 30;
+          }
+          break;
 
-      case "Next Year": {
-        dateRange = 365;
+        case "This Year":
+          {
+            dateRange = 365;
+          }
+          break;
       }
-      break;
-    }
 
-    sessions = SessionController().getUnfinishedSessions(user_id, SessionController().setFilter("Time (L)"),
-        dateRange, 30, user.displayName);
+      loadedSessions = SessionController().getUnfinishedSessions(
+          user_id,
+          SessionController().setFilter("Time (L)"),
+          dateRange,
+          30,
+          user.displayName);
+      upcomingSessions = [];
+      missedSessions = [];
     });
+  }
+
+  void filterSessions(List<Session> sessions) {
+    for (final session in sessions) {
+      final date = session.getDate();
+      final startTime = session.getStartTime();
+
+      final now = new DateTime.now();
+      final dateDate =
+      DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
+      if (dateDate.isBefore(now)) {
+        missedSessions.add(session);
+      } else {
+        upcomingSessions.add(session);
+      }
+    }
   }
 
   Widget build(BuildContext context) {
     loadSessions();
 
-    var Navigation = Column(children: [
-      Row(
+    var Navigation = Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MenuButton(),
-          Text("Schedule", style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.black),
-          )
+          Expanded(
+            child: Text(
+              "Schedule",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.black),
+            ),
+          ),
+          SizedBox(width: 50.0),
         ],
-      ),
-    ]);
+      );
 
-    var Filterer = Container (
+    var Filterer = Container(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,36 +114,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             for (final filter in filters)
               TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: filterMode == filter ? Colors.black: Colors.transparent,
+                    backgroundColor: filterMode == filter
+                        ? Colors.black
+                        : Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero, // <-- Radius
                     ),
                   ),
-                  onPressed: (){setState((){
-                    filterMode = filter;
-                  });},
-                  child: Text(
-                      filter, style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 13,
-                      color: filterMode == filter ? Colors.white: Colors.black)
-                  )
-              ),
+                  onPressed: () {
+                    setState(() {
+                      filterMode = filter;
+                    });
+                  },
+                  child: Text(filter,
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                          color: filterMode == filter
+                              ? Colors.white
+                              : Colors.black))),
           ],
         ));
 
-    final AddButton =  TextButton(
+    final AddButton = TextButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.orange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero, // <-- Radius
           ),
         ),
-        onPressed: ()  => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddSessionScreen(loadSessions)),
-        ),
-        child:   Container(
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddSessionScreen(loadSessions)),
+            ),
+        child: Container(
           padding: EdgeInsets.all(12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -137,51 +171,66 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
         ));
 
-    var NoSchedule = Column(
-        children: [Container(
-      padding: EdgeInsets.all(36),
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-      width: double.infinity,
-      child: Text(
-          "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 48,
-              color: Colors.black)
+    var NoSchedule = Column(children: [
+      Container(
+        padding: EdgeInsets.all(36),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        width: double.infinity,
+        child: Text(
+            "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 48,
+                color: Colors.black)),
       ),
-    ),
-          AddButton
-        ]
-    );
+      AddButton
+    ]);
 
-    var Body = FutureBuilder(future: sessions, builder: (context, snapshot){
-      if (snapshot.hasData){
-
-        if (snapshot.data.length > 0) {
-          return ListBody(
-            children: [
-              SessionsScatter(snapshot.data),
-              AddButton,
-              for (final session in snapshot.data)
-                ListBody(
-                    children: [
+    var Body = FutureBuilder(
+        future: loadedSessions,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              filterSessions(snapshot.data);
+              return ListBody(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: SessionsCalendar(snapshot.data, filterMode),
+                  ),
+                  AddButton,
+                  Container(
+                  color: Colors.black,
+                  padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                  child: Text(upcomingSessions.length > 0 ? "Upcoming sessions":"No upcoming session",
+                  style: TextStyle(color: Colors.white)))
+                  ,
+                  for (final session in upcomingSessions)
+                    ListBody(children: [
                       SessionButton(session, loadSessions),
                       divider
-                    ]
-                ),
-              SessionsPie(snapshot.data),
-            ],
-          );
-        }
-        else {
-          return NoSchedule;
-        }
-      } else if (snapshot.hasError) {
-        return Text("${snapshot.error}");
-      }
-      return LoadingIndicator;
-    });
+                    ]),
+                  Container(
+                      color: Colors.black,
+                      padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                      child: Text(missedSessions.length > 0 ? "Missed sessions":"No missed session",
+                          style: TextStyle(color: Colors.white))),
+                  for (final session in missedSessions)
+                    ListBody(children: [
+                      SessionButton(session, loadSessions),
+                      divider
+                    ]),
+                ],
+              );
+            } else {
+              return NoSchedule;
+            }
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return LoadingIndicator;
+        });
 
     return Scaffold(
       drawer: SideMenu(),
@@ -194,143 +243,97 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 }
 
-class SessionsPie extends StatelessWidget{
-  List<PieChartSectionData> pieData = [];
+class SessionsCalendar extends StatelessWidget {
+  List<Appointment> appointments = [];
+  List<String> titles = []; // Ordered list of unique titles
+  CalendarController _controller = CalendarController();
+  SfCalendar calendarView;
 
-  SessionsPie(List<Session> sessions){
-    List<String> titles = [];
+  SessionsCalendar(List<Session> sessions, String displayMode) {
+    final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
+
     for (final session in sessions) {
       final title = session.getTitle();
-      if (!titles.contains(title)){
+      if (!titles.contains(title)) {
         titles.add(title);
       }
     }
 
-    for (var i = 0 ; i < titles.length; i++) {
-      var totalMinutes = 0.0;
-      for (final session in sessions) {
-        if (session.getTitle() == titles[i]) {
-          totalMinutes += session.getDuration();
-        }
-      }
-      pieData.add(PieChartSectionData(
-        title: titles[i],
-        value: totalMinutes,
-        color:colors[i],
-        radius: 140,
-      ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-        height: 320,
-        color: Color.fromRGBO(0, 0, 0, 0.06),
-        child: PieChart(
-          PieChartData(
-            sections: pieData,
-            sectionsSpace: 0,
-            centerSpaceRadius: 0,
-          ),
-          swapAnimationDuration: Duration(milliseconds: 150), // Optional
-          swapAnimationCurve: Curves.linear, // Optional
-        ));
-  }
-}
-
-class SessionsScatter extends StatelessWidget{
-  List<ScatterSpot> sessionSpots = [];
-  List<String> titles = [];  // Ordered list of unique titles
-
-  SessionsScatter(List<Session> sessions){
-    for (final session in sessions){
+    for (final session in sessions) {
       final title = session.getTitle();
-      if (!titles.contains(title)){
-        titles.add(title);
-      }
+      appointments.add(Appointment(
+          startTime: timeFormat
+              .parse(session.getDate() + " " + session.getStartTime()),
+          endTime:
+              timeFormat.parse(session.getDate() + " " + session.getEndTime()),
+          subject: title,
+          color: colors[titles.indexOf(title)]));
     }
 
-    final now = new DateTime.now();
-    var today = new DateTime(now.year, now.month, now.day);
-    for (var i = 1; i <= 7; i++) {
-      for (final session in sessions) {
-        if (DateFormat('MM/dd/yyyy').parse(session.getDate()).isAtSameMomentAs(today)){
-          final startTime = DateFormat('hh:mm:ss').parse(session.getStartTime());
-          final startMinute = startTime.hour + startTime.minute.toDouble()/100;
-          sessionSpots.add(ScatterSpot(i.toDouble(), startMinute,
-              color: colors[titles.indexOf(session.getTitle())]
-          ));
+    switch (displayMode) {
+      case "Today":
+        {
+          _controller.view = CalendarView.day;
         }
-      }
-      today = today.add(Duration(days: 1));
+        break;
+
+      case "This Week":
+        {
+          _controller.view = CalendarView.week;
+        }
+        break;
+
+      default:
+        {
+          _controller.view = CalendarView.month;
+        }
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    var legend = Row(
+    var legend = Container(
+      height: 45,
+        padding: EdgeInsets.only(left: 18),
+        child: ListView(
+        scrollDirection: Axis.horizontal,
       children: [
         for (final title in titles)
-          Container(
-            padding: EdgeInsets.only(left: 24),
-            child: Row(
+          Row(
                 children: [
                   Container(
-                      width: 14, height: 14,
+                      width: 12, height: 12,
                       decoration: BoxDecoration(
                           color: colors[titles.indexOf(title)],
                           shape: BoxShape.circle
                       )),
-                  Text("  "+title, style: TextStyle(
+                  Text("  "+title+"   ", style: TextStyle(
                       fontWeight: FontWeight.bold
                   ))
                 ]
-            ),
-          )
+            )
+      ]));
+
+    return Column(
+      children: [
+        Container(
+            height: 470,
+            padding: EdgeInsets.only(top: 4),
+            child: SfCalendar(
+              view: _controller.view,
+              controller: _controller,
+              dataSource: SessionDataSource(appointments),
+            )),
+        legend
       ],
     );
+  }
+}
 
-    return Container(
-      height: 480,
-      color: Color.fromRGBO(0, 0, 0, 0.06),
-      child: ListView(
-        // This next line does the trick.
-          scrollDirection: Axis.horizontal,
-          children: [Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  height: 440,
-                  width: 500,
-                  padding: EdgeInsets.only(top: 20, right: 24, bottom: 10),
-                  child: ScatterChart(
-                    ScatterChartData(
-                      scatterSpots: sessionSpots,
-                      minX: 1,
-                      maxX: 7,
-                      minY: 0,
-                      maxY: 24.toDouble(),
-                      gridData: FlGridData(
-                        show: true,
-                        drawHorizontalLine: true,
-                        checkToShowHorizontalLine: (value) => true,
-                        getDrawingHorizontalLine: (value) => FlLine(color: Colors.black12),
-                        drawVerticalLine: true,
-                        checkToShowVerticalLine: (value) => true,
-                        getDrawingVerticalLine: (value) => FlLine(color: Colors.black12),
-                      ),
-                    ),
-                    swapAnimationDuration: Duration(milliseconds: 150), // Optional
-                    swapAnimationCurve: Curves.linear, // Optional
-                  )),
-              legend
-            ],
-          )]),
-    );
+class SessionDataSource extends CalendarDataSource {
+  SessionDataSource(List<Appointment> source) {
+    appointments = source;
   }
 }
 
@@ -341,23 +344,24 @@ class SessionButton extends StatelessWidget {
   String date;
   String startTime;
   String endTime;
-  SessionButton(Session session, void Function() reloadParent){
+
+  SessionButton(Session session, void Function() reloadParent) {
     this.reloadParent = reloadParent;
     this.session = session;
     title = session.getTitle();
     date = session.getDate();
-    startTime = session.getStartTime().substring(0,5);
-    endTime = session.getEndTime().substring(0,5);
+    startTime = session.getStartTime().substring(0, 5);
+    endTime = session.getEndTime().substring(0, 5);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return TextButton(
-        onPressed: ()  => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SessionScreen(session, reloadParent)),
-        ),
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SessionScreen(session, reloadParent)),
+            ),
         style: TextButton.styleFrom(
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.06),
           shape: RoundedRectangleBorder(
@@ -370,20 +374,22 @@ class SessionButton extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("$title", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black)),
-                Text("$date", style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16,
-                    color: Colors.black)),
-                Text("From $startTime to $endTime", style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16,
-                    color: Colors.black)),
+                Text("$title",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.black)),
+                Text("$date",
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        color: Colors.grey)),
+                Text("From $startTime to $endTime",
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        color: Colors.grey)),
               ],
-            )
-        ));
+            )));
   }
 }

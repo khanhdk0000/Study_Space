@@ -3,11 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
+import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
 import 'dart:io';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 ///User arguments
 final User user = auth.currentUser;
@@ -21,12 +23,14 @@ class SessionScreen extends StatefulWidget {
   SessionScreen(this.session, this.reloadParent);
 
   @override
-  _SessionScreenState createState() => _SessionScreenState(session, reloadParent);
+  _SessionScreenState createState() =>
+      _SessionScreenState(session, reloadParent);
 }
 
 class _SessionScreenState extends State<SessionScreen> {
   void Function() reloadParent;
   Session session;
+  Future<List<Session>> todaySessions;
   String title;
   String date;
   String upcoming;
@@ -60,6 +64,9 @@ class _SessionScreenState extends State<SessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    todaySessions = SessionController().getUnfinishedSessions(user_id,
+        SessionController().setFilter("Time (L)"), 0, 30, user.displayName);
+
     var Navigation = Column(
       children: [
         Row(
@@ -86,19 +93,24 @@ class _SessionScreenState extends State<SessionScreen> {
         ),
       ),
       onPressed: () {
-         SessionController()
-            .removeSession(date, startTime, endTime, title, user_id, user.displayName);
-         sleep(Duration(milliseconds: 500));
+        SessionController().removeSession(
+            date, startTime, endTime, title, user_id, user.displayName);
+        sleep(Duration(milliseconds: 500));
         reloadParent();
         Navigator.pop(context);
       },
       child: Container(
-        padding: EdgeInsets.all(14),
+        padding: EdgeInsets.all(12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Icon(
+              Icons.close,
+              color: Colors.white,
+              size: 20.0,
+            ),
             Text(
-              "Remove event  ",
+              "  Remove this event  ",
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontWeight: FontWeight.w100,
@@ -111,7 +123,8 @@ class _SessionScreenState extends State<SessionScreen> {
       ),
     );
 
-    var Body = Container(
+    var Summary = Container(
+      color: Color.fromRGBO(0, 0, 0, 0.06),
         padding: EdgeInsets.all(22),
         child: ListBody(
           children: [
@@ -124,13 +137,101 @@ class _SessionScreenState extends State<SessionScreen> {
           ],
         ));
 
+    var Timeline = FutureBuilder(
+        future: todaySessions,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return SessionsTimeline(snapshot.data, session);
+            } else {
+              return Text("There is no event for today");
+            }
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return LoadingIndicator;
+        });
+
     return Scaffold(
         drawer: SideMenu(),
         body: SafeArea(
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, Body, DeleteButton]),
+              children: [
+                Navigation,
+                Summary,
+                Timeline,
+                DeleteButton
+              ]),
         ));
+  }
+}
+
+class SessionsTimeline extends StatelessWidget {
+  List<Appointment> appointments = [];
+  List<String> titles = []; // Ordered list of unique titles
+  Session pivot;
+  SfCalendar calendarView;
+
+  SessionsTimeline(List<Session> sessions, Session pivot) {
+    final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
+
+    this.pivot = pivot;
+    final pivotTitle = pivot.getTitle();
+    for (final session in sessions) {
+      final title = session.getTitle();
+      appointments.add(Appointment(
+          startTime: timeFormat
+              .parse(session.getDate() + " " + session.getStartTime()),
+          endTime:
+              timeFormat.parse(session.getDate() + " " + session.getEndTime()),
+          subject: title,
+          color: title == pivotTitle ? Colors.blue:Colors.grey));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var legend = Container(
+        height: 32,
+        padding: EdgeInsets.only(left: 18),
+        child: Row(children: [
+            Row(children: [
+              Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle)),
+              Text("  " + pivot.getTitle() + "   ",
+                  style: TextStyle(fontWeight: FontWeight.bold))
+            ]),
+          Row(children: [
+            Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle)),
+            Text("  " + "Other events" + "   ",
+                style: TextStyle(fontWeight: FontWeight.bold))
+          ])
+        ]));
+
+    return Column(
+      children: [
+        Container(
+            height: 180,
+            padding: EdgeInsets.only(top: 4, left: 18),
+            child: SfCalendar(
+              view: CalendarView.timelineDay,
+              initialDisplayDate:  DateFormat('MM/dd/yyyy').parse(pivot.getDate()),
+              dataSource: SessionDataSource(appointments),
+            )),
+        divider,
+        legend
+      ],
+    );
   }
 }
