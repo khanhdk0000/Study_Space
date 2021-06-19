@@ -294,14 +294,41 @@ class SessionsCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 500,
-        padding: EdgeInsets.only(top: 4),
-        child: SfCalendar(
-          view: _controller.view,
-          controller: _controller,
-          dataSource: SessionDataSource(appointments),
-        ));
+    var legend = Container(
+      height: 45,
+        padding: EdgeInsets.only(left: 18),
+        child: ListView(
+        scrollDirection: Axis.horizontal,
+      children: [
+        for (final title in titles)
+          Row(
+                children: [
+                  Container(
+                      width: 12, height: 12,
+                      decoration: BoxDecoration(
+                          color: colors[titles.indexOf(title)],
+                          shape: BoxShape.circle
+                      )),
+                  Text("  "+title+"   ", style: TextStyle(
+                      fontWeight: FontWeight.bold
+                  ))
+                ]
+            )
+      ]));
+
+    return Column(
+      children: [
+        Container(
+            height: 470,
+            padding: EdgeInsets.only(top: 4),
+            child: SfCalendar(
+              view: _controller.view,
+              controller: _controller,
+              dataSource: SessionDataSource(appointments),
+            )),
+        legend
+      ],
+    );
   }
 }
 
