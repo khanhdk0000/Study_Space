@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
-import 'package:study_space/Timer/view/timer_screen.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
@@ -78,14 +77,6 @@ class SideMenu extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScheduleScreen()),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.timer_outlined),
-            title: Text('Timer', style: TextStyle(fontWeight: FontWeight.bold)),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TimerScreen()),
             ),
           ),
           // ListTile(

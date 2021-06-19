@@ -201,10 +201,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                   AddButton,
                   Container(
-                      color: Colors.black,
-                      padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                      child: Text("Upcoming sessions",
-                          style: TextStyle(color: Colors.white))),
+                  color: Colors.black,
+                  padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                  child: Text(upcomingSessions.length > 0 ? "Upcoming sessions":"No upcoming session",
+                  style: TextStyle(color: Colors.white)))
+                  ,
                   for (final session in upcomingSessions)
                     ListBody(children: [
                       SessionButton(session, loadSessions),
@@ -213,7 +214,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   Container(
                       color: Colors.black,
                       padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                      child: Text("Missed sessions",
+                      child: Text(missedSessions.length > 0 ? "Missed sessions":"No missed session",
                           style: TextStyle(color: Colors.white))),
                   for (final session in missedSessions)
                     ListBody(children: [

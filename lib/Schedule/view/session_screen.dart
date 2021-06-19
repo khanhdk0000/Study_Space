@@ -124,6 +124,7 @@ class _SessionScreenState extends State<SessionScreen> {
     );
 
     var Summary = Container(
+      color: Color.fromRGBO(0, 0, 0, 0.06),
         padding: EdgeInsets.all(22),
         child: ListBody(
           children: [
@@ -170,13 +171,14 @@ class _SessionScreenState extends State<SessionScreen> {
 class SessionsTimeline extends StatelessWidget {
   List<Appointment> appointments = [];
   List<String> titles = []; // Ordered list of unique titles
-  String pivotTitle;
+  Session pivot;
   SfCalendar calendarView;
 
   SessionsTimeline(List<Session> sessions, Session pivot) {
     final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
 
-    pivotTitle = pivot.getTitle();
+    this.pivot = pivot;
+    final pivotTitle = pivot.getTitle();
     for (final session in sessions) {
       final title = session.getTitle();
       appointments.add(Appointment(
@@ -202,7 +204,7 @@ class SessionsTimeline extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.blue,
                       shape: BoxShape.circle)),
-              Text("  " + pivotTitle + "   ",
+              Text("  " + pivot.getTitle() + "   ",
                   style: TextStyle(fontWeight: FontWeight.bold))
             ]),
           Row(children: [
@@ -221,9 +223,10 @@ class SessionsTimeline extends StatelessWidget {
       children: [
         Container(
             height: 180,
-            padding: EdgeInsets.only(top: 4),
+            padding: EdgeInsets.only(top: 4, left: 18),
             child: SfCalendar(
               view: CalendarView.timelineDay,
+              initialDisplayDate:  DateFormat('MM/dd/yyyy').parse(pivot.getDate()),
               dataSource: SessionDataSource(appointments),
             )),
         divider,
