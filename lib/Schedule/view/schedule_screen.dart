@@ -25,7 +25,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   final filters = ["Today", "This Week", "This Month", "This Year"];
   String filterMode = "Today";
-  Future<List<Session>> sessions;
+  Future<List<Session>> loadedSessions;
+  List<Session> upcomingSessions;
+  List<Session> missedSessions;
 
   void loadSessions() {
     setState(() {
@@ -56,13 +58,31 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           break;
       }
 
-      sessions = SessionController().getUnfinishedSessions(
+      loadedSessions = SessionController().getUnfinishedSessions(
           user_id,
           SessionController().setFilter("Time (L)"),
           dateRange,
           30,
           user.displayName);
     });
+  }
+
+  void filterSessions(List<Session> sessions) {
+    upcomingSessions = [];
+    missedSessions = [];
+    for (final session in sessions) {
+      final date = session.getDate();
+      final startTime = session.getStartTime();
+
+      final now = new DateTime.now();
+      final dateDate =
+          DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
+      if (dateDate.isBefore(now)) {
+        missedSessions.add(session);
+      } else {
+        upcomingSessions.add(session);
+      }
+    }
   }
 
   Widget build(BuildContext context) {
@@ -170,10 +190,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     ]);
 
     var Body = FutureBuilder(
-        future: sessions,
+        future: loadedSessions,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
+              filterSessions(snapshot.data);
               return ListBody(
                 children: [
                   Padding(
@@ -181,7 +202,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     child: SessionsCalendar(snapshot.data, filterMode),
                   ),
                   AddButton,
-                  for (final session in snapshot.data)
+                  Container(
+                      color: Colors.black,
+                      padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                      child: Text("Upcoming sessions",
+                          style: TextStyle(color: Colors.white))),
+                  for (final session in upcomingSessions)
+                    ListBody(children: [
+                      SessionButton(session, loadSessions),
+                      divider
+                    ]),
+                  Container(
+                      color: Colors.black,
+                      padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                      child: Text("Missed sessions",
+                          style: TextStyle(color: Colors.white))),
+                  for (final session in missedSessions)
                     ListBody(children: [
                       SessionButton(session, loadSessions),
                       divider
@@ -216,12 +252,6 @@ class SessionsCalendar extends StatelessWidget {
 
   SessionsCalendar(List<Session> sessions, String displayMode) {
     final timeFormat = DateFormat('MM/dd/yyyy hh:mm:ss');
-    final timeFormat2 = DateFormat('hh:mm:ss');
-    print(timeFormat
-        .parse(sessions[0].getDate() + " " + sessions[0].getStartTime()));
-    print(timeFormat
-        .parse(sessions[0].getDate() + " " + sessions[0].getEndTime()));
-    print(timeFormat2.parse(sessions[0].getStartTime()));
 
     for (final session in sessions) {
       final title = session.getTitle();
@@ -288,6 +318,7 @@ class SessionButton extends StatelessWidget {
   String date;
   String startTime;
   String endTime;
+
   SessionButton(Session session, void Function() reloadParent) {
     this.reloadParent = reloadParent;
     this.session = session;
