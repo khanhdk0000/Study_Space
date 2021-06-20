@@ -250,9 +250,9 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         onPressed: () async {
           var error = "";
           if (subject.length == 0) {
-            error = "You need a name for your event";
+            error = "You need a name for your event.";
           } else if (startTime.minute > endTime.minute && startTime.hour >= endTime.hour) {
-            error = "You can't end an event before it even started";
+            error = "You can't end an event before it even started.";
           }
 
           if (error.length > 0) {
@@ -271,7 +271,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                   ),
             );
           } else {
-            await SessionController().addSessions(
+             var  s = await SessionController().addSessions(
                 repeat,
                 period,
                 dateToString(startDate),
@@ -279,13 +279,15 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 timeToString(endTime),
                 subject,
                 user_id,
-                username: user.displayName);
+                context,
+                username: user.displayName,);
             reloadParent();
-
-            //schedule.addSession(subject, timeframe);
-            Navigator.pop(context);
-            NotificationScreen _myapp = new NotificationScreen();
-            _myapp.pushNoti();
+            if (s==true) {
+              //schedule.addSession(subject, timeframe);
+              Navigator.pop(context);
+              NotificationScreen _myapp = new NotificationScreen();
+              _myapp.pushNoti();
+            }
           }
         },
         child: Container(

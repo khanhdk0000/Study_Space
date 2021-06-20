@@ -164,18 +164,17 @@ class SessionController {
           barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('AlertDialog Title'),
+              title: const Text('Oh no'),
               content: SingleChildScrollView(
                 child: ListBody(
                   children: const <Widget>[
-                    Text('This is a demo alert dialog.'),
-                    Text('Would you like to approve of this message?'),
+                    Text('Another session already exist at that time.'),
                   ],
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('Approve'),
+                  child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
