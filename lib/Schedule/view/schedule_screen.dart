@@ -27,7 +27,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   String filterMode = "Today";
   Future<List<Session>> loadedSessions;
   List<Session> upcomingSessions;
-  List<Session> missedSessions;
 
   void loadSessions() {
     setState(() {
@@ -64,12 +63,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           dateRange,
           30,
           user.displayName);
-      upcomingSessions = [];
-      missedSessions = [];
     });
   }
 
   void filterSessions(List<Session> sessions) {
+    upcomingSessions = [];
     for (final session in sessions) {
       final date = session.getDate();
       final startTime = session.getStartTime();
@@ -77,9 +75,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       final now = new DateTime.now();
       final dateDate =
       DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
-      if (dateDate.isBefore(now)) {
-        missedSessions.add(session);
-      } else {
+      if (dateDate.isAfter(now)) {
         upcomingSessions.add(session);
       }
     }
@@ -177,7 +173,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         color: Color.fromRGBO(0, 0, 0, 0.06),
         width: double.infinity,
         child: Text(
-            "You have nothing scheduled for ${filterMode.toLowerCase()}. Try adding some study sessions.",
+            "You have no upcoming event for ${filterMode.toLowerCase()}. Try scheduling some study events.",
             textAlign: TextAlign.left,
             style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -191,8 +187,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         future: loadedSessions,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              filterSessions(snapshot.data);
+            filterSessions(snapshot.data);
+            if (upcomingSessions.length > 0) {
               return ListBody(
                 children: [
                   Padding(
@@ -200,23 +196,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     child: SessionsCalendar(snapshot.data, filterMode),
                   ),
                   AddButton,
-                  Container(
-                  color: Colors.black,
-                  padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                  child: Text(upcomingSessions.length > 0 ? "Upcoming sessions":"No upcoming session",
-                  style: TextStyle(color: Colors.white)))
-                  ,
                   for (final session in upcomingSessions)
-                    ListBody(children: [
-                      SessionButton(session, loadSessions),
-                      divider
-                    ]),
-                  Container(
-                      color: Colors.black,
-                      padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                      child: Text(missedSessions.length > 0 ? "Missed sessions":"No missed session",
-                          style: TextStyle(color: Colors.white))),
-                  for (final session in missedSessions)
                     ListBody(children: [
                       SessionButton(session, loadSessions),
                       divider

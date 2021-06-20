@@ -65,7 +65,7 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     todaySessions = SessionController().getUnfinishedSessions(user_id,
-        SessionController().setFilter("Time (L)"), 0, 30, user.displayName);
+        SessionController().setFilter("Time (L)"), 365, 30, user.displayName);
 
     var Navigation = Column(
       children: [
@@ -95,7 +95,7 @@ class _SessionScreenState extends State<SessionScreen> {
       onPressed: () {
         SessionController().removeSession(
             date, startTime, endTime, title, user_id, user.displayName);
-        sleep(Duration(milliseconds: 500));
+        sleep(Duration(milliseconds: 600));
         reloadParent();
         Navigator.pop(context);
       },
