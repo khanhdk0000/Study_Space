@@ -121,7 +121,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                         }
                         break;
                     }
-                    Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                   });
                 },
               )
@@ -235,7 +235,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
             onPressed: () =>
                 _displayDialog(context, "Period", period.toString()),
             child: Text(
-              "Repeat every: $period days",
+              "Duration between each repeat: $period days",
               textAlign: TextAlign.left,
               style: bodyText,
             )));
@@ -248,21 +248,45 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () async {
-          await SessionController().addSessions(
-              repeat,
-              period,
-              dateToString(startDate),
-              timeToString(startTime),
-              timeToString(endTime),
-              subject,
-              user_id,
-              username: user.displayName);
-          reloadParent();
+          var error = "";
+          if (subject.length == 0) {
+            error = "You need a name for your event";
+          } else if (startTime.minute > endTime.minute && startTime.hour >= endTime.hour) {
+            error = "You can't end an event before it even started";
+          }
 
-          //schedule.addSession(subject, timeframe);
-          Navigator.pop(context);
-          NotificationScreen _myapp = new NotificationScreen();
-          _myapp.pushNoti();
+          if (error.length > 0) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) =>
+                  AlertDialog(
+                    title: const Text('Oh no'),
+                    content: Text(error),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+            );
+          } else {
+            await SessionController().addSessions(
+                repeat,
+                period,
+                dateToString(startDate),
+                timeToString(startTime),
+                timeToString(endTime),
+                subject,
+                user_id,
+                username: user.displayName);
+            reloadParent();
+
+            //schedule.addSession(subject, timeframe);
+            Navigator.pop(context);
+            NotificationScreen _myapp = new NotificationScreen();
+            _myapp.pushNoti();
+          }
         },
         child: Container(
           padding: EdgeInsets.only(left: 22, top: 12, bottom: 12),
