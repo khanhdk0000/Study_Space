@@ -226,9 +226,7 @@ class SessionController {
           await this.getPenaltyTemp(s);
       print("[SESSION SCORE CALCULATED] $score");
       if (score <= -10000) {
-        return "NA";
-      } else if (score < 0){
-        return "0";
+        return "-1";
       } else
         return score.toString();
     } else {
