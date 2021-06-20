@@ -197,7 +197,7 @@ class HomeSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     sessions = SessionController().getUnfinishedSessions(user_id,
-        SessionController().setFilter("Time (L)"), 0, 30, _user.displayName);
+        SessionController().setFilter("Time (L)"), 0, 30, _user.displayName,context);
 
     return FutureBuilder(
         future: sessions,

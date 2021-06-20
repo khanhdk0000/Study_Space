@@ -62,7 +62,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           SessionController().setFilter("Time (L)"),
           dateRange,
           30,
-          user.displayName);
+          user.displayName,context);
     });
   }
 

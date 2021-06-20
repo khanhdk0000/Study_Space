@@ -248,7 +248,8 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           ),
         ),
         onPressed: () async {
-          await SessionController().addSessions(
+          checkId(context);
+          var s = await SessionController().addSessions(
               repeat,
               period,
               dateToString(startDate),
@@ -256,13 +257,16 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               timeToString(endTime),
               subject,
               user_id,
+              context,
               username: user.displayName);
           reloadParent();
 
           //schedule.addSession(subject, timeframe);
-          Navigator.pop(context);
-          NotificationScreen _myapp = new NotificationScreen();
-          _myapp.pushNoti();
+          if (s== true) {
+            Navigator.pop(context);
+            NotificationScreen _myapp = new NotificationScreen();
+            _myapp.pushNoti();
+          }
         },
         child: Container(
           padding: EdgeInsets.only(left: 22, top: 12, bottom: 12),

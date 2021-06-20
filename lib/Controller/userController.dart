@@ -8,6 +8,8 @@ import 'package:study_space/constants.dart';
 import 'package:study_space/Model/user.dart';
 import 'package:flutter/material.dart';
 
+import 'package:study_space/global.dart';
+
 class userController {
   userController() {
     print('constructed');
@@ -70,12 +72,13 @@ class userController {
   Future<int> getUserId(String username, BuildContext context) async {
       print('get user id');
       var u = await getUser(username);
-      if (u != null)
+      if (u != null) {
+        user_id = u.getId();
         return u.getId();
+      }
       else {
         print("User error");
-        popup(context);
-        reroute(context);
+        checkId(context);
         return -1;
       }
   }
@@ -108,8 +111,9 @@ class userController {
       actions: <Widget>[
         new TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
             // reroute(context);
+            Navigator.of(context).pop();
+
           },
           child: const Text('Ok'),
         ),
