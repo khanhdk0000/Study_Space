@@ -225,8 +225,10 @@ class SessionController {
           await this.getPenaltySound(s) +
           await this.getPenaltyTemp(s);
       print("[SESSION SCORE CALCULATED] $score");
-      if (score < 0) {
-        return "-1";
+      if (score <= -10000) {
+        return "NA";
+      } else if (score < 0){
+        return "0";
       } else
         return score.toString();
     } else {
@@ -238,7 +240,7 @@ class SessionController {
     double average = await SensorController()
         .getDirectAverage(sess_id: s.getId(), type: 'L');
     if (average == null) {
-      return -100;
+      return -10100;
     }
     print('[LIGHT] $average');
     // Light score:
@@ -255,7 +257,7 @@ class SessionController {
     double average = await SensorController()
         .getDirectAverage(sess_id: s.getId(), type: 'TH');
     if (average == null) {
-      return -100;
+      return -10100;
     }
     print('[TEMPERATURE] $average');
     // Temperature score:
@@ -274,7 +276,7 @@ class SessionController {
     double average = await SensorController()
         .getDirectAverage(sess_id: s.getId(), type: 'S');
     if (average == null) {
-      return -100;
+      return -10100;
     }
     print('[SOUND] $average');
     // Sound score:

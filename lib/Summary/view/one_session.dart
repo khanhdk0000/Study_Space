@@ -35,6 +35,8 @@ class _OneSessionViewState extends State<OneSessionView> {
     tempSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'TH');
     soundSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'S');
     lightSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'L');
+    ///Random comments is fixed here
+
   }
 
   @override
@@ -184,20 +186,18 @@ class _OneSessionViewState extends State<OneSessionView> {
 
   Widget _sensorView(){
     return Expanded(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-          child: Column(
-            children: [
-              _sensorTile('Light'),
-              SizedBox(height: kDefaultPadding * 0.5),
-              _sensorTile('Sound'),
-              SizedBox(height: kDefaultPadding * 0.5),
-              _sensorTile('Temperature'),
-              SizedBox(height: kDefaultPadding * 2),
-            ],
-          )
-        ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+        child: ListView(
+          children: [
+            _sensorTile('Light'),
+            SizedBox(height: kDefaultPadding * 0.5),
+            _sensorTile('Sound'),
+            SizedBox(height: kDefaultPadding * 0.5),
+            _sensorTile('Temperature'),
+            SizedBox(height: kDefaultPadding * 2),
+          ],
+        )
       ),
     );
   }
@@ -365,6 +365,7 @@ class _OneSessionViewState extends State<OneSessionView> {
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 14.0,
+                    color: Colors.grey,
                   ),
                 ),
               ],

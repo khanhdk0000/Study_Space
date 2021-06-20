@@ -42,8 +42,11 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   @override
   Widget build(BuildContext context) {
     //Retrieve data from the database through SessionController.
-    futureSession = SessionController().getAllSessions(_userid,
-        SessionController().setFilter(_sortSelection[_sortedBy]), _numView, user.displayName);
+    futureSession = SessionController().getAllSessions(
+        _userid,
+        SessionController().setFilter(_sortSelection[_sortedBy]),
+        _numView,
+        user.displayName);
     return Scaffold(
       drawer: SideMenu(),
       body: SafeArea(
@@ -143,34 +146,33 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
 
   Widget _listView(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-          child: FutureBuilder(
-              future: futureSession,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var numDisplay = snapshot.data.length > _numView
-                      ? _numView
-                      : snapshot.data.length;
-                  if (snapshot.data.length == 0){
-                    return Text("No session.");
-                  }
-                  List<Widget> widLst = [];
-                  for (int i = 0; i < numDisplay; i++) {
-                    print(snapshot.data[i].displaySession());
-                    widLst
-                        .add(_scheduleTile(snapshot.data[i].displaySession()));
-                  }
-                  return Column(
-                    children: widLst,
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+        child: FutureBuilder(
+            future: futureSession,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var numDisplay = snapshot.data.length > _numView
+                    ? _numView
+                    : snapshot.data.length;
+                if (snapshot.data.length == 0) {
+                  return Text("No session.");
                 }
-                return Text('Loading...\nIf you have just finished a session, it may take a while to process.');
-              }),
-        ),
+                List<Widget> widLst = [];
+                for (int i = 0; i < numDisplay; i++) {
+                  print(snapshot.data[i].displaySession());
+                  widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
+                }
+                return ListView(
+                  children: widLst,
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Text(
+                  'Loading...\nIf you have just finished a session, it may take a while to process.',
+                  textAlign: TextAlign.center);
+            }),
       ),
     );
   }
@@ -339,7 +341,9 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
               color: Colors.white,
-            )));
+            )
+        )
+    );
   }
 
   Color _circleColor(int score) {
