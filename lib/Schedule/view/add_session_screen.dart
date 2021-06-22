@@ -283,11 +283,12 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                 username: user.displayName,);
 
             if (s==true) {
+              reloadParent();
               //schedule.addSession(subject, timeframe);
               Navigator.pop(context);
               NotificationScreen _myapp = new NotificationScreen();
               _myapp.pushNoti();
-              reloadParent();
+
             }
           }
         },
