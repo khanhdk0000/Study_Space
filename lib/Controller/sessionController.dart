@@ -1,3 +1,7 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:study_space/constants.dart';
@@ -57,9 +61,9 @@ class SessionController {
   }
 
   Future<List<Session>> getUnfinishedSessions(int uid, String filter,
-      int daysFromNow, int limit, String username) async {
+      int daysFromNow, int limit, String username, BuildContext context) async {
     if (uid == null) {
-      uid = await userController().getUserId(username, null);
+      uid = await userController().getUserId(username, context);
     }
 
     final maxDate = DateTime.now().add(Duration(days: daysFromNow));
@@ -114,7 +118,7 @@ class SessionController {
   }
 
   Future addSessions(int repeat, int period, String date, String start_time,
-      String end_time, String title, int user_id,
+      String end_time, String title, int user_id, BuildContext context,
       {String username}) async {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final startDate = dateFormat.parse(date);
@@ -128,12 +132,12 @@ class SessionController {
 
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      await addSession(dateString, start_time, end_time, title, user_id);
+      await addSession(dateString, start_time, end_time, title, user_id,context);
     }
   }
 
   Future addSession(String date, String start_time, String end_time,
-      String title, int user_id) async {
+      String title, int user_id, BuildContext context) async {
     var response = await http.post(Uri.https(webhost, 'add_session.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -151,15 +155,43 @@ class SessionController {
     if (response.statusCode == 201) {
       print("Success");
       print(response.body);
+      return true;
     } else {
+      if(response.statusCode == 202 )  {
+        print('Another session already exist');
+        showDialog<Void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Oh no'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: const <Widget>[
+                    Text('Another session already exist at that time.'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+      };
       print('failed');
+      return false;
     }
   }
 
   void removeSession(String date, String start_time, String end_time,
-      String title, int user_id, String username) async {
+      String title, int user_id, String username, BuildContext context) async {
     // if (user_id == null) {
-    //   user_id = await userController().getUserId(username);
+    user_id = await userController().getUserId(username,context);
     // }
 
     var response = await http.post(Uri.https(webhost, 'remove_session.php'),

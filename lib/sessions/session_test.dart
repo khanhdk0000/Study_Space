@@ -124,6 +124,7 @@ class _SessionsViewState extends State<SessionsView> {
 
   void getId() {
     print(user_id);
+    checkId(context);
   }
 
   void popup() {
