@@ -10,8 +10,6 @@ import 'package:study_space/Notification/notification_screen.dart';
 
 class TempState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState;
-
-  String _historyText = "";
   String _valueFromServer = '0-0';
   double _temperature = 0;
   bool _overThreshold = false;
@@ -31,50 +29,53 @@ class TempState with ChangeNotifier {
       if (_appConnectionState == MQTTAppConnectionState.connected) {
         valueFromServer(temp['data']);
       }
-
       _temperature = double.parse(temp['data'].split('-')[0]);
-      if (_temperature > 30) {
+
+      String sessionId = await getSessionId();
+      if (_temperature > 30 && sessionId != '-1') {
         setBoolThreshold(true);
-
         print('reeee');
-        var response = await http.post(
-          Uri.parse('http://' + host + '/postlcd'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, String>{
-            'data': 'Temp alert',
-          }),
-        );
-        var response2 = await http.post(
-          Uri.parse('http://' + host + '/postbuzzer'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, String>{
-            'data': '500',
-          }),
-        );
-        print('Status: ' + response.statusCode.toString());
-        print('Status 2: ' + response2.statusCode.toString());
-
-        // Notification part
+        await notifyBuzzerLcd();
         NotificationScreen initNoti = new NotificationScreen();
         initNoti.tempNoti();
+        await pushToDatabase(sessionId);
+        // Notification part
       }
-      pushToDatabase();
     });
   }
 
   final f = DateFormat('yyyy-MM-dd hh:mm:ss');
-  void pushToDatabase() async {
-    String sessid = await getSessionId();
+
+  Future notifyBuzzerLcd() async {
+    var response = await http.post(
+      Uri.parse('http://' + host + '/postlcd'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'data': 'Temp alert',
+      }),
+    );
+    var response2 = await http.post(
+      Uri.parse('http://' + host + '/postbuzzer'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'data': '500',
+      }),
+    );
+    print('Status buzzer: ' + response.statusCode.toString());
+    print('Status lcd: ' + response2.statusCode.toString());
+  }
+
+  Future pushToDatabase(String id) async {
     await sensorController.addSensorField(
         name: 'TEMP-HUMID',
         unit: 'C-%',
         type: 'TH',
         timestamp: f.format(DateTime.now()),
-        sessId: sessid,
+        sessId: id,
         data: _temperature.toString());
   }
 
@@ -90,7 +91,6 @@ class TempState with ChangeNotifier {
     notifyListeners();
   }
 
-  String get getHistoryText => _historyText;
   String get getValueFromServer => _valueFromServer;
   bool get getOverThreshold => _overThreshold;
   double get getTemperature => _temperature;

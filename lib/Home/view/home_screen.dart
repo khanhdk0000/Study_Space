@@ -197,7 +197,7 @@ class HomeSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     sessions = SessionController().getUnfinishedSessions(
-        user_id,
+        userId,
         SessionController().setFilter("Time (L)"),
         0,
         30,
@@ -237,7 +237,7 @@ class HomeSchedule extends StatelessWidget {
                       color: Colors.black,
                       width: double.infinity,
                       child: Text(
-                        "Your next study event is ${nextSession.getTitle()}, starting in ${eta} minutes",
+                        "Your next study event is ${nextSession.getTitle()}, starting in $eta minutes",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontWeight: FontWeight.normal,

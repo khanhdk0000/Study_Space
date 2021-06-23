@@ -12,7 +12,7 @@ class scheduleController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'user_id': user_id.toString(),
+          'user_id': userId.toString(),
         }));
     var data = json.decode(response.body);
     List<String> scheduledStudyList = [];
@@ -37,7 +37,7 @@ class scheduleController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'user_id': user_id.toString(),
+          'user_id': userId.toString(),
         }));
     var data = jsonDecode(response.body);
 

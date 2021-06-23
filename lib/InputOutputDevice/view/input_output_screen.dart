@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_card/sliding_card.dart';
@@ -33,7 +32,7 @@ class InputOutputScreen extends StatelessWidget {
 class Body extends StatelessWidget {
   // const Body({required Key key}) : super(key: key);
 
-  Widget _topView() {
+  Widget _topView(BuildContext context) {
     ///The top view include the drawer button and screen name.
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
@@ -65,11 +64,33 @@ class Body extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 10,
+                width: 20,
               ),
             ],
           ),
-          Icon(Icons.info_outline_rounded),
+          InkWell(
+            onTap: () => showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      title: Text('What are these sensors all about?'),
+                      content: Column(
+                        children: [
+                          Image(
+                              image: AssetImage(
+                                  'assets/img/internet-of-things.png')),
+                          Text(sensorDescription),
+                        ],
+                      ),
+                      scrollable: true,
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    )),
+            child: Icon(Icons.info_outline_rounded),
+          ),
         ],
       ),
     );
@@ -79,7 +100,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _topView(),
+        _topView(context),
         CustomScrollSensorList(),
       ],
     );

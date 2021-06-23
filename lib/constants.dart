@@ -42,3 +42,12 @@ String host = '10.0.2.2:5000';
 
 enum MQTTAppConnectionState { connected, disconnected, connecting }
 enum SensorEvaluation { normal, warning, bad }
+
+String sensorDescription = """
+We have three sensors to assist your learning:
+
+- Light: Capture the lighting condition in your room, if it is too dark(<100) or too bright(>500), you will be notified.
+
+- Sound: Measure the sound threshold in your room, value beyond 500 is bad for your ears.
+
+- Temperature: The temperature in your room should not be over 30.""";

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:study_space/InputOutputDevice/controller/controller.dart';
 import 'package:study_space/InputOutputDevice/view/light_sensor_screen.dart';
 import 'package:study_space/InputOutputDevice/view/sound_sensor_screen.dart';
 import 'package:study_space/InputOutputDevice/view/temp_sensor_screen.dart';

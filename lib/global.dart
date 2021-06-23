@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:study_space/Controller/userController.dart';
 
 User user;
-int user_id; //current user id
+int userId; //current user id
 bool isLoggedIn;
 String characterNames = userController().getCharacterName();
 
 void checkId(BuildContext context) {
-  if(user_id == 0 || user_id == null) {
+  if (userId == 0 || userId == null) {
     userController().popup(context);
     // userController().reroute(context);
   }

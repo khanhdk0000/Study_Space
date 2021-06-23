@@ -22,7 +22,6 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  @override
   final filters = ["Today", "This Week", "This Month", "This Year"];
   String filterMode = "Today";
   Future<List<Session>> loadedSessions;
@@ -58,7 +57,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
 
       loadedSessions = SessionController().getUnfinishedSessions(
-          user_id,
+          userId,
           SessionController().setFilter("Time (L)"),
           dateRange,
           30,
@@ -82,10 +81,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     loadSessions();
 
-    var Navigation = Row(
+    var navigation = Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         MenuButton(),
@@ -103,7 +103,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ],
     );
 
-    var Filterer = Container(
+    var filterer = Container(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,7 +133,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ],
         ));
 
-    final AddButton = TextButton(
+    final addButton = TextButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.orange,
           shape: RoundedRectangleBorder(
@@ -168,7 +168,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
         ));
 
-    var NoSchedule = Column(children: [
+    var noSchedule = Column(children: [
       Container(
         padding: EdgeInsets.all(36),
         color: Color.fromRGBO(0, 0, 0, 0.06),
@@ -181,10 +181,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 fontSize: 48,
                 color: Colors.black)),
       ),
-      AddButton
+      addButton
     ]);
 
-    var Body = FutureBuilder(
+    var body = FutureBuilder(
         future: loadedSessions,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -196,7 +196,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: SessionsCalendar(snapshot.data, filterMode),
                   ),
-                  AddButton,
+                  addButton,
                   for (final session in upcomingSessions)
                     ListBody(children: [
                       SessionButton(session, loadSessions),
@@ -205,7 +205,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 ],
               );
             } else {
-              return NoSchedule;
+              return noSchedule;
             }
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
@@ -219,7 +219,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, spacer, Filterer, Body])),
+              children: [navigation, spacer, filterer, body])),
     );
   }
 }
