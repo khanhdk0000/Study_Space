@@ -155,6 +155,7 @@ class SessionController {
     if (response.statusCode == 201) {
       print("Success");
       print(response.body);
+      Navigator.of(context).pop();
       return true;
     } else {
       if(response.statusCode == 202 )  {
