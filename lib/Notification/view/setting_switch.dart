@@ -11,7 +11,9 @@ class StudySwitch extends StatelessWidget {
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: switchControl == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
@@ -22,7 +24,7 @@ class StudySwitch extends StatelessWidget {
             size: 25.0,
           ),
           Text(
-            "     Allow Study Notification",
+            "     Study Notification",
             style: TextStyle(fontSize: 16),
           ),
           Spacer(),
@@ -30,6 +32,7 @@ class StudySwitch extends StatelessWidget {
             value: switchControl,
             onChanged: (bool value) => onchange(value),
             activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
           ),
         ],
       ),
@@ -46,7 +49,9 @@ class PresenceSwitch extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: presenceSwitchControl == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
@@ -57,7 +62,7 @@ class PresenceSwitch extends StatelessWidget {
             size: 25.0,
           ),
           Text(
-            "     Allow Presence Notification",
+            "     Presence Notification",
             style: TextStyle(fontSize: 16),
           ),
           Spacer(),
@@ -65,6 +70,7 @@ class PresenceSwitch extends StatelessWidget {
             value: presenceSwitchControl,
             onChanged: (bool value) async => onchangePresence(value),
             activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
           ),
         ],
       ),
@@ -81,7 +87,9 @@ class BreakSwitch extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: breakSwitchControl == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
       ),
       child: Row(
@@ -92,7 +100,7 @@ class BreakSwitch extends StatelessWidget {
             size: 25.0,
           ),
           Text(
-            "     Allow Break Notification",
+            "     Break Notification",
             style: TextStyle(fontSize: 16),
           ),
           Spacer(),
@@ -100,6 +108,7 @@ class BreakSwitch extends StatelessWidget {
             value: breakSwitchControl,
             onChanged: (bool value) => onchangeBreak(value),
             activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
           ),
         ],
       ),
@@ -107,16 +116,106 @@ class BreakSwitch extends StatelessWidget {
   }
 }
 
-class SoundSwitch extends StatelessWidget {
-  final Function onchangeSound;
-  final bool soundSwitchControl;
-  SoundSwitch(this.onchangeSound, this.soundSwitchControl);
+// class SoundSwitch extends StatelessWidget {
+//   final Function onchangeSound;
+//   final bool soundSwitchControl;
+//   SoundSwitch(this.onchangeSound, this.soundSwitchControl);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+//       decoration: BoxDecoration(
+//         color: soundSwitchControl == false
+//             ? Color.fromRGBO(0, 0, 0, 0.3)
+//             : Color.fromRGBO(0, 0, 0, 0.06),
+//         border: Border(
+//           top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+//           bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+//         ),
+//       ),
+//       child: Row(
+//         children: [
+//           Icon(
+//             Icons.volume_off_rounded,
+//             color: Colors.black,
+//             size: 25.0,
+//           ),
+//           Text(
+//             "     Allow Sound",
+//             textAlign: TextAlign.left,
+//             style: TextStyle(
+//               fontSize: 16,
+//             ),
+//           ),
+//           Spacer(),
+//           Switch(
+//             value: soundSwitchControl,
+//             onChanged: (bool value) => onchangeSound(value),
+//             activeColor: kPrimaryColor,
+//             inactiveThumbColor: Colors.grey,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class VibrateSwitch extends StatelessWidget {
+//   final Function onchangeVibrate;
+//   final bool vibrateSwitchControl;
+//   VibrateSwitch(this.onchangeVibrate, this.vibrateSwitchControl);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+//       decoration: BoxDecoration(
+//         color: vibrateSwitchControl == false
+//             ? Color.fromRGBO(0, 0, 0, 0.3)
+//             : Color.fromRGBO(0, 0, 0, 0.06),
+//         border: Border(
+//           top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+//           bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+//         ),
+//       ),
+//       child: Row(
+//         children: [
+//           Icon(
+//             Icons.vibration_rounded,
+//             color: Colors.black,
+//             size: 25.0,
+//           ),
+//           Text(
+//             "     Allow Vibration",
+//             textAlign: TextAlign.left,
+//             style: TextStyle(
+//               fontSize: 16,
+//             ),
+//           ),
+//           Spacer(),
+//           Switch(
+//             value: vibrateSwitchControl,
+//             onChanged: (bool value) => onchangeVibrate(value),
+//             activeColor: kPrimaryColor,
+//             inactiveThumbColor: Colors.grey,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class SoundSensorSwitch extends StatelessWidget {
+  final Function sensorSound;
+  final bool sound;
+  SoundSensorSwitch(this.sensorSound, this.sound);
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
       decoration: BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: sound == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
         border: Border(
           top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
           bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
@@ -125,12 +224,12 @@ class SoundSwitch extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.volume_off_rounded,
+            Icons.surround_sound_rounded,
             color: Colors.black,
             size: 25.0,
           ),
           Text(
-            "     Allow Sound",
+            "     Sound Sensor Notification",
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 16,
@@ -138,9 +237,98 @@ class SoundSwitch extends StatelessWidget {
           ),
           Spacer(),
           Switch(
-            value: soundSwitchControl,
-            onChanged: (bool value) => onchangeSound(value),
+            value: sound,
+            onChanged: (bool value) => sensorSound(value),
             activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LightSensorSwitch extends StatelessWidget {
+  final Function sensorLight;
+  final bool light;
+  LightSensorSwitch(this.sensorLight, this.light);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: light == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(
+          top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+          bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.wb_incandescent_rounded,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Light Sensor Notification",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Spacer(),
+          Switch(
+            value: light,
+            onChanged: (bool value) => sensorLight(value),
+            activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TempSensorSwitch extends StatelessWidget {
+  final Function sensorTemp;
+  final bool temp;
+  TempSensorSwitch(this.sensorTemp, this.temp);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10),
+      decoration: BoxDecoration(
+        color: temp == false
+            ? Color.fromRGBO(0, 0, 0, 0.3)
+            : Color.fromRGBO(0, 0, 0, 0.06),
+        border: Border(
+          top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+          bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06)),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.whatshot_rounded,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          Text(
+            "     Temperature Sensor Notification",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Spacer(),
+          Switch(
+            value: temp,
+            onChanged: (bool value) => sensorTemp(value),
+            activeColor: kPrimaryColor,
+            inactiveThumbColor: Colors.grey,
           ),
         ],
       ),
