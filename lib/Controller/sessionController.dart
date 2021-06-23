@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/Controller/userController.dart';
 import 'sensorController.dart';
+import 'package:study_space/Notification/notification_screen.dart';
 
 class SessionController {
   SessionController();
@@ -126,15 +127,18 @@ class SessionController {
       user_id = await userController().getUserId(username, null);
     }
     print('[USER ID] $user_id, $username');
-
+    bool res;
     for (var i = 0; i <= repeat; i++) {
       final repeatDate = startDate.add(Duration(days: period * i));
 
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      await addSession(
+      res = await addSession(
+
           dateString, start_time, end_time, title, user_id, context);
     }
+
+    return res;
   }
 
   Future addSession(String date, String start_time, String end_time,
@@ -215,6 +219,8 @@ class SessionController {
       print('Failed');
       print(response.body);
     }
+    NotificationScreen initNoti = new NotificationScreen();
+    initNoti.pushNoti();
   }
 
   Future<String> getCurrentSession(String username) async {

@@ -6,6 +6,7 @@ import 'package:study_space/constants.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:study_space/Notification/notification_screen.dart';
 
 class SoundState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState;
@@ -51,6 +52,10 @@ class SoundState with ChangeNotifier {
         );
         print('Status: ' + response.statusCode.toString());
         print('Status 2: ' + response2.statusCode.toString());
+
+        // Notification part
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.soundNoti();
       }
       pushToDatabase();
     });
