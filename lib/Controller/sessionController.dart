@@ -127,15 +127,17 @@ class SessionController {
       user_id = await userController().getUserId(username, null);
     }
     print('[USER ID] $user_id, $username');
-
+    bool res;
     for (var i = 0; i <= repeat; i++) {
       final repeatDate = startDate.add(Duration(days: period * i));
 
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      await addSession(
+      res = await addSession(
           dateString, start_time, end_time, title, user_id, context);
     }
+
+    return res;
   }
 
   Future addSession(String date, String start_time, String end_time,
@@ -157,7 +159,6 @@ class SessionController {
     if (response.statusCode == 201) {
       print("Success");
       print(response.body);
-      Navigator.of(context).pop();
       return true;
     } else {
       if (response.statusCode == 202) {
@@ -186,7 +187,6 @@ class SessionController {
               );
             });
       }
-      ;
       print('failed');
       return false;
     }
