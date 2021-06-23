@@ -96,8 +96,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String _userEmail;
-  String _username;
 
   void _register() async {
     print(_emailController.text);
@@ -111,13 +109,11 @@ class _RegisterFormState extends State<RegisterForm> {
 
       if (user != null) {
         await user.updateProfile(displayName: _usernameController.text.trim());
-        print('success');
+        print('sign up success');
 
-        _userEmail = user.email;
-        _username = user.displayName;
         var c = new userController();
         await c.addUser(user.displayName);
-        user_id = await c.getUserId(user.displayName,context);
+        user_id = await c.getUserId(user.displayName, context);
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //     content: Text(
         //         'Successfully signed up ' + _userEmail + ' ' + _username)));

@@ -132,7 +132,8 @@ class SessionController {
 
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
-      await addSession(dateString, start_time, end_time, title, user_id,context);
+      await addSession(
+          dateString, start_time, end_time, title, user_id, context);
     }
   }
 
@@ -157,32 +158,32 @@ class SessionController {
       print(response.body);
       return true;
     } else {
-      if(response.statusCode == 202 )  {
+      if (response.statusCode == 202) {
         print('Another session already exist');
         showDialog<Void>(
-          context: context,
-          barrierDismissible: false, // user must tap button!
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Oh no'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: const <Widget>[
-                    Text('Another session already exist at that time.'),
-                  ],
+            context: context,
+            barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Oh no'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: const <Widget>[
+                      Text('Another session already exist at that time.'),
+                    ],
+                  ),
                 ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
-      };
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+      }
       print('failed');
       return false;
     }
@@ -191,7 +192,7 @@ class SessionController {
   void removeSession(String date, String start_time, String end_time,
       String title, int user_id, String username, BuildContext context) async {
     // if (user_id == null) {
-    user_id = await userController().getUserId(username,context);
+    user_id = await userController().getUserId(username, context);
     // }
 
     var response = await http.post(Uri.https(webhost, 'remove_session.php'),

@@ -64,8 +64,13 @@ class _SessionScreenState extends State<SessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    todaySessions = SessionController().getUnfinishedSessions(user_id,
-        SessionController().setFilter("Time (L)"), 365, 30, user.displayName,context);
+    todaySessions = SessionController().getUnfinishedSessions(
+        user_id,
+        SessionController().setFilter("Time (L)"),
+        365,
+        30,
+        user.displayName,
+        context);
 
     var Navigation = Column(
       children: [
@@ -93,8 +98,8 @@ class _SessionScreenState extends State<SessionScreen> {
         ),
       ),
       onPressed: () {
-        SessionController().removeSession(
-            date, startTime, endTime, title, user_id, user.displayName,context);
+        SessionController().removeSession(date, startTime, endTime, title,
+            user_id, user.displayName, context);
         sleep(Duration(milliseconds: 600));
         reloadParent();
         Navigator.pop(context);
@@ -124,7 +129,7 @@ class _SessionScreenState extends State<SessionScreen> {
     );
 
     var Summary = Container(
-      color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
         padding: EdgeInsets.all(22),
         child: ListBody(
           children: [
@@ -149,7 +154,7 @@ class _SessionScreenState extends State<SessionScreen> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return LoadingIndicator;
+          return loadingIndicator;
         });
 
     return Scaffold(
@@ -158,12 +163,7 @@ class _SessionScreenState extends State<SessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [
-                Navigation,
-                Summary,
-                Timeline,
-                DeleteButton
-              ]),
+              children: [Navigation, Summary, Timeline, DeleteButton]),
         ));
   }
 }
@@ -187,7 +187,7 @@ class SessionsTimeline extends StatelessWidget {
           endTime:
               timeFormat.parse(session.getDate() + " " + session.getEndTime()),
           subject: title,
-          color: title == pivotTitle ? Colors.blue:Colors.grey));
+          color: title == pivotTitle ? Colors.blue : Colors.grey));
     }
   }
 
@@ -197,23 +197,21 @@ class SessionsTimeline extends StatelessWidget {
         height: 32,
         padding: EdgeInsets.only(left: 18),
         child: Row(children: [
-            Row(children: [
-              Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle)),
-              Text("  " + pivot.getTitle() + "   ",
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
           Row(children: [
             Container(
                 width: 12,
                 height: 12,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle)),
+                decoration:
+                    BoxDecoration(color: Colors.blue, shape: BoxShape.circle)),
+            Text("  " + pivot.getTitle() + "   ",
+                style: TextStyle(fontWeight: FontWeight.bold))
+          ]),
+          Row(children: [
+            Container(
+                width: 12,
+                height: 12,
+                decoration:
+                    BoxDecoration(color: Colors.grey, shape: BoxShape.circle)),
             Text("  " + "Other events" + "   ",
                 style: TextStyle(fontWeight: FontWeight.bold))
           ])
@@ -226,7 +224,8 @@ class SessionsTimeline extends StatelessWidget {
             padding: EdgeInsets.only(top: 4, left: 18),
             child: SfCalendar(
               view: CalendarView.timelineDay,
-              initialDisplayDate:  DateFormat('MM/dd/yyyy').parse(pivot.getDate()),
+              initialDisplayDate:
+                  DateFormat('MM/dd/yyyy').parse(pivot.getDate()),
               dataSource: SessionDataSource(appointments),
             )),
         divider,

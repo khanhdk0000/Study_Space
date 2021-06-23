@@ -82,38 +82,6 @@ class SideMenu extends StatelessWidget {
               MaterialPageRoute(builder: (context) => ScheduleScreen()),
             ),
           ),
-          // ListTile(
-          //   leading: Icon(Icons.device_thermostat),
-          //   title: Text('Sensor'),
-          //   onTap: () => Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => SensorScreen(),
-          //     ),
-          //   ),
-          //   trailing: Container(
-          //     width: 25,
-          //     height: 25,
-          //     decoration: BoxDecoration(
-          //         shape: BoxShape.circle, color: Colors.redAccent),
-          //     child: Center(
-          //       child: Text(
-          //         '1',
-          //         style: TextStyle(color: kContentColorDarkTheme),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.construction),
-          //   title: Text('Customize'),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => CustomViewAll()),
-          //     );
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.construction),
             title:
@@ -125,16 +93,6 @@ class SideMenu extends StatelessWidget {
               );
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.construction),
-          //   title: Text('Output device'),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => OutputDeviceScreen()),
-          //     );
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.wb_shade),
             title:

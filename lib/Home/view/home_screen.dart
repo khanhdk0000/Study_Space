@@ -196,8 +196,13 @@ class HomeSchedule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    sessions = SessionController().getUnfinishedSessions(user_id,
-        SessionController().setFilter("Time (L)"), 0, 30, _user.displayName,context);
+    sessions = SessionController().getUnfinishedSessions(
+        user_id,
+        SessionController().setFilter("Time (L)"),
+        0,
+        30,
+        _user.displayName,
+        context);
 
     return FutureBuilder(
         future: sessions,
@@ -306,7 +311,7 @@ class HomeSchedule extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return LoadingIndicator;
+          return loadingIndicator;
         });
   }
 }

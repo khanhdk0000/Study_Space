@@ -65,7 +65,7 @@ class SoundState with ChangeNotifier {
         unit: '',
         type: 'S',
         timestamp: f.format(DateTime.now()),
-        sess_id: sessid,
+        sessId: sessid,
         data: _valueFromServer.toString());
   }
 

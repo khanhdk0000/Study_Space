@@ -14,7 +14,7 @@ import 'package:study_space/InputOutputDevice/view/sensor_screen_header.dart';
 import 'package:study_space/InputOutputDevice/state/buzzer_state.dart';
 import 'package:study_space/InputOutputDevice/state/light_state.dart';
 import 'package:study_space/InputOutputDevice/custom_card.dart';
-import 'package:study_space/OutputDevice/devicesize.dart';
+import 'package:study_space/devicesize.dart';
 import 'package:study_space/constants.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';

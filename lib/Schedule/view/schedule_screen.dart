@@ -62,7 +62,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           SessionController().setFilter("Time (L)"),
           dateRange,
           30,
-          user.displayName,context);
+          user.displayName,
+          context);
     });
   }
 
@@ -74,7 +75,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
       final now = new DateTime.now();
       final dateDate =
-      DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
+          DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
       if (dateDate.isAfter(now)) {
         upcomingSessions.add(session);
       }
@@ -85,22 +86,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     loadSessions();
 
     var Navigation = Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          MenuButton(),
-          Expanded(
-            child: Text(
-              "Schedule",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                  color: Colors.black),
-            ),
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        MenuButton(),
+        Expanded(
+          child: Text(
+            "Schedule",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: Colors.black),
           ),
-          SizedBox(width: 50.0),
-        ],
-      );
+        ),
+        SizedBox(width: 50.0),
+      ],
+    );
 
     var Filterer = Container(
         color: Color.fromRGBO(0, 0, 0, 0.06),
@@ -209,7 +210,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return LoadingIndicator;
+          return loadingIndicator;
         });
 
     return Scaffold(
@@ -274,26 +275,21 @@ class SessionsCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var legend = Container(
-      height: 45,
+        height: 45,
         padding: EdgeInsets.only(left: 18),
-        child: ListView(
-        scrollDirection: Axis.horizontal,
-      children: [
-        for (final title in titles)
-          Row(
-                children: [
-                  Container(
-                      width: 12, height: 12,
-                      decoration: BoxDecoration(
-                          color: colors[titles.indexOf(title)],
-                          shape: BoxShape.circle
-                      )),
-                  Text("  "+title+"   ", style: TextStyle(
-                      fontWeight: FontWeight.bold
-                  ))
-                ]
-            )
-      ]));
+        child: ListView(scrollDirection: Axis.horizontal, children: [
+          for (final title in titles)
+            Row(children: [
+              Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                      color: colors[titles.indexOf(title)],
+                      shape: BoxShape.circle)),
+              Text("  " + title + "   ",
+                  style: TextStyle(fontWeight: FontWeight.bold))
+            ])
+        ]));
 
     return Column(
       children: [

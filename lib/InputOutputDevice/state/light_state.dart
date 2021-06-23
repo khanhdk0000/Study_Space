@@ -3,10 +3,7 @@ import "package:flutter/cupertino.dart";
 import 'package:intl/intl.dart';
 import 'package:study_space/Controller/sensorController.dart';
 import 'package:study_space/Controller/sessionController.dart';
-import 'package:study_space/Controller/userController.dart';
-import 'package:study_space/Model/session.dart';
 import 'package:study_space/constants.dart';
-import 'package:study_space/global.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -56,7 +53,6 @@ class LightState with ChangeNotifier {
             'data': '300',
           }),
         );
-
         print('Status: ' + response.statusCode.toString());
         print('Status 2: ' + response2.statusCode.toString());
       }
@@ -67,13 +63,14 @@ class LightState with ChangeNotifier {
   final f = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   void pushToDatabase() async {
+    print("Push light to database");
     String sessid = await getSessionId();
     await sensorController.addSensorField(
         name: 'LIGHT',
         unit: 'L1',
         type: 'L',
         timestamp: f.format(DateTime.now()),
-        sess_id: sessid,
+        sessId: sessid,
         data: _valueFromServer.toString());
   }
 
