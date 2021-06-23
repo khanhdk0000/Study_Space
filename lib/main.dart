@@ -8,7 +8,6 @@ import 'package:study_space/InputOutputDevice/state/lcd_state.dart';
 import 'package:study_space/InputOutputDevice/state/light_state.dart';
 import 'package:study_space/InputOutputDevice/state/sound_state.dart';
 import 'package:study_space/InputOutputDevice/state/temp_state.dart';
-import 'package:study_space/InputOutputDevice/state/infrared_state.dart';
 import 'package:study_space/OutputDevice/state/buzzer_state.dart';
 import 'package:study_space/Sensor/state/light_state.dart';
 import 'package:study_space/constants.dart';
@@ -58,7 +57,6 @@ class MyApp extends StatelessWidget {
           create: (_) => LCDState(),
           lazy: false,
         ),
-        ChangeNotifierProvider<InfraredState>(create: (_) => InfraredState()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

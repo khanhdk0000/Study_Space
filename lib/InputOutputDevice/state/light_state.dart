@@ -10,6 +10,7 @@ import 'package:study_space/global.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:study_space/Notification/notification_screen.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final User user = auth.currentUser;
@@ -57,6 +58,10 @@ class LightState with ChangeNotifier {
         );
         print('Status: ' + response.statusCode.toString());
         print('Status 2: ' + response2.statusCode.toString());
+
+        // Notification part
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.lightNoti();
       }
       pushToDatabase();
     });

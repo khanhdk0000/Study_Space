@@ -6,13 +6,18 @@ import 'package:study_space/Notification/scheduleController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
+import 'package:study_space/theme.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 bool switchControl = true;
 bool breakSwitchControl = false;
-// bool soundSwitchControl = true;
 bool presenceSwitchControl = false;
+// bool soundSwitchControl = true;
+// bool vibrateSwitchControl = true;
+bool light = true;
+bool sound = true;
+bool temp = true;
 
 class NotificationScreen extends StatefulWidget {
   MyScreen myAppState = new MyScreen();
@@ -26,6 +31,30 @@ class NotificationScreen extends StatefulWidget {
     myAppState._cancelAllNotifications();
     myAppState._showStudyNotification(
         breakSwitchControl, presenceSwitchControl);
+  }
+
+  void lightNoti() {
+    myAppState.initState();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+    if (light) {
+      myAppState._showLightNotification();
+    }
+  }
+
+  void soundNoti() {
+    myAppState.initState();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+    if (sound) {
+      myAppState._showSoundNotification();
+    }
+  }
+
+  void tempNoti() {
+    myAppState.initState();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+    if (temp) {
+      myAppState._showTempNotification();
+    }
   }
 }
 
@@ -89,7 +118,7 @@ class MyScreen extends State<NotificationScreen> {
     scheduledStudyList = await c.getStarttime();
     scheduledEndtimeList = await c.getEndtime();
     print(scheduledStudyList);
-    print(scheduledEndtimeList);
+    print('Schedule updated successfully!');
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     for (var i = 0; i < scheduledStudyList.length; i++) {
@@ -132,7 +161,6 @@ class MyScreen extends State<NotificationScreen> {
   // PRESENCE DETECT NOTIFICATION ///
   ///////////////////////////////////
   Future _showPresenceNotification(String time, var i) async {
-    // DateTime scheduledTime = DateTime.parse(time).add(Duration(seconds: 10));
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     String last = await _getLatestData3();
@@ -162,16 +190,14 @@ class MyScreen extends State<NotificationScreen> {
     if (switchControl == false) {
       setState(() {
         switchControl = true;
-        // soundSwitchControl = true;
         _cancelAllNotifications();
         _showStudyNotification(breakSwitchControl, presenceSwitchControl);
       });
     } else {
       setState(() {
         switchControl = false;
-        // soundSwitchControl = true;
         _cancelAllNotifications();
-        print('cancel success');
+        print('cancel successfully!');
       });
     }
   }
@@ -190,13 +216,13 @@ class MyScreen extends State<NotificationScreen> {
         }
       });
     }
+    _showStudyNotification(breakSwitchControl, presenceSwitchControl);
   }
 
   void onchangePresence(bool value) {
     if (presenceSwitchControl == false) {
       setState(() {
         presenceSwitchControl = true;
-        _showStudyNotification(breakSwitchControl, presenceSwitchControl);
       });
     } else {
       setState(() {
@@ -207,6 +233,7 @@ class MyScreen extends State<NotificationScreen> {
         }
       });
     }
+    _showStudyNotification(breakSwitchControl, presenceSwitchControl);
   }
 
   // void onchangeSound(bool value) {
@@ -223,12 +250,27 @@ class MyScreen extends State<NotificationScreen> {
   //   }
   // }
 
+  // void onchangeVibrate(bool value) {
+  //   if (vibrateSwitchControl == false) {
+  //     setState(() {
+  //       vibrateSwitchControl = true;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       vibrateSwitchControl = false;
+  //       _cancelAllNotifications();
+  //       _showStudyNotification(breakSwitchControl, presenceSwitchControl);
+  //     });
+  //   }
+  // }
+
   ////////////////////
   // User Interface //
   ////////////////////
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: lightThemeData(context),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         drawer: SideMenu(),
@@ -240,6 +282,10 @@ class MyScreen extends State<NotificationScreen> {
             PresenceSwitch(onchangePresence, presenceSwitchControl),
             BreakSwitch(onchangeBreak, breakSwitchControl),
             // SoundSwitch(onchangeSound, soundSwitchControl),
+            // VibrateSwitch(onchangeVibrate, vibrateSwitchControl),
+            SoundSensorSwitch(sensorSound, sound),
+            LightSensorSwitch(sensorLight, light),
+            TempSensorSwitch(sensorTemp, temp)
           ],
         ),
       ),
@@ -307,5 +353,83 @@ class MyScreen extends State<NotificationScreen> {
         ),
       ),
     );
+  }
+
+  /////////////////////////////
+  // Notification for sensor //
+  /////////////////////////////
+  Future _showSoundNotification() async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+      -3,
+      'Too noisy bro?',
+      'Go somewhere else to study đi bro :V',
+      DateTime.now(),
+      platformChannelSpecifics,
+      // payload: 'Ra chơi 15 phút',
+    );
+  }
+
+  Future _showLightNotification() async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+      -2,
+      'Too sáng bro',
+      'Tắt bớt đèn đi bro',
+      DateTime.now(),
+      platformChannelSpecifics,
+      // payload: 'Ra chơi 15 phút',
+    );
+  }
+
+  Future _showTempNotification() async {
+    var platformChannelSpecifics =
+        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+      -1,
+      'So hot, so humid bro',
+      'Bật máy lạnh đi bro',
+      DateTime.now(),
+      platformChannelSpecifics,
+      // payload: 'Ra chơi 15 phút',
+    );
+  }
+
+  void sensorSound(bool value) {
+    if (sound == false) {
+      setState(() {
+        sound = true;
+      });
+    } else {
+      setState(() {
+        sound = false;
+      });
+    }
+  }
+
+  void sensorLight(bool value) {
+    if (light == false) {
+      setState(() {
+        light = true;
+      });
+    } else {
+      setState(() {
+        light = false;
+      });
+    }
+  }
+
+  void sensorTemp(bool value) {
+    if (temp == false) {
+      setState(() {
+        temp = true;
+      });
+    } else {
+      setState(() {
+        temp = false;
+      });
+    }
   }
 }
