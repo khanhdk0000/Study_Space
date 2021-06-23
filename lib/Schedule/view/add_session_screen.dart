@@ -121,7 +121,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                         }
                         break;
                     }
-                      Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   });
                 },
               )
@@ -251,42 +251,44 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           var error = "";
           if (subject.length == 0) {
             error = "You need a name for your event.";
-          } else if (startTime.minute > endTime.minute && startTime.hour >= endTime.hour) {
+          } else if (startTime.minute > endTime.minute &&
+              startTime.hour >= endTime.hour) {
             error = "You can't end an event before it even started.";
           }
 
           if (error.length > 0) {
             showDialog<String>(
               context: context,
-              builder: (BuildContext context) =>
-                  AlertDialog(
-                    title: const Text('Oh no'),
-                    content: Text(error),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Oh no'),
+                content: Text(error),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
                   ),
+                ],
+              ),
             );
           } else {
-             var  s = await SessionController().addSessions(
-                repeat,
-                period,
-                dateToString(startDate),
-                timeToString(startTime),
-                timeToString(endTime),
-                subject,
-                user_id,
-                context,
-                username: user.displayName,);
-            reloadParent();
-            if (s==true) {
+            var s = await SessionController().addSessions(
+              repeat,
+              period,
+              dateToString(startDate),
+              timeToString(startTime),
+              timeToString(endTime),
+              subject,
+              user_id,
+              context,
+              username: user.displayName,
+            );
+
+            if (s == true) {
+              reloadParent();
               //schedule.addSession(subject, timeframe);
               Navigator.pop(context);
-              NotificationScreen _myapp = new NotificationScreen();
-              _myapp.pushNoti();
+              NotificationScreen initNoti = new NotificationScreen();
+              initNoti.pushNoti();
             }
           }
         },
