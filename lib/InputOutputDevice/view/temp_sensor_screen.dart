@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:study_space/InputOutputDevice/controller/controller.dart';
 import 'package:study_space/InputOutputDevice/state/temp_state.dart';
 import 'package:study_space/constants.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';

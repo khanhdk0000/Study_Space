@@ -37,7 +37,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   ///User arguments
   final User user = auth.currentUser;
   String _username = "Unknown"; //temporary name when the user is null
-  int _userid = user_id;
+  int _userid = userId;
 
   @override
   Widget build(BuildContext context) {
@@ -341,9 +341,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
               color: Colors.white,
-            )
-        )
-    );
+            )));
   }
 
   Color _circleColor(int score) {

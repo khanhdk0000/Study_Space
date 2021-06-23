@@ -1,5 +1,3 @@
-import 'package:study_space/InputOutputDevice/controller/controller.dart';
-
 import '../devicesize.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
@@ -98,7 +96,7 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.black,
+                color: Color(0xFF3e9ee7),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
@@ -123,7 +121,7 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                           widget.device,
                           style: TextStyle(
                               fontSize: DeviceSize.safeBlockHorizontal * 4.7,
-                              color: Colors.white70),
+                              color: Colors.white),
                         )
                       ],
                     ),
@@ -224,7 +222,7 @@ class _CustomFrontCardState extends State<CustomFrontCard> {
                                         Icons.info,
                                         size:
                                             DeviceSize.safeBlockHorizontal * 9,
-                                        color: Colors.black,
+                                        color: Color(0xFF031D44),
                                       ),
                               ),
                             ),

@@ -35,7 +35,6 @@ class NotificationScreen extends StatefulWidget {
 
   void lightNoti() {
     myAppState.initState();
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
     if (light) {
       myAppState._showLightNotification();
     }
@@ -51,7 +50,6 @@ class NotificationScreen extends StatefulWidget {
 
   void tempNoti() {
     myAppState.initState();
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
     if (temp) {
       myAppState._showTempNotification();
     }

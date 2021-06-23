@@ -110,10 +110,10 @@ class _LogInFormState extends State<LogInForm> {
         print('success');
         var c = new userController();
         // await c.addUser(user.displayName);
-        user_id = await c.getUserId(user.displayName, context);
+        userId = await c.getUserId(user.displayName, context);
         characterNames = userController().getCharacterName();
 
-        if (user_id == -1) {
+        if (userId == -1) {
           await c.addUser(user.displayName);
           c.popup(context);
         } else {

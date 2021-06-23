@@ -10,7 +10,6 @@ import 'package:study_space/Notification/notification_screen.dart';
 
 class SoundState with ChangeNotifier {
   MQTTAppConnectionState _appConnectionState;
-  String _historyText = "";
   double _valueFromServer = 0;
   bool _overThreshold = false;
   SensorController sensorController = SensorController();
@@ -29,48 +28,51 @@ class SoundState with ChangeNotifier {
         valueFromServer(double.parse(temp['data']));
       }
 
-      if (_valueFromServer > 500) {
+      String sessionId = await getSessionId();
+      if (_valueFromServer > 500 && sessionId != '-1') {
         print('reeee');
         setBoolThreshold(true);
-        var response = await http.post(
-          Uri.parse('http://' + host + '/postlcd'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, String>{
-            'data': 'Sound alert',
-          }),
-        );
-        var response2 = await http.post(
-          Uri.parse('http://' + host + '/postbuzzer'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, String>{
-            'data': '400',
-          }),
-        );
-        print('Status: ' + response.statusCode.toString());
-        print('Status 2: ' + response2.statusCode.toString());
-
-        // Notification part
+        // get session id success
+        await notifyBuzzerLcd();
         NotificationScreen initNoti = new NotificationScreen();
         initNoti.soundNoti();
+        await pushToDatabase(sessionId);
       }
-      pushToDatabase();
     });
   }
 
   final f = DateFormat('yyyy-MM-dd hh:mm:ss');
 
-  void pushToDatabase() async {
-    String sessid = await getSessionId();
+  Future notifyBuzzerLcd() async {
+    var response = await http.post(
+      Uri.parse('http://' + host + '/postlcd'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'data': 'Sound alert',
+      }),
+    );
+    var response2 = await http.post(
+      Uri.parse('http://' + host + '/postbuzzer'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'data': '400',
+      }),
+    );
+    print('Status: ' + response.statusCode.toString());
+    print('Status 2: ' + response2.statusCode.toString());
+  }
+
+  Future pushToDatabase(String id) async {
     await sensorController.addSensorField(
         name: 'SOUND',
         unit: '',
         type: 'S',
         timestamp: f.format(DateTime.now()),
-        sessId: sessid,
+        sessId: id,
         data: _valueFromServer.toString());
   }
 
@@ -86,8 +88,8 @@ class SoundState with ChangeNotifier {
     notifyListeners();
   }
 
-  String get getHistoryText => _historyText;
   double get getValueFromServer => _valueFromServer;
+
   bool get getOverThreshold => _overThreshold;
 
   MQTTAppConnectionState get getAppConnectionState => _appConnectionState;

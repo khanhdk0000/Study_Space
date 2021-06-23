@@ -60,7 +60,6 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         }
       });
     }
-    ;
   }
 
   void setDate() async {
@@ -75,7 +74,6 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
         startDate = newDate;
       });
     }
-    ;
   }
 
   @override
@@ -131,7 +129,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
   }
 
   Widget build(BuildContext context) {
-    var Navigation = Column(children: [
+    var navigation = Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -145,7 +143,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
       ),
     ]);
 
-    final SubjectField = Container(
+    final subjectField = Container(
         padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -163,7 +161,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
                   color: Colors.black),
             )));
 
-    final DateField = Container(
+    final dateField = Container(
         padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -178,7 +176,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               style: bodyText,
             )));
 
-    final StartTimeField = Container(
+    final startTimeField = Container(
         padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -193,7 +191,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               style: bodyText,
             )));
 
-    final EndTimeField = Container(
+    final endTimeField = Container(
         padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -208,7 +206,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               style: bodyText,
             )));
 
-    final RepeatField = Container(
+    final repeatField = Container(
         padding: EdgeInsets.all(20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -224,7 +222,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               style: bodyText,
             )));
 
-    final PeriodField = Container(
+    final periodField = Container(
         padding: EdgeInsets.only(left: 20, top: 20, bottom: 24, right: 20),
         color: Color.fromRGBO(0, 0, 0, 0.06),
         alignment: Alignment.topLeft,
@@ -240,7 +238,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               style: bodyText,
             )));
 
-    final SaveButton = TextButton(
+    final saveButton = TextButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.green,
           shape: RoundedRectangleBorder(
@@ -278,7 +276,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               timeToString(startTime),
               timeToString(endTime),
               subject,
-              user_id,
+              userId,
               context,
               username: user.displayName,
             );
@@ -322,20 +320,20 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
               children: [
-            Navigation,
+            navigation,
             spacer,
-            SubjectField,
+            subjectField,
             divider,
-            DateField,
+            dateField,
             divider,
-            StartTimeField,
+            startTimeField,
             divider,
-            EndTimeField,
+            endTimeField,
             divider,
-            RepeatField,
+            repeatField,
             divider,
-            PeriodField,
-            SaveButton
+            periodField,
+            saveButton
           ])),
     );
   }

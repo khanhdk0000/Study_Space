@@ -56,7 +56,7 @@ class _SessionScreenState extends State<SessionScreen> {
     } else if (difference < 0) {
       upcoming = "You missed this event";
     } else {
-      upcoming = "Scheduled for ${difference} days from now";
+      upcoming = "Scheduled for $difference days from now";
     }
   }
 
@@ -65,14 +65,14 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     todaySessions = SessionController().getUnfinishedSessions(
-        user_id,
+        userId,
         SessionController().setFilter("Time (L)"),
         365,
         30,
         user.displayName,
         context);
 
-    var Navigation = Column(
+    var navigation = Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -90,7 +90,7 @@ class _SessionScreenState extends State<SessionScreen> {
       ],
     );
 
-    final DeleteButton = TextButton(
+    final deleteButton = TextButton(
       style: TextButton.styleFrom(
         backgroundColor: Colors.red,
         shape: RoundedRectangleBorder(
@@ -98,8 +98,8 @@ class _SessionScreenState extends State<SessionScreen> {
         ),
       ),
       onPressed: () {
-        SessionController().removeSession(date, startTime, endTime, title,
-            user_id, user.displayName, context);
+        SessionController().removeSession(
+            date, startTime, endTime, title, userId, user.displayName, context);
         sleep(Duration(milliseconds: 600));
         reloadParent();
         Navigator.pop(context);
@@ -128,7 +128,7 @@ class _SessionScreenState extends State<SessionScreen> {
       ),
     );
 
-    var Summary = Container(
+    var summary = Container(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         padding: EdgeInsets.all(22),
         child: ListBody(
@@ -142,7 +142,7 @@ class _SessionScreenState extends State<SessionScreen> {
           ],
         ));
 
-    var Timeline = FutureBuilder(
+    var timeline = FutureBuilder(
         future: todaySessions,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -163,7 +163,7 @@ class _SessionScreenState extends State<SessionScreen> {
           child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.symmetric(vertical: 12),
-              children: [Navigation, Summary, Timeline, DeleteButton]),
+              children: [navigation, summary, timeline, deleteButton]),
         ));
   }
 }

@@ -23,8 +23,8 @@ class userController {
     return data.toString();
   }
 
-  Future<User> addUser(
-      String username, {String fname = '', String lname = '', String dob = ''}) async {
+  Future<User> addUser(String username,
+      {String fname = '', String lname = '', String dob = ''}) async {
     print('add user');
     var response = await http.post(Uri.https(webhost, 'add_user.php'),
         headers: <String, String>{
@@ -58,30 +58,30 @@ class userController {
           'username': username,
         }));
     print(response.statusCode);
-    if ((response.statusCode == 201)&&(response.body.isNotEmpty)) {
+    if ((response.statusCode == 201) && (response.body.isNotEmpty)) {
       print("Success");
       var data = jsonDecode(response.body);
       print(data);
-      return User(int.parse(data[0]),data[1],data[2],data[3],data[4]);
+      return User(int.parse(data[0]), data[1], data[2], data[3], data[4]);
     } else {
       print('failed');
       return null;
     }
   }
-  
+
   Future<int> getUserId(String username, BuildContext context) async {
-      print('get user id');
-      var u = await getUser(username);
-      if (u != null) {
-        user_id = u.getId();
-        return u.getId();
-      }
-      else {
-        print("User error");
-        checkId(context);
-        return -1;
-      }
+    print('get user id');
+    var u = await getUser(username);
+    if (u != null) {
+      userId = u.getId();
+      return u.getId();
+    } else {
+      print("User error");
+      checkId(context);
+      return -1;
+    }
   }
+
   void popup(BuildContext context) {
     showDialog(
       context: context,
@@ -89,14 +89,12 @@ class userController {
     );
   }
 
-
   void reroute(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WelcomeScreen()),
     );
   }
-
 
   Widget _buildPopupDialog(BuildContext context) {
     return new AlertDialog(
@@ -113,7 +111,6 @@ class userController {
           onPressed: () {
             // reroute(context);
             Navigator.of(context).pop();
-
           },
           child: const Text('Ok'),
         ),
@@ -121,16 +118,24 @@ class userController {
     );
   }
 
-  String getCharacterName(){
+  String getCharacterName() {
     List<String> characterNames = [
-      "Captain America", "Iron Man", "Thor Odinson",
-      "Hulk", "Black Widow", "Hawkeye", "War Machine",
-      "Vision", "Scarlet Witch", "Falcon", "Spider-Man",
-      "Ant-Man", "Nebula", "Batman"
+      "Captain America",
+      "Iron Man",
+      "Thor Odinson",
+      "Hulk",
+      "Black Widow",
+      "Hawkeye",
+      "War Machine",
+      "Vision",
+      "Scarlet Witch",
+      "Falcon",
+      "Spider-Man",
+      "Ant-Man",
+      "Nebula",
+      "Batman"
     ];
     int rand = Random().nextInt(characterNames.length);
     return characterNames[rand];
   }
 }
-
-

@@ -31,12 +31,16 @@ class _OneSessionViewState extends State<OneSessionView> {
   void initState() {
     super.initState();
     print("[DATABASE] Retrieving data");
-    ///widget.sessionList[4] means we take the ID of the session recorded in the session list
-    tempSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'TH');
-    soundSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'S');
-    lightSensorData = SensorController().getSensorData(sess_id: widget.sessionList[4], type: 'L');
-    ///Random comments is fixed here
 
+    ///widget.sessionList[4] means we take the ID of the session recorded in the session list
+    tempSensorData = SensorController()
+        .getSensorData(sess_id: widget.sessionList[4], type: 'TH');
+    soundSensorData = SensorController()
+        .getSensorData(sess_id: widget.sessionList[4], type: 'S');
+    lightSensorData = SensorController()
+        .getSensorData(sess_id: widget.sessionList[4], type: 'L');
+
+    ///Random comments is fixed here
   }
 
   @override
@@ -45,24 +49,23 @@ class _OneSessionViewState extends State<OneSessionView> {
       drawer: SideMenu(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text('How performance score is calculated?'),
-            content: Column(
-              children: [
-                Image(image: AssetImage('assets/img/calculator.png')),
-                Text(SensorController().howEvaluatedText()),
-              ],
-            ),
-            scrollable: true,
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: Text('OK'),
-              ),
-            ],
-          )
-        ),
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  title: Text('How performance score is calculated?'),
+                  content: Column(
+                    children: [
+                      Image(image: AssetImage('assets/img/calculator.png')),
+                      Text(SensorController().howEvaluatedText()),
+                    ],
+                  ),
+                  scrollable: true,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: Text('OK'),
+                    ),
+                  ],
+                )),
         child: const Icon(Icons.contact_support_outlined, color: Colors.white),
         backgroundColor: Colors.deepPurpleAccent,
       ),
@@ -80,13 +83,14 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
-  Widget _topView(){
+  Widget _topView() {
     ///The top view include the drawer button and screen name.
     return Padding(
-      padding: const EdgeInsets.only(top:10.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
+          padding:
+              const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
           child: Row(
             children: [
               MenuButton(),
@@ -104,7 +108,7 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
-  Widget _sessionView(){
+  Widget _sessionView() {
     ///Display the information of the session in table format.
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
@@ -132,32 +136,27 @@ class _OneSessionViewState extends State<OneSessionView> {
           color: _circleColor(int.parse(score)),
           shape: BoxShape.circle,
         ),
-        child: Text(
-            scoreText,
+        child: Text(scoreText,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 35.0,
               color: Colors.white,
-            )
-        )
-    );
+            )));
   }
 
-  Color _circleColor(int score){
-    if (score >= 90.0){
+  Color _circleColor(int score) {
+    if (score >= 90.0) {
       return Colors.greenAccent;
-    }
-    else if (score >= 70.0){
+    } else if (score >= 70.0) {
       return Colors.orangeAccent;
-    }
-    else if (score > 0){
+    } else if (score > 0) {
       return Colors.redAccent;
     } else {
       return Colors.grey;
     }
   }
 
-  Widget _tableText(String str1, String str2){
+  Widget _tableText(String str1, String str2) {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -184,68 +183,71 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
-  Widget _sensorView(){
+  Widget _sensorView() {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-        child: ListView(
-          children: [
-            _sensorTile('Light'),
-            SizedBox(height: kDefaultPadding * 0.5),
-            _sensorTile('Sound'),
-            SizedBox(height: kDefaultPadding * 0.5),
-            _sensorTile('Temperature'),
-            SizedBox(height: kDefaultPadding * 2),
-          ],
-        )
-      ),
+          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          child: ListView(
+            children: [
+              _sensorTile('Light'),
+              SizedBox(height: kDefaultPadding * 0.5),
+              _sensorTile('Sound'),
+              SizedBox(height: kDefaultPadding * 0.5),
+              _sensorTile('Temperature'),
+              SizedBox(height: kDefaultPadding * 2),
+            ],
+          )),
     );
   }
 
-  Widget _sensorTile(String type){
+  Widget _sensorTile(String type) {
     String unit;
     String text;
     double value;
     bool visible;
     Future future;
-    String image_asset;
+    String imageAsset;
     if (type == 'Light') {
       unit = 'Lux';
       visible = lightVisible;
       future = lightSensorData;
-      image_asset = 'assets/img/lightbulb1.png';
+      imageAsset = 'assets/img/lightbulb1.png';
     } else if (type == 'Sound') {
       unit = 'dB';
       visible = soundVisible;
       future = soundSensorData;
-      image_asset = 'assets/img/stereo.png';
+      imageAsset = 'assets/img/stereo.png';
     } else if (type == 'Temperature') {
       unit = 'degC';
       visible = tempVisible;
       future = tempSensorData;
-      image_asset = 'assets/img/thermometer.png';
+      imageAsset = 'assets/img/thermometer.png';
     }
-    return FutureBuilder(future: future, builder: (context, snapshot){
-      if (snapshot.hasData){
-        value = SensorController().getAverage(snapshot.data);
-        text = value.toString() + ' ' + unit;
-        return _displaySensorTile(type, visible, text, value, snapshot.data, image_asset);
-      } else if (snapshot.hasError) {
-        return Text("${snapshot.error}");
-      }
-      return Text('Loading...');
-    });
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            value = SensorController().getAverage(snapshot.data);
+            text = value.toString() + ' ' + unit;
+            return _displaySensorTile(
+                type, visible, text, value, snapshot.data, imageAsset);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return Text('Loading...');
+        });
   }
 
-  Widget _displaySensorTile(String type, bool visible, String text, double value, List<Sensor> sensorList, String image_asset) {
+  Widget _displaySensorTile(String type, bool visible, String text,
+      double value, List<Sensor> sensorList, String imageAsset) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         focusColor: Colors.grey,
         onTap: () {
-          if (sensorList.length != 0){
+          if (sensorList.length != 0) {
             setState(() {
-              if (type == 'Light'){
+              if (type == 'Light') {
                 lightVisible = !lightVisible;
               } else if (type == 'Sound') {
                 soundVisible = !soundVisible;
@@ -278,7 +280,7 @@ class _OneSessionViewState extends State<OneSessionView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image(
-                      image: AssetImage(image_asset),
+                      image: AssetImage(imageAsset),
                       height: 65.0,
                     ),
                     SizedBox(width: 15.0),
@@ -295,20 +297,20 @@ class _OneSessionViewState extends State<OneSessionView> {
                           ),
                           SizedBox(height: 4.0),
                           Text(
-                              sensorList.length == 0 ? 'No record' : 'Average: $text',
+                              sensorList.length == 0
+                                  ? 'No record'
+                                  : 'Average: $text',
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 14,
                                 color: Colors.black54,
-                              )
-                          )
+                              ))
                         ],
                       ),
                     ),
                     Transform.rotate(
-                      angle: visible ? -math.pi / 2 : math.pi / 2,
-                      child: Icon(Icons.chevron_right)
-                    ),
+                        angle: visible ? -math.pi / 2 : math.pi / 2,
+                        child: Icon(Icons.chevron_right)),
                   ],
                 ),
                 Visibility(
@@ -318,12 +320,16 @@ class _OneSessionViewState extends State<OneSessionView> {
                     child: ChartView(sensorList: sensorList, type: type),
                   ),
                 ),
-                Visibility(visible: visible, child: SizedBox(height: kDefaultPadding * 0.5)),
+                Visibility(
+                    visible: visible,
+                    child: SizedBox(height: kDefaultPadding * 0.5)),
                 Visibility(
                   visible: visible,
                   child: _reviewView(value, type),
                 ),
-                Visibility(visible: visible, child: SizedBox(height: kDefaultPadding * 0.5)),
+                Visibility(
+                    visible: visible,
+                    child: SizedBox(height: kDefaultPadding * 0.5)),
               ],
             ),
           ),
@@ -332,7 +338,7 @@ class _OneSessionViewState extends State<OneSessionView> {
     );
   }
 
-  Widget _reviewView(double value, String type){
+  Widget _reviewView(double value, String type) {
     SensorController s = SensorController();
     SensorEvaluation eval = s.getEvaluation(value, type);
     String reviewText = s.getReviewText(eval, type);
