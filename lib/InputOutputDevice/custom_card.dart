@@ -1,6 +1,6 @@
 import 'package:study_space/InputOutputDevice/controller/controller.dart';
 
-import '../OutputDevice/devicesize.dart';
+import '../devicesize.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
 

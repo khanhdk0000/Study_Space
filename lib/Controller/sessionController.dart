@@ -134,6 +134,7 @@ class SessionController {
       final dateString = DateFormat('MM/dd/yyyy').format(repeatDate);
 
       res = await addSession(
+
           dateString, start_time, end_time, title, user_id, context);
     }
 

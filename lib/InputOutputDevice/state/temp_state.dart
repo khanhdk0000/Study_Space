@@ -34,6 +34,8 @@ class TempState with ChangeNotifier {
 
       _temperature = double.parse(temp['data'].split('-')[0]);
       if (_temperature > 30) {
+        setBoolThreshold(true);
+
         print('reeee');
         var response = await http.post(
           Uri.parse('http://' + host + '/postlcd'),
@@ -72,7 +74,7 @@ class TempState with ChangeNotifier {
         unit: 'C-%',
         type: 'TH',
         timestamp: f.format(DateTime.now()),
-        sess_id: sessid,
+        sessId: sessid,
         data: _temperature.toString());
   }
 
@@ -101,6 +103,7 @@ class TempState with ChangeNotifier {
 
   void setBoolThreshold(bool val) {
     _overThreshold = val;
+    notifyListeners();
   }
 
   void disposeStream() {

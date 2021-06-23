@@ -20,7 +20,7 @@ class SensorController {
       String unit,
       String type,
       String timestamp,
-      String sess_id,
+      String sessId,
       String data}) async {
     var session_id =
         await SessionController().getCurrentSession(user.displayName);
@@ -72,20 +72,21 @@ class SensorController {
     }
   }
 
-  Future<double> getDirectAverage({String sess_id, String type}) async{
-    var response = await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'session': sess_id,
-          'type' : "'" + type + "'",
-        }));
+  Future<double> getDirectAverage({String sess_id, String type}) async {
+    var response =
+        await http.post(Uri.https(webhost, 'get_average_sensor_data.php'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+              'session': sess_id,
+              'type': "'" + type + "'",
+            }));
     print('[GET DIRECT AVERAGE] ${response.statusCode}');
     print(response.body);
     if (response.statusCode == 201) {
       print("Success");
-      if (response.body == ''){
+      if (response.body == '') {
         return -1;
       }
       return double.parse(response.body);
@@ -166,7 +167,8 @@ class SensorController {
       } else {
         return SensorEvaluation.bad;
       }
-    } else return SensorEvaluation.bad;
+    } else
+      return SensorEvaluation.bad;
   }
 
   String getImage(SensorEvaluation eval) {

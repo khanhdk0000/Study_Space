@@ -52,7 +52,8 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.cast_for_education),
-            title: Text('Session', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Session', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -62,7 +63,8 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.stacked_bar_chart),
-            title: Text('Summary', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Summary', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -73,47 +75,17 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.calendar_today_sharp),
-            title: Text('Schedule', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Schedule', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScheduleScreen()),
             ),
           ),
-          // ListTile(
-          //   leading: Icon(Icons.device_thermostat),
-          //   title: Text('Sensor'),
-          //   onTap: () => Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => SensorScreen(),
-          //     ),
-          //   ),
-          //   trailing: Container(
-          //     width: 25,
-          //     height: 25,
-          //     decoration: BoxDecoration(
-          //         shape: BoxShape.circle, color: Colors.redAccent),
-          //     child: Center(
-          //       child: Text(
-          //         '1',
-          //         style: TextStyle(color: kContentColorDarkTheme),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.construction),
-          //   title: Text('Customize'),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => CustomViewAll()),
-          //     );
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.construction),
-            title: Text('Setting', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Setting', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -121,19 +93,10 @@ class SideMenu extends StatelessWidget {
               );
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.construction),
-          //   title: Text('Output device'),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => OutputDeviceScreen()),
-          //     );
-          //   },
-          // ),
           ListTile(
             leading: Icon(Icons.wb_shade),
-            title: Text('Device', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Device', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.push(
                 context,
@@ -143,7 +106,8 @@ class SideMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('Sign Out', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('Sign Out', style: TextStyle(fontWeight: FontWeight.bold)),
             onTap: () async {
               final User user = _auth.currentUser;
               if (user == null) {

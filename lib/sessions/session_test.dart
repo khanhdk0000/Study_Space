@@ -3,14 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/CommonComponents/components.dart';
-import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
-import 'package:study_space/Controller/schedController.dart';
-
 
 User user = FirebaseAuth.instance.currentUser;
 
@@ -129,11 +126,10 @@ class _SessionsViewState extends State<SessionsView> {
 
   void popup() {
     showDialog(
-        context: context,
-        builder: (BuildContext context) => _buildPopupDialog(context),
+      context: context,
+      builder: (BuildContext context) => _buildPopupDialog(context),
     );
   }
-
 
   void reroute() {
     Navigator.push(

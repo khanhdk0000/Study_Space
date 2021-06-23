@@ -31,6 +31,7 @@ class SoundState with ChangeNotifier {
 
       if (_valueFromServer > 500) {
         print('reeee');
+        setBoolThreshold(true);
         var response = await http.post(
           Uri.parse('http://' + host + '/postlcd'),
           headers: <String, String>{
@@ -69,7 +70,7 @@ class SoundState with ChangeNotifier {
         unit: '',
         type: 'S',
         timestamp: f.format(DateTime.now()),
-        sess_id: sessid,
+        sessId: sessid,
         data: _valueFromServer.toString());
   }
 
@@ -98,6 +99,7 @@ class SoundState with ChangeNotifier {
 
   void setBoolThreshold(bool val) {
     _overThreshold = val;
+    notifyListeners();
   }
 
   void disposeStream() {
