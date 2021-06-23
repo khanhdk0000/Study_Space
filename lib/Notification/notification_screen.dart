@@ -13,14 +13,12 @@ import 'dart:convert';
 bool switchControl = true;
 bool breakSwitchControl = false;
 bool presenceSwitchControl = false;
-// bool soundSwitchControl = true;
-// bool vibrateSwitchControl = true;
 bool light = true;
 bool sound = true;
 bool temp = true;
 
 class NotificationScreen extends StatefulWidget {
-  MyScreen myAppState = new MyScreen();
+  final MyScreen myAppState = new MyScreen();
 
   @override
   MyScreen createState() => MyScreen();
@@ -29,29 +27,28 @@ class NotificationScreen extends StatefulWidget {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
     myAppState._cancelAllNotifications();
-    myAppState._showStudyNotification(
+    myAppState._pushStudyNotification(
         breakSwitchControl, presenceSwitchControl);
   }
 
   void lightNoti() {
     myAppState.initState();
     if (light) {
-      myAppState._showLightNotification();
+      myAppState._pushLightNotification();
     }
   }
 
   void soundNoti() {
     myAppState.initState();
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
     if (sound) {
-      myAppState._showSoundNotification();
+      myAppState._pushSoundNotification();
     }
   }
 
   void tempNoti() {
     myAppState.initState();
     if (temp) {
-      myAppState._showTempNotification();
+      myAppState._pushTempNotification();
     }
   }
 }
@@ -96,9 +93,10 @@ class MyScreen extends State<NotificationScreen> {
   ////////////////////////
   // BREAK NOTIFICATION //
   ////////////////////////
-  Future _showBreakNotification(String time, var i) async {
+  Future _pushBreakNotification(String time, var i) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
+    // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       i,
       'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
@@ -112,7 +110,7 @@ class MyScreen extends State<NotificationScreen> {
   //////////////////////////////////////
   // START STUDY SESSION NOTIFICATION //
   //////////////////////////////////////
-  Future _showStudyNotification(bool useBreak, bool usePresence) async {
+  Future _pushStudyNotification(bool useBreak, bool usePresence) async {
     scheduledStudyList = await c.getStarttime();
     scheduledEndtimeList = await c.getEndtime();
     print(scheduledStudyList);
@@ -121,6 +119,7 @@ class MyScreen extends State<NotificationScreen> {
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     for (var i = 0; i < scheduledStudyList.length; i++) {
       if (DateTime.parse(scheduledStudyList[i]).isAfter(DateTime.now())) {
+        // ignore: deprecated_member_use
         await flutterLocalNotificationsPlugin.schedule(
           i,
           'Đi họccccccccccccccccccccc',
@@ -129,6 +128,7 @@ class MyScreen extends State<NotificationScreen> {
           platformChannelSpecifics,
           payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
         );
+        // ignore: deprecated_member_use
         await flutterLocalNotificationsPlugin.schedule(
           i + scheduledEndtimeList.length * 3,
           'Hết giờ !!!!!!!!!!!!!!!!',
@@ -138,12 +138,12 @@ class MyScreen extends State<NotificationScreen> {
           payload: 'Một cái nội dung gì đó về việc tới giờ nghỉ học',
         );
         if (useBreak) {
-          _showBreakNotification(
+          _pushBreakNotification(
               scheduledStudyList[i], i + scheduledStudyList.length * 2);
         }
         if (usePresence) {
           void showPresence() {
-            _showPresenceNotification(
+            _pushPresenceNotification(
                 scheduledStudyList[i], i + scheduledEndtimeList.length);
           }
 
@@ -158,11 +158,12 @@ class MyScreen extends State<NotificationScreen> {
   ////////////////////////////////////
   // PRESENCE DETECT NOTIFICATION ///
   ///////////////////////////////////
-  Future _showPresenceNotification(String time, var i) async {
+  Future _pushPresenceNotification(String time, var i) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     String last = await _getLatestData3();
     if (last == '0') {
+      // ignore: deprecated_member_use
       await flutterLocalNotificationsPlugin.schedule(
         i,
         'Vắng mặt',
@@ -189,7 +190,7 @@ class MyScreen extends State<NotificationScreen> {
       setState(() {
         switchControl = true;
         _cancelAllNotifications();
-        _showStudyNotification(breakSwitchControl, presenceSwitchControl);
+        _pushStudyNotification(breakSwitchControl, presenceSwitchControl);
       });
     } else {
       setState(() {
@@ -214,7 +215,7 @@ class MyScreen extends State<NotificationScreen> {
         }
       });
     }
-    _showStudyNotification(breakSwitchControl, presenceSwitchControl);
+    _pushStudyNotification(breakSwitchControl, presenceSwitchControl);
   }
 
   void onchangePresence(bool value) {
@@ -231,36 +232,8 @@ class MyScreen extends State<NotificationScreen> {
         }
       });
     }
-    _showStudyNotification(breakSwitchControl, presenceSwitchControl);
+    _pushStudyNotification(breakSwitchControl, presenceSwitchControl);
   }
-
-  // void onchangeSound(bool value) {
-  //   if (soundSwitchControl == false) {
-  //     setState(() {
-  //       soundSwitchControl = true;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       soundSwitchControl = false;
-  //       _cancelAllNotifications();
-  //       _showStudyNotification(breakSwitchControl, presenceSwitchControl);
-  //     });
-  //   }
-  // }
-
-  // void onchangeVibrate(bool value) {
-  //   if (vibrateSwitchControl == false) {
-  //     setState(() {
-  //       vibrateSwitchControl = true;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       vibrateSwitchControl = false;
-  //       _cancelAllNotifications();
-  //       _showStudyNotification(breakSwitchControl, presenceSwitchControl);
-  //     });
-  //   }
-  // }
 
   ////////////////////
   // User Interface //
@@ -273,14 +246,11 @@ class MyScreen extends State<NotificationScreen> {
       home: Scaffold(
         drawer: SideMenu(),
         body: ListView(
-          // padding: const EdgeInsets.all(20),
           children: [
             _topView(),
             StudySwitch(onchange, switchControl),
             PresenceSwitch(onchangePresence, presenceSwitchControl),
             BreakSwitch(onchangeBreak, breakSwitchControl),
-            // SoundSwitch(onchangeSound, soundSwitchControl),
-            // VibrateSwitch(onchangeVibrate, vibrateSwitchControl),
             SoundSensorSwitch(sensorSound, sound),
             LightSensorSwitch(sensorLight, light),
             TempSensorSwitch(sensorTemp, temp)
@@ -309,19 +279,6 @@ class MyScreen extends State<NotificationScreen> {
     var temp = infos[0]['value'];
     var temp2 = json.decode(temp)['data'];
     return temp2.toString();
-  }
-
-  Widget _buildScrollableTextWith(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Container(
-        width: 400,
-        height: 200,
-        child: SingleChildScrollView(
-          child: Text(text),
-        ),
-      ),
-    );
   }
 
   Widget _topView() {
@@ -356,42 +313,42 @@ class MyScreen extends State<NotificationScreen> {
   /////////////////////////////
   // Notification for sensor //
   /////////////////////////////
-  Future _showSoundNotification() async {
+  Future _pushSoundNotification() async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
+    // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       -3,
       'Too noisy bro?',
       'Go somewhere else to study đi bro :V',
       DateTime.now(),
       platformChannelSpecifics,
-      // payload: 'Ra chơi 15 phút',
     );
   }
 
-  Future _showLightNotification() async {
+  Future _pushLightNotification() async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
+    // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       -2,
       'Too sáng bro',
       'Tắt bớt đèn đi bro',
       DateTime.now(),
       platformChannelSpecifics,
-      // payload: 'Ra chơi 15 phút',
     );
   }
 
-  Future _showTempNotification() async {
+  Future _pushTempNotification() async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
+    // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       -1,
       'So hot, so humid bro',
       'Bật máy lạnh đi bro',
       DateTime.now(),
       platformChannelSpecifics,
-      // payload: 'Ra chơi 15 phút',
     );
   }
 
