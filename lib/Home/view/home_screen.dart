@@ -27,18 +27,8 @@ class HomeScreen extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          MenuButton(),
-          Container(
-            child: CircleAvatar(
-              radius: 90.0,
-              backgroundImage: AssetImage(avatar),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 2)],
-            ),
-          ),
+          CircleMenuButton(),
+          CookieAvatar(),
           TextButton(
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -49,7 +39,15 @@ class HomeScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
             },
-            child: Icon(Icons.tune, color: Colors.black, size: 24.0),
+            child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue,
+              ),
+              child: Icon(Icons.tune, color: Colors.white, size: 24.0),
+            ),
           )
         ],
       ),
@@ -61,7 +59,7 @@ class HomeScreen extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
       ),
       Text(
-        "Your sprit today is $characterNames",
+        "Your sprit today is $characterNames Cookie",
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -87,7 +85,7 @@ class HomeScreen extends StatelessWidget {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Icon(
             Icons.calendar_view_week,
-            color: Colors.black,
+            color: Colors.redAccent,
             size: 22.0,
           ),
           Text(
@@ -122,7 +120,7 @@ class HomeScreen extends StatelessWidget {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Icon(
             Icons.insights,
-            color: Colors.black,
+            color: Colors.purple,
             size: 22.0,
           ),
           Text(
@@ -157,7 +155,7 @@ class HomeScreen extends StatelessWidget {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Icon(
             Icons.device_hub,
-            color: Colors.black,
+            color: Colors.deepOrange,
             size: 22.0,
           ),
           Text(
@@ -198,18 +196,45 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+class CookieAvatar extends StatelessWidget {
+  const CookieAvatar({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: CircleAvatar(
+        radius: 90.0,
+        child: CircleAvatar(
+          radius: 75.0,
+          backgroundImage: AssetImage(avatar),
+        ),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(blurRadius: 3, color: Colors.grey, spreadRadius: 1)
+        ],
+      ),
+    );
+  }
+}
+
 class HomeSchedule extends StatelessWidget {
   Future<List<Session>> sessions;
 
   @override
   Widget build(BuildContext context) {
     sessions = SessionController().getUnfinishedSessions(
-        userId,
-        SessionController().setFilter("Time (L)"),
-        0,
-        30,
-        _user.displayName,
-        context);
+      userId,
+      SessionController().setFilter("Time (L)"),
+      0,
+      30,
+      _user.displayName,
+      context,
+    );
 
     return FutureBuilder(
         future: sessions,
@@ -240,80 +265,87 @@ class HomeSchedule extends StatelessWidget {
               return Column(
                 children: [
                   Container(
-                      padding: EdgeInsets.all(22),
-                      color: Colors.black,
-                      width: double.infinity,
-                      child: Text(
-                        "Your next study event is ${nextSession.getTitle()}, starting in $eta minutes",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                            color: Colors.white),
-                      )),
+                    padding: EdgeInsets.all(22),
+                    color: Colors.black,
+                    width: double.infinity,
+                    child: Text(
+                      "Your next study event is ${nextSession.getTitle()}, starting in $eta minutes",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          color: Colors.white),
+                    ),
+                  ),
                   Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(26),
-                            color: Color.fromRGBO(0, 0, 0, 0.06),
-                            child: Column(children: [
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(26),
+                          color: Color.fromRGBO(0, 0, 0, 0.06),
+                          child: Column(
+                            children: [
                               for (var i = 0; i < todaySessions.length; i++)
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
                                   child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(children: [
-                                          Container(
-                                            width: 4.0,
-                                            height: 4.0,
-                                            decoration: BoxDecoration(
-                                                color: colors[i],
-                                                shape: BoxShape.circle),
-                                          ),
-                                          Text(
-                                            "  ${todaySessions[i].getTitle()}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                        ]),
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(children: [
+                                        Container(
+                                          width: 4.0,
+                                          height: 4.0,
+                                          decoration: BoxDecoration(
+                                              color: colors[i],
+                                              shape: BoxShape.circle),
+                                        ),
                                         Text(
-                                          "${todaySessions[i].getStartTime()} : ${todaySessions[i].getEndTime()}",
+                                          "  ${todaySessions[i].getTitle()}",
                                           style: TextStyle(
-                                              fontWeight: FontWeight.normal,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Colors.black),
-                                        )
+                                        ),
                                       ]),
+                                      Text(
+                                        "${todaySessions[i].getStartTime()} : ${todaySessions[i].getEndTime()}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                            ]),
+                            ],
                           ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               );
             } else {
               return Container(
-                  child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(26),
-                    color: Colors.black,
-                    child: Text(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(26),
+                      color: Colors.blue,
+                      child: Text(
                         "You don't have any upcoming study event for today",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
-                            color: Colors.white)),
-                  ),
-                ],
-              ));
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
