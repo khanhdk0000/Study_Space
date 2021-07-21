@@ -49,23 +49,7 @@ class _OneSessionViewState extends State<OneSessionView> {
       drawer: SideMenu(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-                  title: Text('How performance score is calculated?'),
-                  content: Column(
-                    children: [
-                      Image(image: AssetImage('assets/img/calculator.png')),
-                      Text(SensorController().howEvaluatedText()),
-                    ],
-                  ),
-                  scrollable: true,
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: Text('OK'),
-                    ),
-                  ],
-                )),
+            context: context, builder: (BuildContext context) => FunkyDialog()),
         child: const Icon(Icons.contact_support_outlined, color: Colors.white),
         backgroundColor: Colors.deepPurpleAccent,
       ),
@@ -376,6 +360,56 @@ class _OneSessionViewState extends State<OneSessionView> {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FunkyDialog extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => FunkyDialogState();
+}
+
+class FunkyDialogState extends State<FunkyDialog>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    scaleAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.elasticInOut);
+
+    controller.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: scaleAnimation,
+      child: AlertDialog(
+        title: Text('How performance score is calculated?'),
+        content: Column(
+          children: [
+            Image(image: AssetImage('assets/img/calculator.png')),
+            Text(SensorController().howEvaluatedText()),
+          ],
+        ),
+        scrollable: true,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text('OK'),
           ),
         ],
       ),

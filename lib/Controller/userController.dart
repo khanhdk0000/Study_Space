@@ -11,6 +11,21 @@ import 'package:flutter/material.dart';
 import 'package:study_space/global.dart';
 
 class userController {
+  List<String> characterNames = [
+    "Adventurer",
+    "Cheese Cake",
+    "Dark Choco",
+    "Dr. Wasabi",
+    "Kiwi",
+    "Macaroon",
+    "Pilot",
+    "Popcorn",
+    "Sea Fairy",
+    "Space Doughnut",
+    "Walnut",
+    "Yoga"
+  ];
+
   userController() {
     print('constructed');
   }
@@ -119,22 +134,7 @@ class userController {
   }
 
   String getCharacterName() {
-    List<String> characterNames = [
-      "Captain America",
-      "Iron Man",
-      "Thor",
-      "Hulk",
-      "Black Widow",
-      "Hawkeye",
-      "War Machine",
-      "Vision",
-      "Scarlet Witch",
-      "Falcon",
-      "Spider-Man",
-      "Ant-Man",
-      "Nebula",
-    ];
-    int rand = Random().nextInt(characterNames.length);
-    return characterNames[rand];
+    int rand = Random().nextInt(this.characterNames.length);
+    return this.characterNames[rand];
   }
 }

@@ -80,7 +80,11 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.black),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        _numView = _numView;
+                      });
+                    },
                     child: Icon(Icons.refresh, color: Colors.black, size: 24.0),
                   ),
                 ],
@@ -102,7 +106,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
                   ),
                   SizedBox(height: kDefaultPadding * 0.2),
                   Text(
-                    "Today's spirit:\n$characterNames",
+                    "Today's spirit:\n$characterNames Cookie",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
