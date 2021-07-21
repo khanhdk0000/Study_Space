@@ -6,6 +6,7 @@ User user;
 int userId; //current user id
 bool isLoggedIn;
 String characterNames = userController().getCharacterName();
+String avatar = 'assets/img/$characterNames.jpg';
 
 void checkId(BuildContext context) {
   if (userId == 0 || userId == null) {

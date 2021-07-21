@@ -28,9 +28,16 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           MenuButton(),
-          CircleAvatar(
-            radius: 90.0,
-            backgroundImage: AssetImage('assets/img/portrait.png'),
+          Container(
+            child: CircleAvatar(
+              radius: 90.0,
+              backgroundImage: AssetImage(avatar),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 2)],
+            ),
           ),
           TextButton(
             style: ButtonStyle(

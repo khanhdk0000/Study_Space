@@ -258,10 +258,12 @@ class SessionController {
     //finished sessions but don't have score
     if (int.parse(s.getScore()) == 0) {
       print("[APP] Collecting sensor data");
-      int score = 100 +
-          await this.getPenaltyLight(s) +
-          await this.getPenaltySound(s) +
-          await this.getPenaltyTemp(s);
+      List<int> penalties = await Future.wait([
+        this.getPenaltyLight(s),
+        this.getPenaltySound(s),
+        this.getPenaltyTemp(s),
+      ]);
+      int score = 100 + penalties.reduce((a, b) => a + b);
       print("[SESSION SCORE CALCULATED] $score");
       if (score <= -10000) {
         return "-1";

@@ -88,7 +88,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               CircleAvatar(
                 radius: 50.0,
-                backgroundImage: AssetImage('assets/img/portrait.png'),
+                backgroundImage: AssetImage(avatar),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               Column(
@@ -327,7 +327,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-1') ? 'NA' : score;
+    String scoreText = (score == '-1') ? 'NA' : (score[0] == '-' ? '0': score);
     return Container(
         alignment: Alignment.center,
         width: 70.0,

@@ -87,7 +87,7 @@ class SensorController {
     if (response.statusCode == 201) {
       print("Success");
       if (response.body == '') {
-        return -1;
+        return null;
       }
       return double.parse(response.body);
     } else {
@@ -140,6 +140,7 @@ class SensorController {
     } else if (type == 'Temperature') {
       return tempComments[rand];
     }
+    return null;
   }
 
   SensorEvaluation getEvaluation(double value, String type) {

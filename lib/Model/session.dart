@@ -45,8 +45,14 @@ class Session {
     return int.parse(this._status).toString();
   }
 
-  String setScore(String score) {
+  void setScore(String score) {
     this._status = score;
+  }
+
+  void setUntitled(){
+    if (this._title == '') {
+      this._title = 'Untitled';
+    }
   }
 
   String getTitle(){
@@ -72,7 +78,7 @@ class Session {
 
   factory Session.fromJson(Map<String, dynamic> json) {
     print(json.toString());
-    return Session(
+    Session session = Session(
       id: json['id'].toString(),
       sched_id: json['sched_id'].toString(),
       date: json['date'].toString(),
@@ -81,6 +87,8 @@ class Session {
       status: json['status'].toString(),
       title: json['title'].toString(),
     );
+    session.setUntitled();
+    return session;
   }
 
   List<String> displaySession() {

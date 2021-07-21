@@ -7,6 +7,7 @@ import 'package:study_space/constants.dart';
 import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Summary/view/all_sessions.dart';
+import 'package:study_space/global.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final User user = FirebaseAuth.instance.currentUser;
@@ -30,7 +31,7 @@ class SideMenu extends StatelessWidget {
               style: TextStyle(color: kContentColorDarkTheme),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/img/portrait.png'),
+              backgroundImage: AssetImage(avatar),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(

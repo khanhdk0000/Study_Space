@@ -122,7 +122,7 @@ class userController {
     List<String> characterNames = [
       "Captain America",
       "Iron Man",
-      "Thor Odinson",
+      "Thor",
       "Hulk",
       "Black Widow",
       "Hawkeye",
@@ -133,7 +133,6 @@ class userController {
       "Spider-Man",
       "Ant-Man",
       "Nebula",
-      "Batman"
     ];
     int rand = Random().nextInt(characterNames.length);
     return characterNames[rand];
