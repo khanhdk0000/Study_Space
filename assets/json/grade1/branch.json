@@ -1,0 +1,88 @@
+[
+    {
+        "1": "It is well known that in general the optimal solution to the relaxed linear program deduced from an integer linear program gives an upper bound of the objective function of the integer linear program. In which following cases, we also have a lower bound of the objective function in general?",
+        "2": "Maximize: \n              Y = 2X1 + X2 \nSubject to: \n              3X1 - 5X2 <= 0 \n              3X1 + 5X2 <= 15 \n              X1, X2 >= 0 \nBy the branch and bound method, if we firstly split the relaxed linear program into 2 new linear programs based on X1 then:",
+        "3": "Maximize: \n              Y = 16X1 + 22X2 + 12X3 + 8X4 \nSubject to: \n              5X1 + 7X2 + 4X3 + 3X4 <= 14 \n              0 <= X1, X2, X3, X4 <= 1 \nWhat is the optimal value of Y?",
+       	"4": "Which of the following is not a requirement for a goal programming problem?",
+	    "5": "The problem description: \nMaximize: \n              Y = 7X1 + 3X2 \nSubject to: \n              5X1 + 7X2 <= 27 \n              4X1 + X2 <= 14 \n              3X1 - 2X2 <= 9 \n              X1, X2 >= 0 \n              X1 integer \nrepresent a(n):",
+	    "6": "The Factory has one sewing machine makes coats and vests. Each coat requires 50 minutes and uses 12 square feet of leather. Each vest requires 30 minutes and uses 8 square feet of leather. The sewing machine is available 8 hours a day, and the Leather Factory can obtain 118 square feet of leather a day. The coats sell for $175 each, and the vests sell for $100 each. Find the maximum revenue. ",
+	    "7": "Maximize: \n         Y = 17X1 + 26X2 + 85X3 + 63X4 + 43X5 \nSubject to: \n         72X1 + 46X2 + 73X3 + 26X4 + 54X5 <= 185 \n         0 <= X1, X2, X3, X4, X5 <= 1 \nThe optimal Y is:",
+	    "8": "The first drink provides 1 unit of protein and 3 units of carbohydrates in each liter. The second drink supplies 2 units of protein and 2 units of carbohydrates in each liter. An athlete requires 3 units of protein and 5 units of carbohydrates. The first drink costs $4 per liter and the second costs $2 per liter. Find the  minimize cost of drinks and still meet the minimum dietary requirements.",
+	    "9": "Which of the following constraints is not linear?",
+	    "10": "Minimize: \n              Y = -2X1 + 5X2 \n Subject to: \n              5X1 - 3X2 <= 10 \n              10X1 + 7X2 <= 18 \n              X1, X2 >= 0 \nThe optimal solution is:"
+    },
+    {
+        "1": {
+            "a": "Any integral optimal solution that appears during the branch and bound method gives a lower bound of the objective function",
+            "b": "We cannot say anything about the lower bound of the objective function",
+            "c": "The rounded-down optimal solution to the relaxed linear program gives a lower bound of the objective function",
+            "d": "The rounded-up optimal solution to the relaxed linear program gives a lower bound of the objective function"
+        },
+        "2": {
+            "a": "One of the new programs is infeasible and the other has X2 = 1.8, Y =4.8",
+            "b": "One of the new programs has X1 = 2 and the other has X2 = 1",
+            "c": "One of the new programs is infeasible and the other has X2 = 1.8, Y =5.8",
+            "d": "None of the other choices is correct"
+        },
+        "3": {
+            "a": "Y = 38",
+            "b": "Y = 42",
+            "c": "Y = 36",
+            "d": "Y = 50"
+        },
+        "4": {
+            "a": "Prioritization of goals",
+            "b": "A single objective function",
+            "c": "Linear constraints",
+            "d": "Linear objective function"
+        },
+        "5": {
+            "a": "Integer programming problem",
+            "b": "Goal programming problem",
+            "c": "None of the others",
+            "d": "Nonlinear programming problem"
+        },
+        "6": {
+            "a": "$1680",
+            "b": "$1650",
+            "c": "$1575",
+            "d": "$1675"
+        },
+        "7": {
+            "a": "Y = 165",
+            "b": "Y = 191",
+            "c": "Y = 174",
+            "d": "Y = 154"
+        },
+        "8": {
+            "a": "$6",
+            "b": "$5",
+            "c": "$7",
+            "d": "$4"
+        },
+        "9": {
+            "a": "7A - 6B <= 45",
+            "b": "X + Y + 3Z = 35",
+            "c": "2X + 5Y >= 10",
+            "d": "3XY + X >=50"
+        },
+        "10": {
+            "a": "Y = -2",
+            "b": "Y = -4",
+            "c": "Y = 2",
+            "d": "Y = 4"
+        }
+    },
+    {
+        "1": "Any integral optimal solution that appears during the branch and bound method gives a lower bound of the objective function",
+        "2": "One of the new programs is infeasible and the other has X2 = 1.8, Y =5.8",
+        "3": "Y = 42",
+        "4": "A single objective function",
+        "5": "None of the others",
+        "6": "$1675",
+        "7": "Y = 174",
+        "8": "$6",
+        "9": "3XY + X >=50",
+        "10": "Y = -2"
+    }
+]

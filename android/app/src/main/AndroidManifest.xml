@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
    <application
-        android:label="Self-study Space"
+        android:label="Self-studying System"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

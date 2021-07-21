@@ -8,13 +8,14 @@ import 'package:study_space/Notification/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Summary/view/all_sessions.dart';
 import 'package:study_space/global.dart';
+import 'package:study_space/Quiz/grade_selection.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final User user = FirebaseAuth.instance.currentUser;
 
 class SideMenu extends StatelessWidget {
   // SideMenu({this.user});
-
+  
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -90,6 +91,16 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.devices_other_rounded),
+            title: Text('Quiz', style: TextStyle(fontWeight: FontWeight.bold)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GradeSelectScreen()),
               );
             },
           ),

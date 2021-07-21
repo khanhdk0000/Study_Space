@@ -1,0 +1,88 @@
+[
+    {
+        "1": "The cutting plane method is designed for ...",
+        "2": "Given the integer program: \nMaximize: \n              Y = 3X1 + 4X2 \nSubject to: \n              2X1 + 5X2 + S1 = 15 \n              2X1 - 2X2 + S2 = 5 \n              X1, X2, S1, S2 >= 0 \nWhat is the first cut that appears in the first step of the cutting plane algorithm?",
+        "3": "Given the integer program: \nMaximize: \n              Y = 3X1 + 4X2 \nSubject to: \n              2X1 + 5X2 + S1 = 15 \n              2X1 - 2X2 + S2 = 5 \n              X1, X2, S1, S2 >= 0 \nWhat is the second cut that is not used in the second step of the cutting plane algorithm?",
+        "4": "Given the integer program: \nMaximize: \n              Y = X1 - 2X2 \nSubject to: \n              -4X1 + 6X2 + S1 = 9 \n              X1 + X2 + S2 = 4 \n              X1, X2, S1, S2 >= 0 \nFollowing the Gomory cuts with greatest fractional parts, if the first Gomory cut is X2 <= 2 \n What is the next cut that appears in the next step of the cutting plane algorithm?",
+        "5": "Given the integer program: \nMaximize: \n              Y = X1 - 2X2 \nSubject to: \n              -4X1 + 6X2 + S1 = 9 \n              X1 + X2 + S2 = 4 \n              X1, X2, S1, S2 >= 0 \nWhat of the following equations appears the final optimal simplex tableau at the end of the cutting plane algorithm?",
+        "6": "Maximize: \n              Y \nSubject to: \n              Y - 10X1 - 15X2 = 0 \n              2X1 + X2 + S1 = 10 \n              3X1 + 6X2 + S2 = 40 \n              X2 - S1 + S3 = 5 \n              X2 - S3 + S4 = 5 \n              X2 + S5 = 6 \n              X1, X2, S1, S2, S3, S4, S5 >= 0 \nWhat is the value of (S1, S2, S3)?",
+        "7": "How many steps are there in Gomory's cutting plane method?",
+        "8": "What is the basic purpose of the cut constrained?",
+        "9": "The owner of machine shop is planning to expand by purchasing some new machines: presses and lathes. The owner estimated that each press profit $100 and each lathe profit $150 daily. Purchase price is $8000/press and $4000/lathe. Floor space is required for press and lathe are 15 and 30 square feer respectively. The owner has a budget of $40,000 and 200 square feet of available floor space. How many each type of machines owner should purchase to maximize profit?",
+        "10": "A craftsman produces two products, coffee tables and end tables. Coffee table take 6 hours and $200 to finish and profit $240. End table take 5 hours and $100 to finish and profit $160. If the craftsman wants to work no more than 40 hours each week and if his financial resources allow him to pay no more than $1,000 for materials each week, what is the maximum profit he can make?"
+    },
+    {
+        "1": {
+            "a": "Developing another simplex algorithm that combines the primal and dual simplex methods",
+            "b": "Solving zero-one programming problems",
+            "c": "Eliminating integer optimal solutions from the feasible space of linear programming problems",
+            "d": "Eliminating non-integer optimal solutions from the feasible space of linear programming problems"
+        },
+        "2": {
+            "a": "X2 - S2 <= 1",
+            "b": "X1 <= 3",
+            "c": "X1 - S2 <= 1",
+            "d": "X2 <= 3"
+        },
+        "3": {
+            "a": "3X1 + S2 <= 11",
+            "b": "X1 + X2 <= 4",
+            "c": "X2 - S3 <= 1, S3 >= 0",
+            "d": "All answers are correct"
+        },
+        "4": {
+            "a": "-3X1 + 5X2 <= 9",
+            "b": "X1 - S1 + S3 <= 0, S3 >=0",
+            "c": "-3X1 + 6X2 + S3 <=0",
+            "d": "None of the above"
+        },
+        "5": {
+            "a": "X2 + S4 = 2, S4 >= 0",
+            "b": "X1 + 5/3 S3 - 1/3 S4 = 1, S3,S4 >= 0",
+            "c": "Neither A nor B is correct",
+            "d": "Both A and B are correct"
+        },
+        "6": {
+            "a": "(0, 0, 1)",
+            "b": "(1, 0, 1)",
+            "c": "(0, 0, 0)",
+            "d": "(1, 1, 1)"
+        },
+        "7": {
+            "a": "3 steps",
+            "b": "4 steps",
+            "c": "5 steps",
+            "d": "6 steps"
+        },
+        "8": {
+            "a": "Delete a part of the feasible region S1",
+            "b": "Not delete the points which have integer coordinates",
+            "c": "Both A and B are correct",
+            "d": "Neither A nor B is correct"
+        },
+        "9": {
+            "a": "Press: 1 , Lathe: 6",
+            "b": "Press: 2 , Lathe: 4",
+            "c": "Press: 6 , Lathe: 1",
+            "d": "Press: 4 , Lathe: 2"
+        },
+        "10": {
+            "a": "$1400",
+            "b": "$1280",
+            "c": "$1360",
+            "d": "$1200"
+        }
+    },
+    {
+        "1": "Eliminating non-integer optimal solutions from the feasible space of linear programming problems",
+        "2": "X1 <= 3",
+        "3": "All answers are correct",
+        "4": "X1 - S1 + S3 <= 0, S3 >=0",
+        "5": "X1 + 5/3 S3 - 1/3 S4 = 1, S3,S4 >= 0",
+        "6": "(1, 1, 1)",
+        "7": "4 steps",
+        "8": "Both A and B are correct",
+        "9": "Press: 1 , Lathe: 6",
+        "10": "$1360"
+    }
+]

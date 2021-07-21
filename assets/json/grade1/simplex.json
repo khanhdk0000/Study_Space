@@ -1,0 +1,88 @@
+[
+    {
+        "1": "Maximize: \n              Y = X1 + 3X2 \nSubject to: \n              X1 + X2 <= 4 \n              X1 - X2 <= 1 \n              X1, X2 >= 0 \nThe optimal Y is:",
+        "2": "Maximize: \n              Y = 6X1 - 9X2 \nSubject to: \n              2X1 - 3X2 <= 6 \n              X1 + X2 <= 20 \n              X1, X2 >= 0 \nWhat is the optimal case?",
+        "3": "Maximize: \n              Y = 2X1 + 4X2 - 4X3 \nSubject to: \n              3X1 + 2X2 +4X3 >= 1 \n              4X1 - 3X2 = 2 \n              2X1 + X2 +6X3 <= 3 \n              X1, X2, X3 >= 0 \nThe optimal Y is:",
+       	"4": "Convert the inequalities to an equation using slack variables: \n              3X1 + 2X2 <= 60",
+	    "5": "What is the value of nonbasic variables?",
+    	"6": "Which equation correct for the following linear programming models? \nMaximize: \n              Y = 2X1 + 6X2 \nSubject to: \n              6X1 + 8X2 <= 85 \n              4X1 + 3X2 <= 70 \n              X1, X2 >= 0",
+	    "7": "In converting a greater than or equal constraint for use in a simplex table, we must add ...",
+	    "8": "In a Simplex table, the pivot row is computed by ...",
+	    "9": "A fruit grower has 150 acres of land available to raise two crops, A and B. It takes one day to trim an acre of crop A and two days to trim an acre of crop B, and there are 240 days per year available for trimming. It takes 0.3 day to pick an acre of crop A and 0.1 day to pick an acre of crop B, and there are 30 days per year available for picking. Find the number of acres of each fruit that should be planted to maximize profit, assuming that the profit is $140 per acre for crop A and $235 per acre for B.",
+	    "10": "A candy company makes three types of candy: solid, fruit, and cream filled. A box I contains 4 solid, 4 fruit, and 12 cream and sells for $9.40. A box II contains 12 solid, 4 fruit, and 4 cream and sells for $7.60. A box III contains 8 solid, 8 fruit, and 8 cream and sells for $11.00. The manufacturing costs per piece of candy are $0.20 for solid, $0.25 for fruit, and $0.30 for cream. The company can manufacture up to 4800 solid, 4000 fruit, and 5600 cream candies weekly. What is their maximum profit?"
+    },
+    {
+        "1": {
+            "a": "Y = 8",
+            "b": "Y = 5",
+            "c": "Y = 12",
+            "d": "Y = 10"
+        },
+        "2": {
+            "a": "Y = 16, X2 = 0",
+            "b": "Y = 18, X2 = 0",
+            "c": "Y = 16, X2 = 5",
+            "d": "Y = 18, X2 = 3"
+        },
+        "3": {
+            "a": "Y = 4.8",
+            "b": "Y = 8",
+            "c": "Y = 5.4",
+            "d": "Y = 10"
+        },
+        "4": {
+            "a": "3X1 + 2X2 + S1 = 60",
+            "b": "3X1 + 2X2 - S1 = 60",
+            "c": "3X1 + 2X2 + 60S1 = 0",
+            "d": "3X1 + 2X2 - 60S1 = 0"
+        },
+        "5": {
+            "a": "-1",
+            "b": "1",
+            "c": "None of these",
+            "d": "0"
+        },
+        "6": {
+            "a": "6X1 + 8X2 + S1 = 85",
+            "b": "4X1 + 3X2 + S2 = 70",
+            "c": "-2X1 - 6X2 + Y = 0",
+            "d": "All of the above"
+        },
+        "7": {
+            "a": "An artificial variable",
+            "b": "A slack and an artificial variable",
+            "c": "A surplus and an artificial variable",
+            "d": "A slack and a surplus variable"
+        },
+        "8": {
+            "a": "Divide every number in the pivot row by the corresponding number in the profit row",
+            "b": "Divide every number in the profit row by the pivot number",
+            "c": "Divide every number in the pivot row by the pivot number",
+            "d": "Divide every number in the net profit row by the corresponding number in the gross profit row"
+        },
+        "9": {
+            "a": "A acres = 60, B acres = 90",
+            "b": "A acres = 90, B acres = 60",
+            "c": "A acres = 120, B acres = 30",
+            "d": "A acres = 30, B acres = 120"
+        },
+        "10": {
+            "a": "$3250",
+            "b": "$2650",
+            "c": "$2500",
+            "d": "$2850"
+        }
+    },
+    {
+        "1": "Y = 12",
+        "2": "Y = 18, X2 = 0",
+        "3": "Y = 5.4",
+        "4": "3X1 + 2X2 + S1 = 60",
+        "5": "0",
+        "6": "All of the above",
+        "7": "A surplus and an artificial variable",
+        "8": "Divide every number in the profit row by the pivot number",
+        "9": "A acres = 60, B acres = 90",
+        "10": "$2850"
+    }
+]

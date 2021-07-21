@@ -99,8 +99,8 @@ class MyScreen extends State<NotificationScreen> {
     // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       i,
-      'Break rồiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
-      'Giờ chời đến rồi giờ chơi đến rồi, đi chơi thôi',
+      'Break time!!!',
+      'Take a rest for 15 minutes. Sitting still for too long will cause many diseases.',
       DateTime.parse(time).add(Duration(seconds: 15)),
       platformChannelSpecifics,
       payload: 'Ra chơi 15 phút',
@@ -122,8 +122,8 @@ class MyScreen extends State<NotificationScreen> {
         // ignore: deprecated_member_use
         await flutterLocalNotificationsPlugin.schedule(
           i,
-          'Đi họccccccccccccccccccccc',
-          'Êi bạn êi, vô học bạn êi!!',
+          'Study time!!!',
+          'Do some exercises now or you will get zero. Good luck, have fun!',
           DateTime.parse(scheduledStudyList[i]),
           platformChannelSpecifics,
           payload: '9h Thứ 3 học Computer Graphic, giờ lo làm homework đi',
@@ -131,8 +131,8 @@ class MyScreen extends State<NotificationScreen> {
         // ignore: deprecated_member_use
         await flutterLocalNotificationsPlugin.schedule(
           i + scheduledEndtimeList.length * 3,
-          'Hết giờ !!!!!!!!!!!!!!!!',
-          'Nghỉ đi tan rồi, cố quá là quá cố',
+          'End of session!!!',
+          'Awesome! you can stop now. You did really good.',
           DateTime.parse(scheduledEndtimeList[i]),
           platformChannelSpecifics,
           payload: 'Một cái nội dung gì đó về việc tới giờ nghỉ học',
@@ -166,8 +166,8 @@ class MyScreen extends State<NotificationScreen> {
       // ignore: deprecated_member_use
       await flutterLocalNotificationsPlugin.schedule(
         i,
-        'Vắng mặt',
-        'Tới giờ rồi mà chưa vô vậy bro',
+        'No attendance!!!',
+        'Your child has not sat at his desk yet, you should tell him/her to study now.',
         DateTime.now(),
         platformChannelSpecifics,
         // payload: 'Ra chơi 15 phút',
@@ -195,6 +195,8 @@ class MyScreen extends State<NotificationScreen> {
     } else {
       setState(() {
         switchControl = false;
+        breakSwitchControl = false;
+        presenceSwitchControl = false;
         _cancelAllNotifications();
         print('cancel successfully!');
       });

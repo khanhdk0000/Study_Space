@@ -9,6 +9,7 @@ import 'package:study_space/Summary/view/all_sessions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
+// import 'package:study_space/InputOutputDevice/custom_card.dart';
 import 'package:study_space/global.dart';
 
 const spacer = SizedBox(height: 32.0);
@@ -174,6 +175,24 @@ class HomeScreen extends StatelessWidget {
       ),
     );
 
+    // final infraredImg = InkWell(
+    //   onTap: () => {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => NotificationScreen()),
+    //     )
+    //   },
+    //   child: Container(
+    //     child: ClipRRect(
+    //       // borderRadius: BorderRadius.circular(20.0),
+    //       child: Image.asset(
+    //         'assets/img/infrared.png',
+    //         width: 150,
+    //       ),
+    //     ),
+    //   ),
+    // );
+
     return Scaffold(
       drawer: SideMenu(),
       body: _user == null
@@ -190,7 +209,9 @@ class HomeScreen extends StatelessWidget {
                   divider,
                   sessionButton,
                   divider,
-                  deviceButton
+                  deviceButton,
+                  // divider,
+                  // infraredImg
                 ],
               ),
             ),
