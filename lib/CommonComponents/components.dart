@@ -11,7 +11,7 @@ class MenuButton extends StatelessWidget {
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
-        child: Icon(Icons.menu, color: Colors.white, size: 24.0),
+        child: Icon(Icons.menu, color: Colors.black, size: 24.0),
       ),
     );
   }
@@ -34,7 +34,7 @@ class CircleMenuButton extends StatelessWidget {
           child: Icon(Icons.menu, color: Colors.white, size: 24.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.blue,
+            color: Colors.black,
           ),
         ),
       ),

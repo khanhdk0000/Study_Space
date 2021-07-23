@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
               width: 50.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue,
+                color: Colors.black,
               ),
               child: Icon(Icons.tune, color: Colors.white, size: 24.0),
             ),
@@ -226,9 +226,11 @@ class CookieAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: CircleAvatar(
+        backgroundColor: Colors.amberAccent,
         radius: 90.0,
         child: CircleAvatar(
           radius: 75.0,
+          backgroundColor: Colors.amberAccent,
           backgroundImage: AssetImage(avatar),
         ),
       ),
@@ -355,7 +357,7 @@ class HomeSchedule extends StatelessWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(26),
-                      color: Colors.blue,
+                      color: Colors.black,
                       child: Text(
                         "You don't have any upcoming study event for today",
                         style: TextStyle(

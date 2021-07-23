@@ -32,6 +32,7 @@ class SideMenu extends StatelessWidget {
               style: TextStyle(color: kContentColorDarkTheme),
             ),
             currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.amberAccent,
               backgroundImage: AssetImage(avatar),
             ),
             decoration: BoxDecoration(

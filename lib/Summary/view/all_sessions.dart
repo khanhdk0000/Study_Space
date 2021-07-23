@@ -92,6 +92,7 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               CircleAvatar(
                 radius: 50.0,
+                backgroundColor: Colors.amberAccent,
                 backgroundImage: AssetImage(avatar),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
