@@ -100,7 +100,7 @@ class _SessionScreenState extends State<SessionScreen> {
       onPressed: () {
         SessionController().removeSession(
             date, startTime, endTime, title, userId, user.displayName, context);
-        Future.delayed(const Duration(milliseconds: 2000), () {
+        Future.delayed(const Duration(milliseconds: 1400), () {
           reloadParent();
         });
         Navigator.pop(context);
