@@ -255,14 +255,15 @@ class SessionController {
   Future<String> setScore(Session s) async {
     //finished sessions but don't have score
     if (int.parse(s.getScore()) == 0) {
-      print("[APP] Collecting sensor data");
+      print("[APP] Collecting sensor data from ${s.getId()}");
       List<int> penalties = await Future.wait([
         this.getPenaltyLight(s),
         this.getPenaltySound(s),
         this.getPenaltyTemp(s),
       ]);
+      print("[APP] Penalties: $penalties");
       int score = 100 + penalties.reduce((a, b) => a + b);
-      print("[SESSION SCORE CALCULATED] $score");
+      print("[APP] Session score calculated: $score");
       if (score <= -10000) {
         return "-1";
       } else

@@ -80,7 +80,7 @@ class SensorController {
             },
             body: jsonEncode(<String, String>{
               'session': sess_id,
-              'type': "'" + type + "'",
+              'type': type,
             }));
     print('[GET DIRECT AVERAGE] ${response.statusCode}');
     print(response.body);
