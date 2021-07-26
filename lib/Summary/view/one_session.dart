@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sensorController.dart';
 import 'package:study_space/Home/view/side_menu.dart';
+import 'package:study_space/Summary/view/sensor_tile.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/Model/sensor.dart';
-import 'dart:math' as math;
-import 'chart.dart';
+import 'package:study_space/Summary/view/dialog.dart';
 
 class OneSessionView extends StatefulWidget {
   final List<String> sessionList;
@@ -17,6 +17,9 @@ class OneSessionView extends StatefulWidget {
 }
 
 class _OneSessionViewState extends State<OneSessionView> {
+  ///List of controllers
+  SensorController s = SensorController();
+
   ///Arguments to handle the sensor data of a session
   Future<List<Sensor>> tempSensorData;
   Future<List<Sensor>> soundSensorData;
@@ -33,14 +36,9 @@ class _OneSessionViewState extends State<OneSessionView> {
     print("[DATABASE] Retrieving data");
 
     ///widget.sessionList[4] means we take the ID of the session recorded in the session list
-    tempSensorData = SensorController()
-        .getSensorData(sess_id: widget.sessionList[4], type: 'TH');
-    soundSensorData = SensorController()
-        .getSensorData(sess_id: widget.sessionList[4], type: 'S');
-    lightSensorData = SensorController()
-        .getSensorData(sess_id: widget.sessionList[4], type: 'L');
-
-    ///Random comments is fixed here
+    tempSensorData = s.getSensorData(sess_id: widget.sessionList[4], type: 'TH');
+    soundSensorData = s.getSensorData(sess_id: widget.sessionList[4], type: 'S');
+    lightSensorData = s.getSensorData(sess_id: widget.sessionList[4], type: 'L');
   }
 
   @override
@@ -125,7 +123,7 @@ class _OneSessionViewState extends State<OneSessionView> {
               fontWeight: FontWeight.bold,
               fontSize: 35.0,
               color: Colors.white,
-            )));
+            ),),);
   }
 
   Color _circleColor(int score) {
@@ -173,246 +171,14 @@ class _OneSessionViewState extends State<OneSessionView> {
           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
           child: ListView(
             children: [
-              _sensorTile('Light'),
+              SensorTile(future: lightSensorData, unit: 'Lux', imageAsset: 'assets/img/lightbulb1.png', type: 'Light',),
               SizedBox(height: kDefaultPadding * 0.5),
-              _sensorTile('Sound'),
+              SensorTile(future: soundSensorData, unit: 'dB', imageAsset: 'assets/img/stereo.png', type: 'Sound'),
               SizedBox(height: kDefaultPadding * 0.5),
-              _sensorTile('Temperature'),
+              SensorTile(future: tempSensorData, unit: 'degC', imageAsset: 'assets/img/thermometer.png', type: 'Temperature'),
               SizedBox(height: kDefaultPadding * 2),
             ],
-          )),
-    );
-  }
-
-  Widget _sensorTile(String type) {
-    String unit;
-    String text;
-    double value;
-    bool visible;
-    Future future;
-    String imageAsset;
-    if (type == 'Light') {
-      unit = 'Lux';
-      visible = lightVisible;
-      future = lightSensorData;
-      imageAsset = 'assets/img/lightbulb1.png';
-    } else if (type == 'Sound') {
-      unit = 'dB';
-      visible = soundVisible;
-      future = soundSensorData;
-      imageAsset = 'assets/img/stereo.png';
-    } else if (type == 'Temperature') {
-      unit = 'degC';
-      visible = tempVisible;
-      future = tempSensorData;
-      imageAsset = 'assets/img/thermometer.png';
-    }
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            value = SensorController().getAverage(snapshot.data);
-            text = value.toString() + ' ' + unit;
-            return _displaySensorTile(
-                type, visible, text, value, snapshot.data, imageAsset);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return Text('Loading...');
-        });
-  }
-
-  Widget _displaySensorTile(String type, bool visible, String text,
-      double value, List<Sensor> sensorList, String imageAsset) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: InkWell(
-        focusColor: Colors.grey,
-        onTap: () {
-          if (sensorList.length != 0) {
-            setState(() {
-              if (type == 'Light') {
-                lightVisible = !lightVisible;
-              } else if (type == 'Sound') {
-                soundVisible = !soundVisible;
-              } else if (type == 'Temperature') {
-                tempVisible = !tempVisible;
-              }
-            });
-          }
-        },
-        child: Container(
-          width: double.infinity,
-          // height: visible ? 400.0 : 90.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20.0),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 17),
-                blurRadius: 23,
-                spreadRadius: -13,
-                color: kShadowColor.withOpacity(0.24),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image(
-                      image: AssetImage(imageAsset),
-                      height: 65.0,
-                    ),
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            type,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                              sensorList.length == 0
-                                  ? 'No record'
-                                  : 'Average: $text',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
-                                color: Colors.black54,
-                              ))
-                        ],
-                      ),
-                    ),
-                    Transform.rotate(
-                        angle: visible ? -math.pi / 2 : math.pi / 2,
-                        child: Icon(Icons.chevron_right)),
-                  ],
-                ),
-                Visibility(
-                  visible: visible,
-                  child: Container(
-                    height: 250.0,
-                    child: ChartView(sensorList: sensorList, type: type),
-                  ),
-                ),
-                Visibility(
-                    visible: visible,
-                    child: SizedBox(height: kDefaultPadding * 0.5)),
-                Visibility(
-                  visible: visible,
-                  child: _reviewView(value, type),
-                ),
-                Visibility(
-                    visible: visible,
-                    child: SizedBox(height: kDefaultPadding * 0.5)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _reviewView(double value, String type) {
-    SensorController s = SensorController();
-    SensorEvaluation eval = s.getEvaluation(value, type);
-    String reviewText = s.getReviewText(eval, type);
-    String imageAsset = s.getImage(eval);
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: Row(
-        children: [
-          Image(
-            image: AssetImage(imageAsset),
-            height: 50.0,
-          ),
-          SizedBox(width: 15.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  reviewText,
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0,
-                  ),
-                ),
-                SizedBox(height: 5.0),
-                Text(
-                  SensorController().getRandomComment(type),
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FunkyDialog extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => FunkyDialogState();
-}
-
-class FunkyDialogState extends State<FunkyDialog>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-    scaleAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.elasticInOut);
-
-    controller.addListener(() {
-      setState(() {});
-    });
-
-    controller.forward();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: scaleAnimation,
-      child: AlertDialog(
-        title: Text('How performance score is calculated?'),
-        content: Column(
-          children: [
-            Image(image: AssetImage('assets/img/calculator.png')),
-            Text(SensorController().howEvaluatedText()),
-          ],
-        ),
-        scrollable: true,
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('OK'),
-          ),
-        ],
-      ),
+          ),),
     );
   }
 }

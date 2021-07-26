@@ -40,14 +40,12 @@ class SessionController {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var data = jsonDecode(response.body);
-      print(data.toString());
       List<Session> sessionLst =
           (data as List).map((s) => Session.fromJson(s)).toList();
       for (int i = 0; i < sessionLst.length; i++) {
         print(sessionLst[i].getScore());
         if (sessionLst[i].getScore() == '0') {
           String score = await this.setScore(sessionLst[i]);
-          print(score);
           sessionLst[i].setScore(score);
           //Update the score on the database
           setStatus(sessionLst[i].getId(), score);

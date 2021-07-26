@@ -126,27 +126,28 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
 
   Widget _sortView(BuildContext context) {
     return Container(
-        color: Colors.black,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _whiteText('Your last study sessions:'),
-              SizedBox(height: kDefaultPadding * 0.5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _whiteText('Show'),
-                  _dropDownNumView(context),
-                  _whiteText('Sorted by:'),
-                  _dropDownSort(context),
-                ],
-              ),
-            ],
-          ),
-        ));
+      color: Colors.black,
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _whiteText('Your last study sessions:'),
+            SizedBox(height: kDefaultPadding * 0.5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _whiteText('Show'),
+                _dropDownNumView(context),
+                _whiteText('Sorted by:'),
+                _dropDownSort(context),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _listView(BuildContext context) {
@@ -154,30 +155,31 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
         child: FutureBuilder(
-            future: futureSession,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var numDisplay = snapshot.data.length > _numView
-                    ? _numView
-                    : snapshot.data.length;
-                if (snapshot.data.length == 0) {
-                  return Text("No session.");
-                }
-                List<Widget> widLst = [];
-                for (int i = 0; i < numDisplay; i++) {
-                  print(snapshot.data[i].displaySession());
-                  widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
-                }
-                return ListView(
-                  children: widLst,
-                );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+          future: futureSession,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var numDisplay = snapshot.data.length > _numView
+                  ? _numView
+                  : snapshot.data.length;
+              if (snapshot.data.length == 0) {
+                return Text("No session.");
               }
-              return Text(
-                  'Loading...\nIf you have just finished a session, it may take a while to process.',
-                  textAlign: TextAlign.center);
-            }),
+              List<Widget> widLst = [];
+              for (int i = 0; i < numDisplay; i++) {
+                print(snapshot.data[i].displaySession());
+                widLst.add(_scheduleTile(snapshot.data[i].displaySession()));
+              }
+              return ListView(
+                children: widLst,
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Text(
+                'Loading...\nIf you have just finished a session, it may take a while to process.',
+                textAlign: TextAlign.center);
+          },
+        ),
       ),
     );
   }
@@ -332,21 +334,24 @@ class _SummaryAllSessionsViewState extends State<SummaryAllSessionsView> {
   }
 
   Widget _circleScore(String score) {
-    String scoreText = (score == '-1') ? 'NA' : (score[0] == '-' ? '0': score);
+    String scoreText = (score == '-1') ? 'NA' : (score[0] == '-' ? '0' : score);
     return Container(
-        alignment: Alignment.center,
-        width: 70.0,
-        height: 70.0,
-        decoration: BoxDecoration(
-          color: _circleColor(int.parse(score)),
-          shape: BoxShape.circle,
+      alignment: Alignment.center,
+      width: 70.0,
+      height: 70.0,
+      decoration: BoxDecoration(
+        color: _circleColor(int.parse(score)),
+        shape: BoxShape.circle,
+      ),
+      child: Text(
+        scoreText,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+          color: Colors.white,
         ),
-        child: Text(scoreText,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: Colors.white,
-            )));
+      ),
+    );
   }
 
   Color _circleColor(int score) {

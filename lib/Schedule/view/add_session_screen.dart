@@ -24,10 +24,10 @@ class AddSessionScreen extends StatefulWidget {
 
 class _AddSessionScreenState extends State<AddSessionScreen> {
   final void Function() reloadParent;
-  var subject = "";
+  var subject = "Untitled";
   var startDate = DateTime.now();
-  var startTime = TimeOfDay.now();
-  var endTime = TimeOfDay.now();
+  var startTime = TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 1)));
+  var endTime = TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 5)));
   int repeat = 0;
   int period = 0;
 

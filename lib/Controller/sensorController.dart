@@ -116,7 +116,7 @@ class SensorController {
     return "The ${type.toLowerCase()} of your study space is $comment";
   }
 
-  String getRandomComment(String type) {
+  String getRandomComment(String type, int seed) {
     List<String> lightComments = [
       "If the study space is too dark, it will be harmful to your eyes.",
       "Focus learning is good, but don't forget to blink every 5 minutes.",
@@ -132,7 +132,7 @@ class SensorController {
       "Do you love the weather today? If not, post a Facebook story.",
       "The temperature might not the most weighted factor, but it somehow affect your performance."
     ];
-    int rand = Random().nextInt(3);
+    int rand = Random(seed).nextInt(3);
     if (type == 'Light') {
       return lightComments[rand];
     } else if (type == 'Sound') {
