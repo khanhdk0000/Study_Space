@@ -26,6 +26,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   String filterMode = "Today";
   Future<List<Session>> loadedSessions;
   List<Session> upcomingSessions;
+  List<Session> previousSessions;
 
   void loadSessions() {
     setState(() {
@@ -67,6 +68,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   void filterSessions(List<Session> sessions) {
+    previousSessions = [];
     upcomingSessions = [];
     for (final session in sessions) {
       final date = session.getDate();
@@ -77,6 +79,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           DateFormat('MM/dd/yyyy hh:mm:ss').parse(date + " " + startTime);
       if (dateDate.isAfter(now)) {
         upcomingSessions.add(session);
+      } else {
+        previousSessions.add(session);
       }
     }
   }
@@ -189,7 +193,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             filterSessions(snapshot.data);
-            if (upcomingSessions.length > 0) {
+            if (upcomingSessions.length > 0 || previousSessions.length > 0) {
               return ListBody(
                 children: [
                   Padding(
@@ -197,11 +201,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     child: SessionsCalendar(snapshot.data, filterMode),
                   ),
                   addButton,
-                  for (final session in upcomingSessions)
+                  for (final session in previousSessions)
                     ListBody(children: [
                       SessionButton(session, loadSessions),
                       divider
                     ]),
+                  if (upcomingSessions.length > 0)
+                    ListBody(children: [
+                      Container(
+                        color: Colors.black,
+                          padding: EdgeInsets.only(left: 12, top: 10, bottom: 10),
+                          child: Text("Upcoming sessions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white))
+                      ),
+                  for (final session in upcomingSessions)
+                    ListBody(children: [
+                      SessionButton(session, loadSessions),
+                      divider
+                    ])]),
                 ],
               );
             } else {

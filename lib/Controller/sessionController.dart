@@ -190,7 +190,7 @@ class SessionController {
     }
   }
 
-  void removeSession(String date, String start_time, String end_time,
+  Future removeSession(String date, String start_time, String end_time,
       String title, int user_id, String username, BuildContext context) async {
     // if (user_id == null) {
     user_id = await userController().getUserId(username, context);
@@ -218,6 +218,7 @@ class SessionController {
     }
     NotificationScreen initNoti = new NotificationScreen();
     initNoti.pushNoti();
+    return;
   }
 
   Future<String> getCurrentSession(String username) async {
