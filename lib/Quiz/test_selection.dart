@@ -16,7 +16,6 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  
 
   List<String> tempList;
 
@@ -25,6 +24,8 @@ class _TestPageState extends State<TestPage> {
       case 'Grade 1': {tempList = grade1;} break;
       case 'Grade 2': {tempList = grade2;} break;
       case 'Grade 3': {tempList = grade3;} break;
+      case 'Grade 4': {tempList = grade4;} break;
+      case 'Grade 5': {tempList = grade5;} break;
     }
   }
 
@@ -33,6 +34,11 @@ class _TestPageState extends State<TestPage> {
     return Container(
       height: 100.0,
       margin: EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.3),
+        border:
+            Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.06))),
+      ),
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -40,9 +46,6 @@ class _TestPageState extends State<TestPage> {
           ));
         },
         child: Material(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
           color: Colors.white,
           child: ListTile(
             leading: Image(

@@ -31,12 +31,12 @@ String adaTopicLCD = adaTopic + 'bk-iot-lcd';
 String adaTopicInfrared = adaTopic1 + 'bk-iot-infrared';
 
 String khanhuser = 'khanhdk0000';
-String khanhApi = 'aio_mwIg04X7dgAqiO4gVjJ9QZG0LxXR';
+String khanhApi = 'aio_SEJW997mEyVAkKmrJS8is1m5n6VH';
 String cseBBC = 'CSE_BBC';
 String cseBBC1 = 'CSE_BBC1';
 
-String bbcAPIKey = 'aio_mLkY63WrLLbDcOPzEG3M9jg74h2A';
-String bbc1APIKey = 'aio_VhCE38mvogdpc353vHMQl684Emfs';
+String bbcAPIKey = 'aio_qyBr29pmfJC09tUFB5n9Ap9AtIwD';
+String bbc1APIKey = 'aio_ieyO306EGPxQmn7S23iE7p3jIG8O';
 
 String host = '10.0.2.2:5000';
 

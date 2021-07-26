@@ -4,7 +4,6 @@ import 'package:study_space/Home/view/side_menu.dart';
 import 'package:study_space/constants.dart';
 import 'package:study_space/theme.dart';
 import 'package:study_space/Quiz/test_selection.dart';
-import 'package:study_space/Notification/notification_screen.dart';
 
 class GradeSelectScreen extends StatefulWidget {
   @override
@@ -12,13 +11,8 @@ class GradeSelectScreen extends StatefulWidget {
 }
 
 class _GradeSelectPageState extends State<GradeSelectScreen> {
-  List<String> images = [
-    'assets/images/iconSimplexMethod-06.png',
-    'assets/images/iconBranchAndBound-06.png',
-    'assets/images/iconCuttingPlane-06.png'
-  ];
 
-  Widget testOption(String grade, String image) {
+  Widget testOption(String grade) {
     return Container(
       height: 70.0,
       margin: EdgeInsets.all(5.0),
@@ -36,10 +30,6 @@ class _GradeSelectPageState extends State<GradeSelectScreen> {
         child: Material(
           color: Colors.white,
           child: ListTile(
-            // leading: Image(
-            //   image: AssetImage(image),
-            //   // height: 50.0,
-            // ),
             title: Text(grade, style: TextStyle(fontSize: 15.0)),
             trailing: Icon(Icons.navigate_next),
           ),
@@ -89,8 +79,8 @@ class _GradeSelectPageState extends State<GradeSelectScreen> {
             Column(
               children: [
                 _topView(),
-                for (var i in List<int>.generate(3, (i) => i + 1))
-                  testOption("Grade " + i.toString(), images[i - 1]),
+                for (var i in List<int>.generate(5, (i) => i + 1))
+                  testOption("Grade " + i.toString()),
               ],
             ),
           ],

@@ -69,7 +69,7 @@ flutter:
   assets:
     - assets/img/
     - assets/images/
-    - assets/json/grade1/
+    - assets/json/
     - assets/img/char/
   #   - images/a_dot_ham.jpeg
 

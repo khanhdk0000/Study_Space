@@ -4,8 +4,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Quiz/showresult.dart';
-// import 'package:study_space/Quiz/drawer.dart';
-// import '../drawer.dart';
+import 'package:study_space/constants.dart';
+import 'package:study_space/theme.dart';
+import 'package:study_space/Home/view/side_menu.dart';
 
 class CreateQuestion extends StatelessWidget {
   String method;
@@ -15,19 +16,47 @@ class CreateQuestion extends StatelessWidget {
   String methodChosen;
 
   setasset() {
-    if (method == 'Simplex Method') {
-      methodChosen = 'assets/json/grade1/simplex.json';
-    } else if (method == 'Branch And Bound Method') {
-      methodChosen = 'assets/json/grade1/branch.json';
-    } else if (method == 'Cutting Plane Method') {
-      methodChosen = 'assets/json/grade1/cutting.json';
+    switch(method){
+      case 'Simplex Method':          
+        {methodChosen = 'assets/json/simplex.json';} break;
+      case 'Branch And Bound Method': 
+        {methodChosen = 'assets/json/branch.json';} break;
+      case 'Cutting Plane Method':    
+        {methodChosen = 'assets/json/cutting.json';} break;
+    
+      case 'Computer Graphic':        
+        {methodChosen = 'assets/json/cg.json';} break;
+      case 'Principle of Programming Language': 
+        {methodChosen = 'assets/json/ppl.json';} break;
+      case 'Discrete Structure':      
+        {methodChosen = 'assets/json/discrete.json';} break;
+
+      case 'Data Structure and Algorithm':
+        {methodChosen = 'assets/json/dsa.json';} break;
+      case 'Linear Algebra':          
+        {methodChosen = 'assets/json/algebra.json';} break;
+      case 'Software Engineer':       
+        {methodChosen = 'assets/json/se.json';} break;
+
+      case 'Chemistry':               
+        {methodChosen = 'assets/json/chemistry.json';} break;
+      case 'Physics':                 
+        {methodChosen = 'assets/json/physics.json';} break;
+      case 'Math':                    
+        {methodChosen = 'assets/json/math.json';} break;
+
+      case 'Biology':                 
+        {methodChosen = 'assets/json/biology.json';} break;
+      case 'History':                 
+        {methodChosen = 'assets/json/history.json';} break;
+      case 'Geography':               
+        {methodChosen = 'assets/json/geography.json';} break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     setasset();
-    print('here: ' + methodChosen);
     return FutureBuilder(
       future:
           DefaultAssetBundle.of(context).loadString(methodChosen, cache: true),
@@ -114,7 +143,7 @@ class _QuizPageState extends State<QuizPage> {
 
   final interval = const Duration(seconds: 1);
 
-  final int timerMaxSeconds = 60;
+  final int timerMaxSeconds = 60*5;
 
   int currentSeconds = 0;
 
@@ -170,7 +199,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget selectAnswer(String answer) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: 10.0,
+        vertical: 3.0,
         horizontal: 20.0,
       ),
       child: MaterialButton(
@@ -210,6 +239,34 @@ class _QuizPageState extends State<QuizPage> {
     ));
   }
 
+  Widget _topView() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: Center(
+        child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.75),
+          child: Row(
+            children: [
+              MenuButton(),
+              Expanded(
+                child: Text(
+                  "Quiz",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
+              ),
+              SizedBox(width: 40.0),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget questionsList() {
     return Wrap(
       children: [
@@ -218,76 +275,85 @@ class _QuizPageState extends State<QuizPage> {
             onPressed: () => changeQuestion(i - 1),
             child: Text(i.toString()),
             style: ElevatedButton.styleFrom(
-              primary: Colors.yellow, // background
+              primary: kPrimaryColor, // background
               onPrimary: Colors.black, // foreground
             ),
           ),
-        ElevatedButton(
-          onPressed: () => submit(),
-          child: Text('Submit'),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.pink, // background
-            onPrimary: Colors.black, // foreground
-          ),
-        )
       ],
+    );
+  }
+
+  Widget submitButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () => submit(),
+        child: Text('Submit'),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.green.shade400, // background
+          onPrimary: Colors.black, // foreground
+          alignment: Alignment.center,
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Test', style: TextStyle(fontWeight: FontWeight.w300)),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          questionsList(),
-          Expanded(
-            flex: 4,
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(15.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                question[0][i.toString()],
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 10,
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  selectAnswer('a'),
-                  selectAnswer('b'),
-                  selectAnswer('c'),
-                  selectAnswer('d'),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Center(
+    return MaterialApp(
+      theme: lightThemeData(context),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        drawer: SideMenu(),
+        body: Column(
+          children: [
+            _topView(),
+            questionsList(),
+            submitButton(),
+            Expanded(
+              flex: 2,
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.all(15.0),
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  timerText,
+                  question[0][i.toString()],
                   style: TextStyle(
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 16.0,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 5,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    selectAnswer('a'),
+                    selectAnswer('b'),
+                    selectAnswer('c'),
+                    selectAnswer('d'),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Center(
+                  child: Text(
+                    timerText,
+                    style: TextStyle(
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

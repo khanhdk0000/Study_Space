@@ -27,3 +27,15 @@ List<String> images = [
     'Linear Algebra',
     'Software Engineer',
   ];
+
+  List<String> grade4 = [
+    'Chemistry',
+    'Physics',
+    'Math',
+  ];
+
+  List<String> grade5 = [
+    'Biology',
+    'History',
+    'Geography',
+  ];
