@@ -16,11 +16,16 @@ class ChartView extends StatefulWidget {
 class _ChartViewState extends State<ChartView> {
   List<charts.Series<Sensor, int>> _seriesLineData;
   _generateData() {
+    List<Sensor> sensorChartList = List.from(widget.sensorList);
+    if (sensorChartList.length == 1){
+      Sensor s = sensorChartList[0];
+      sensorChartList.add(Sensor(s.id, s.name, s.type, s.data, s.timestamp, s.count + 1));
+    }
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(chartColor(widget.type)),
         id: 'Lux',
-        data: widget.sensorList,
+        data: sensorChartList,
         domainFn: (Sensor sensors, _) => sensors.count,
         measureFn: (Sensor sensors, _) => sensors.data.round(),
       ),

@@ -3,7 +3,7 @@ class Sensor {
   final String name;
   final String type;
   final String timestamp;
-  final int count;
+  int count;
   double data;
 
   Sensor(this.id, this.name, this.type, this.data, this.timestamp, this.count);
