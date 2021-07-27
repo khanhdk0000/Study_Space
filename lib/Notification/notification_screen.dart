@@ -101,7 +101,7 @@ class MyScreen extends State<NotificationScreen> {
       i,
       'Break time!!!',
       'Take a rest for 15 minutes. Sitting still for too long will cause many diseases.',
-      DateTime.parse(time).add(Duration(seconds: 15)),
+      DateTime.parse(time).add(Duration(seconds: 30)),
       platformChannelSpecifics,
       payload: 'Ra chơi 15 phút',
     );
@@ -113,7 +113,7 @@ class MyScreen extends State<NotificationScreen> {
   Future _pushStudyNotification(bool useBreak, bool usePresence) async {
     scheduledStudyList = await c.getStarttime();
     scheduledEndtimeList = await c.getEndtime();
-    print(scheduledStudyList);
+    // print(scheduledStudyList);
     print('Schedule updated successfully!');
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -130,7 +130,7 @@ class MyScreen extends State<NotificationScreen> {
         );
         // ignore: deprecated_member_use
         await flutterLocalNotificationsPlugin.schedule(
-          i + scheduledEndtimeList.length * 3,
+          i + scheduledStudyList.length * 3,
           'End of session!!!',
           'Awesome! you can stop now. You did really good.',
           DateTime.parse(scheduledEndtimeList[i]),
@@ -143,13 +143,18 @@ class MyScreen extends State<NotificationScreen> {
         }
         if (usePresence) {
           void showPresence() {
-            _pushPresenceNotification(
-                scheduledStudyList[i], i + scheduledEndtimeList.length);
+            print(10);
+            _pushPresenceNotification(i + scheduledStudyList.length);
           }
-
-          DateTime time =
-              DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 10));
-          Timer(time.difference(DateTime.now()), showPresence);
+          // DateTime time = DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 10));
+          DateTime time = DateTime.parse(scheduledStudyList[i]);
+          // while(DateTime.now() != DateTime.parse(scheduledEndtimeList[i])) {
+          for(;time != DateTime.parse(scheduledEndtimeList[i]);) {
+            time = time.add(Duration(seconds: 10));
+            // Timer.periodic(Duration(seconds: 10), (Timer time) => showPresence);
+            Timer(time.difference(DateTime.now()), showPresence);
+          }
+          // Timer(time.difference(DateTime.now()), showPresence);
         }
       }
     }
@@ -158,7 +163,7 @@ class MyScreen extends State<NotificationScreen> {
   ////////////////////////////////////
   // PRESENCE DETECT NOTIFICATION ///
   ///////////////////////////////////
-  Future _pushPresenceNotification(String time, var i) async {
+  Future _pushPresenceNotification(var i) async {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     String last = await _getLatestData3();
