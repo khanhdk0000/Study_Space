@@ -29,7 +29,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
   var startTime = TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 1)));
   var endTime = TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 5)));
   int repeat = 0;
-  int period = 0;
+  int period = 1;
 
   String timeToString(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
