@@ -8,7 +8,7 @@ import 'package:study_space/CommonComponents/components.dart';
 import 'package:study_space/Controller/sessionController.dart';
 import 'package:study_space/Model/session.dart';
 import 'package:study_space/global.dart';
-import 'dart:io';
+import 'dart:async';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 ///User arguments
@@ -100,8 +100,9 @@ class _SessionScreenState extends State<SessionScreen> {
       onPressed: () {
         SessionController().removeSession(
             date, startTime, endTime, title, userId, user.displayName, context);
-        sleep(Duration(milliseconds: 600));
-        reloadParent();
+        Future.delayed(const Duration(milliseconds: 1400), () {
+          reloadParent();
+        });
         Navigator.pop(context);
       },
       child: Container(
