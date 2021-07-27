@@ -88,7 +88,7 @@ class SessionController {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      print("failed");
+      print("unfinished session failed");
     }
   }
 

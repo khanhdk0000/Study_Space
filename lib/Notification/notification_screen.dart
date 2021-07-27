@@ -31,10 +31,10 @@ class NotificationScreen extends StatefulWidget {
         breakSwitchControl, presenceSwitchControl);
   }
 
-  void lightNoti() {
+  void lightNoti(String condition) {
     myAppState.initState();
     if (light) {
-      myAppState._pushLightNotification();
+      myAppState._pushLightNotification(condition);
     }
   }
 
@@ -328,14 +328,18 @@ class MyScreen extends State<NotificationScreen> {
     );
   }
 
-  Future _pushLightNotification() async {
+  Future _pushLightNotification(String condition) async {
+    String message = condition == 'bright' ? 'Quá sáng' : 'Quá tối';
+    String message2 = condition == 'bright'
+        ? 'Tắt bớt đèn đi bro'
+        : 'Mở đèn lên cho sáng nào';
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     // ignore: deprecated_member_use
     await flutterLocalNotificationsPlugin.schedule(
       -2,
-      'Too sáng bro',
-      'Tắt bớt đèn đi bro',
+      message,
+      message2,
       DateTime.now(),
       platformChannelSpecifics,
     );

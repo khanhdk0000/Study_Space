@@ -37,7 +37,15 @@ class LightState with ChangeNotifier {
           // get session id success
           await notifyBuzzerLcd();
           NotificationScreen initNoti = new NotificationScreen();
-          initNoti.lightNoti();
+          initNoti.lightNoti('bright');
+        }
+        else if(_valueFromServer < 100){
+          setBoolThreshold(true);
+          print('reeee');
+          // get session id success
+          await notifyBuzzerLcd();
+          NotificationScreen initNoti = new NotificationScreen();
+          initNoti.lightNoti('dark');
         }
       }
     });
