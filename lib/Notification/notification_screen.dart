@@ -143,14 +143,13 @@ class MyScreen extends State<NotificationScreen> {
         }
         if (usePresence) {
           void showPresence() {
-            print(10);
             _pushPresenceNotification(i + scheduledStudyList.length);
           }
-          // DateTime time = DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 10));
+
           DateTime time = DateTime.parse(scheduledStudyList[i]);
           // while(DateTime.now() != DateTime.parse(scheduledEndtimeList[i])) {
           for(;time != DateTime.parse(scheduledEndtimeList[i]);) {
-            time = time.add(Duration(seconds: 10));
+            time = time.add(Duration(seconds: 15));
             // Timer.periodic(Duration(seconds: 10), (Timer time) => showPresence);
             Timer(time.difference(DateTime.now()), showPresence);
           }
@@ -168,7 +167,7 @@ class MyScreen extends State<NotificationScreen> {
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     String last = await _getLatestData3();
     if (last == '0') {
-      // ignore: deprecated_member_use
+      print('no attend');
       await flutterLocalNotificationsPlugin.schedule(
         i,
         'No attendance!!!',
@@ -281,7 +280,7 @@ class MyScreen extends State<NotificationScreen> {
 
   Future<String> _getLatestData3() async {
     var req = await http.get(Uri.https(
-        'io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
+        'io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
     var infos = json.decode(req.body);
     var temp = infos[0]['value'];
     var temp2 = json.decode(temp)['data'];
