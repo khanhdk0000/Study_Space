@@ -33,14 +33,16 @@ class TempState with ChangeNotifier {
 
       String sessionId = await getSessionId();
       if (sessionId != '-1') {
-        await pushToDatabase(sessionId);
+
         if(_temperature > 30) {
           setBoolThreshold(true);
           print('reeee');
-          await notifyBuzzerLcd();
           NotificationScreen initNoti = new NotificationScreen();
           initNoti.tempNoti();
+          await notifyBuzzerLcd();
+
         }
+        await pushToDatabase(sessionId);
       }
     });
   }

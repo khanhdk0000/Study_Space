@@ -30,15 +30,17 @@ class SoundState with ChangeNotifier {
 
       String sessionId = await getSessionId();
       if (sessionId != '-1') {
-        await pushToDatabase(sessionId);
+
         if (_valueFromServer > 500) {
           print('reeee');
           setBoolThreshold(true);
           // get session id success
-          await notifyBuzzerLcd();
           NotificationScreen initNoti = new NotificationScreen();
           initNoti.soundNoti();
+          await notifyBuzzerLcd();
+
         }
+        await pushToDatabase(sessionId);
       }
     });
   }

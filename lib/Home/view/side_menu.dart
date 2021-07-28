@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_space/Authentication/screen/log_in_screen.dart';
 import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
@@ -137,8 +138,8 @@ class SideMenu extends StatelessWidget {
                       Text(user.displayName + ' has successfully signed out.'),
                 ),
               );
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  kWelcomeScreen, (Route<dynamic> route) => false);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  LogInScreen()), (Route<dynamic> route) => false);
             },
           ),
         ],
