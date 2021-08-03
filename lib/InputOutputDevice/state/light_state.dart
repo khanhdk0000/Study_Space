@@ -28,26 +28,24 @@ class LightState with ChangeNotifier {
         valueFromServer(double.parse(temp['data']));
       }
 
+      if(_valueFromServer > 800) {
+        setBoolThreshold(true);
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.lightNoti('bright');
+      }
+      else if(_valueFromServer < 100){
+        setBoolThreshold(true);
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.lightNoti('dark');
+      }
+
       String sessionId = await getSessionId();
       if (sessionId != '-1') {
-
-        if(_valueFromServer > 500) {
-          setBoolThreshold(true);
-          print('reeee');
-          // get session id success
-          NotificationScreen initNoti = new NotificationScreen();
-          initNoti.lightNoti('bright');
+        if(_valueFromServer > 800) {
           await notifyBuzzerLcd();
-
         }
         else if(_valueFromServer < 100){
-          setBoolThreshold(true);
-          print('reeee');
-          // get session id success
-          NotificationScreen initNoti = new NotificationScreen();
-          initNoti.lightNoti('dark');
           await notifyBuzzerLcd();
-
         }
         await pushToDatabase(sessionId);
       }

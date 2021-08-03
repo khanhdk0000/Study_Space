@@ -28,15 +28,17 @@ class SoundState with ChangeNotifier {
         valueFromServer(double.parse(temp['data']));
       }
 
+      if (_valueFromServer > 600) {
+        setBoolThreshold(true);
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.soundNoti();
+      }
+
       String sessionId = await getSessionId();
       if (sessionId != '-1') {
 
         if (_valueFromServer > 500) {
-          print('reeee');
-          setBoolThreshold(true);
-          // get session id success
-          NotificationScreen initNoti = new NotificationScreen();
-          initNoti.soundNoti();
+
           await notifyBuzzerLcd();
 
         }

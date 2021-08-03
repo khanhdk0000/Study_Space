@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_space/Authentication/screen/log_in_screen.dart';
+import 'package:study_space/Authentication/screen/welcome_screen.dart';
 import 'package:study_space/InputOutputDevice/view/input_output_screen.dart';
 import 'package:study_space/Home/view/home_screen.dart';
 import 'package:study_space/Schedule/view/schedule_screen.dart';
@@ -139,7 +140,7 @@ class SideMenu extends StatelessWidget {
                 ),
               );
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                  LogInScreen()), (Route<dynamic> route) => false);
+                  WelcomeScreen()), (Route<dynamic> route) => false);
             },
           ),
         ],

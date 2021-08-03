@@ -31,14 +31,17 @@ class TempState with ChangeNotifier {
       }
       _temperature = double.parse(temp['data'].split('-')[0]);
 
+      if(_temperature > 35) {
+        setBoolThreshold(true);
+        NotificationScreen initNoti = new NotificationScreen();
+        initNoti.tempNoti();
+      }
+
       String sessionId = await getSessionId();
       if (sessionId != '-1') {
 
         if(_temperature > 30) {
-          setBoolThreshold(true);
-          print('reeee');
-          NotificationScreen initNoti = new NotificationScreen();
-          initNoti.tempNoti();
+
           await notifyBuzzerLcd();
 
         }
