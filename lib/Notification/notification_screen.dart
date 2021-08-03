@@ -22,6 +22,7 @@ class NotificationScreen extends StatefulWidget {
 
   @override
   MyScreen createState() => MyScreen();
+
   void pushNoti() {
     myAppState.initState();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -146,8 +147,9 @@ class MyScreen extends State<NotificationScreen> {
             _pushPresenceNotification(i + scheduledStudyList.length);
           }
 
-          DateTime time = DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 60));
-          for(;time.isBefore(DateTime.parse(scheduledEndtimeList[i]));) {
+          DateTime time =
+              DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 60));
+          for (; time.isBefore(DateTime.parse(scheduledEndtimeList[i]));) {
             print('alo: ' + time.toString());
             Timer(time.difference(DateTime.now()), showPresence);
             time = time.add(Duration(seconds: 60));
@@ -174,8 +176,7 @@ class MyScreen extends State<NotificationScreen> {
         platformChannelSpecifics,
         // payload: 'Ra chơi 15 phút',
       );
-    }
-    else {
+    } else {
       print('attended');
     }
   }
@@ -281,7 +282,8 @@ class MyScreen extends State<NotificationScreen> {
 
   Future<String> _getLatestData3() async {
     // var req = await http.get(Uri.https('io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
-    var req = await http.get(Uri.https('io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
+    var req = await http.get(Uri.https(
+        'io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
     var infos = json.decode(req.body);
     var temp1 = infos[0]['value'];
     var temp2 = json.decode(temp1)['data'];
@@ -321,16 +323,29 @@ class MyScreen extends State<NotificationScreen> {
   // Notification for sensor //
   /////////////////////////////
   Future _pushSoundNotification() async {
-    var platformChannelSpecifics =
-        new NotificationDetails(android: androidPlatformChannelSpecifics);
+    // var platformChannelSpecifics =
+    //     new NotificationDetails(android: androidPlatformChannelSpecifics);
     // ignore: deprecated_member_use
-    await flutterLocalNotificationsPlugin.schedule(
+    // await flutterLocalNotificationsPlugin.schedule(
+    //   -3,
+    //   'Too noisy bro?',
+    //   'Go somewhere else to study đi bro :V',
+    //   DateTime.now(),
+    //   platformChannelSpecifics,
+    // );
+    await flutterLocalNotificationsPlugin.show(
       -3,
       'Too noisy bro?',
       'Go somewhere else to study đi bro :V',
-      DateTime.now(),
-      platformChannelSpecifics,
+      NotificationDetails(
+        android: AndroidNotificationDetails('full screen channel id',
+            'full screen channel name', 'full screen channel description',
+            priority: Priority.high,
+            importance: Importance.high,
+            fullScreenIntent: true),
+      ),
     );
+
   }
 
   Future _pushLightNotification(String condition) async {
@@ -341,12 +356,24 @@ class MyScreen extends State<NotificationScreen> {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     // ignore: deprecated_member_use
-    await flutterLocalNotificationsPlugin.schedule(
+    // await flutterLocalNotificationsPlugin.schedule(
+    //   -2,
+    //   message,
+    //   message2,
+    //   DateTime.now(),
+    //   platformChannelSpecifics,
+    // );
+    await flutterLocalNotificationsPlugin.show(
       -2,
       message,
       message2,
-      DateTime.now(),
-      platformChannelSpecifics,
+      NotificationDetails(
+        android: AndroidNotificationDetails('full screen channel id',
+            'full screen channel name', 'full screen channel description',
+            priority: Priority.high,
+            importance: Importance.high,
+            fullScreenIntent: true),
+      ),
     );
   }
 
@@ -354,12 +381,24 @@ class MyScreen extends State<NotificationScreen> {
     var platformChannelSpecifics =
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     // ignore: deprecated_member_use
-    await flutterLocalNotificationsPlugin.schedule(
+    // await flutterLocalNotificationsPlugin.schedule(
+    //   -1,
+    //   'So hot, so humid bro',
+    //   'Bật máy lạnh đi bro',
+    //   DateTime.now(),
+    //   platformChannelSpecifics,
+    // );
+    await flutterLocalNotificationsPlugin.show(
       -1,
       'So hot, so humid bro',
       'Bật máy lạnh đi bro',
-      DateTime.now(),
-      platformChannelSpecifics,
+      NotificationDetails(
+        android: AndroidNotificationDetails('full screen channel id',
+            'full screen channel name', 'full screen channel description',
+            priority: Priority.high,
+            importance: Importance.high,
+            fullScreenIntent: true),
+      ),
     );
   }
 
