@@ -11,8 +11,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 bool switchControl = true;
-bool breakSwitchControl = false;
-bool presenceSwitchControl = false;
+bool breakSwitchControl = true;
+bool presenceSwitchControl = true;
 bool light = true;
 bool sound = true;
 bool temp = true;
@@ -146,14 +146,12 @@ class MyScreen extends State<NotificationScreen> {
             _pushPresenceNotification(i + scheduledStudyList.length);
           }
 
-          DateTime time = DateTime.parse(scheduledStudyList[i]);
-          // while(DateTime.now() != DateTime.parse(scheduledEndtimeList[i])) {
-          for(;time != DateTime.parse(scheduledEndtimeList[i]);) {
-            time = time.add(Duration(seconds: 15));
-            // Timer.periodic(Duration(seconds: 10), (Timer time) => showPresence);
+          DateTime time = DateTime.parse(scheduledStudyList[i]).add(Duration(seconds: 60));
+          for(;time.isBefore(DateTime.parse(scheduledEndtimeList[i]));) {
+            print('alo: ' + time.toString());
             Timer(time.difference(DateTime.now()), showPresence);
+            time = time.add(Duration(seconds: 60));
           }
-          // Timer(time.difference(DateTime.now()), showPresence);
         }
       }
     }
@@ -167,7 +165,7 @@ class MyScreen extends State<NotificationScreen> {
         new NotificationDetails(android: androidPlatformChannelSpecifics);
     String last = await _getLatestData3();
     if (last == '0') {
-      print('no attend');
+      print('no attended');
       await flutterLocalNotificationsPlugin.schedule(
         i,
         'No attendance!!!',
@@ -176,6 +174,9 @@ class MyScreen extends State<NotificationScreen> {
         platformChannelSpecifics,
         // payload: 'Ra chơi 15 phút',
       );
+    }
+    else {
+      print('attended');
     }
   }
 
@@ -279,11 +280,11 @@ class MyScreen extends State<NotificationScreen> {
   }
 
   Future<String> _getLatestData3() async {
-    var req = await http.get(Uri.https(
-        'io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
+    // var req = await http.get(Uri.https('io.adafruit.com', 'api/v2/CSE_BBC1/feeds/bk-iot-infrared/data'));
+    var req = await http.get(Uri.https('io.adafruit.com', 'api/v2/khanhdk0000/feeds/infrared-sensor-1/data'));
     var infos = json.decode(req.body);
-    var temp = infos[0]['value'];
-    var temp2 = json.decode(temp)['data'];
+    var temp1 = infos[0]['value'];
+    var temp2 = json.decode(temp1)['data'];
     return temp2.toString();
   }
 
